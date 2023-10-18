@@ -1,0 +1,623 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E8A9C2A02AE0033D00BD263A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C29F2AE0033D00BD263A /* AppDelegate.swift */; };
+		E8A9C2A22AE0033D00BD263A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2A12AE0033D00BD263A /* SceneDelegate.swift */; };
+		E8A9C2A42AE0033D00BD263A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2A32AE0033D00BD263A /* ViewController.swift */; };
+		E8A9C2A72AE0033D00BD263A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8A9C2A52AE0033D00BD263A /* Main.storyboard */; };
+		E8A9C2AA2AE0033D00BD263A /* ChargeFlix.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2A82AE0033D00BD263A /* ChargeFlix.xcdatamodeld */; };
+		E8A9C2AC2AE0033D00BD263A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8A9C2AB2AE0033D00BD263A /* Assets.xcassets */; };
+		E8A9C2AF2AE0033D00BD263A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8A9C2AD2AE0033D00BD263A /* LaunchScreen.storyboard */; };
+		E8A9C2BA2AE0033E00BD263A /* ChargeFlixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2B92AE0033E00BD263A /* ChargeFlixTests.swift */; };
+		E8A9C2C42AE0033E00BD263A /* ChargeFlixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2C32AE0033E00BD263A /* ChargeFlixUITests.swift */; };
+		E8A9C2C62AE0033E00BD263A /* ChargeFlixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2C52AE0033E00BD263A /* ChargeFlixUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E8A9C2B62AE0033E00BD263A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E8A9C2942AE0033D00BD263A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8A9C29B2AE0033D00BD263A;
+			remoteInfo = ChargeFlix;
+		};
+		E8A9C2C02AE0033E00BD263A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E8A9C2942AE0033D00BD263A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8A9C29B2AE0033D00BD263A;
+			remoteInfo = ChargeFlix;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E8A9C29C2AE0033D00BD263A /* ChargeFlix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChargeFlix.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8A9C29F2AE0033D00BD263A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E8A9C2A12AE0033D00BD263A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		E8A9C2A32AE0033D00BD263A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E8A9C2A62AE0033D00BD263A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E8A9C2A92AE0033D00BD263A /* ChargeFlix.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ChargeFlix.xcdatamodel; sourceTree = "<group>"; };
+		E8A9C2AB2AE0033D00BD263A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E8A9C2AE2AE0033D00BD263A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E8A9C2B02AE0033D00BD263A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E8A9C2B52AE0033E00BD263A /* ChargeFlixTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChargeFlixTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8A9C2B92AE0033E00BD263A /* ChargeFlixTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeFlixTests.swift; sourceTree = "<group>"; };
+		E8A9C2BF2AE0033E00BD263A /* ChargeFlixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChargeFlixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8A9C2C32AE0033E00BD263A /* ChargeFlixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeFlixUITests.swift; sourceTree = "<group>"; };
+		E8A9C2C52AE0033E00BD263A /* ChargeFlixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeFlixUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E8A9C2992AE0033D00BD263A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8A9C2B22AE0033E00BD263A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8A9C2BC2AE0033E00BD263A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E8A9C2932AE0033D00BD263A = {
+			isa = PBXGroup;
+			children = (
+				E8A9C29E2AE0033D00BD263A /* ChargeFlix */,
+				E8A9C2B82AE0033E00BD263A /* ChargeFlixTests */,
+				E8A9C2C22AE0033E00BD263A /* ChargeFlixUITests */,
+				E8A9C29D2AE0033D00BD263A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E8A9C29D2AE0033D00BD263A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E8A9C29C2AE0033D00BD263A /* ChargeFlix.app */,
+				E8A9C2B52AE0033E00BD263A /* ChargeFlixTests.xctest */,
+				E8A9C2BF2AE0033E00BD263A /* ChargeFlixUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E8A9C29E2AE0033D00BD263A /* ChargeFlix */ = {
+			isa = PBXGroup;
+			children = (
+				E8A9C29F2AE0033D00BD263A /* AppDelegate.swift */,
+				E8A9C2A12AE0033D00BD263A /* SceneDelegate.swift */,
+				E8A9C2A32AE0033D00BD263A /* ViewController.swift */,
+				E8A9C2A52AE0033D00BD263A /* Main.storyboard */,
+				E8A9C2AB2AE0033D00BD263A /* Assets.xcassets */,
+				E8A9C2AD2AE0033D00BD263A /* LaunchScreen.storyboard */,
+				E8A9C2B02AE0033D00BD263A /* Info.plist */,
+				E8A9C2A82AE0033D00BD263A /* ChargeFlix.xcdatamodeld */,
+			);
+			path = ChargeFlix;
+			sourceTree = "<group>";
+		};
+		E8A9C2B82AE0033E00BD263A /* ChargeFlixTests */ = {
+			isa = PBXGroup;
+			children = (
+				E8A9C2B92AE0033E00BD263A /* ChargeFlixTests.swift */,
+			);
+			path = ChargeFlixTests;
+			sourceTree = "<group>";
+		};
+		E8A9C2C22AE0033E00BD263A /* ChargeFlixUITests */ = {
+			isa = PBXGroup;
+			children = (
+				E8A9C2C32AE0033E00BD263A /* ChargeFlixUITests.swift */,
+				E8A9C2C52AE0033E00BD263A /* ChargeFlixUITestsLaunchTests.swift */,
+			);
+			path = ChargeFlixUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E8A9C29B2AE0033D00BD263A /* ChargeFlix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8A9C2C92AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlix" */;
+			buildPhases = (
+				E8A9C2982AE0033D00BD263A /* Sources */,
+				E8A9C2992AE0033D00BD263A /* Frameworks */,
+				E8A9C29A2AE0033D00BD263A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ChargeFlix;
+			productName = ChargeFlix;
+			productReference = E8A9C29C2AE0033D00BD263A /* ChargeFlix.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E8A9C2B42AE0033E00BD263A /* ChargeFlixTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8A9C2CC2AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlixTests" */;
+			buildPhases = (
+				E8A9C2B12AE0033E00BD263A /* Sources */,
+				E8A9C2B22AE0033E00BD263A /* Frameworks */,
+				E8A9C2B32AE0033E00BD263A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E8A9C2B72AE0033E00BD263A /* PBXTargetDependency */,
+			);
+			name = ChargeFlixTests;
+			productName = ChargeFlixTests;
+			productReference = E8A9C2B52AE0033E00BD263A /* ChargeFlixTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E8A9C2BE2AE0033E00BD263A /* ChargeFlixUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8A9C2CF2AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlixUITests" */;
+			buildPhases = (
+				E8A9C2BB2AE0033E00BD263A /* Sources */,
+				E8A9C2BC2AE0033E00BD263A /* Frameworks */,
+				E8A9C2BD2AE0033E00BD263A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E8A9C2C12AE0033E00BD263A /* PBXTargetDependency */,
+			);
+			name = ChargeFlixUITests;
+			productName = ChargeFlixUITests;
+			productReference = E8A9C2BF2AE0033E00BD263A /* ChargeFlixUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E8A9C2942AE0033D00BD263A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					E8A9C29B2AE0033D00BD263A = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					E8A9C2B42AE0033E00BD263A = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = E8A9C29B2AE0033D00BD263A;
+					};
+					E8A9C2BE2AE0033E00BD263A = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = E8A9C29B2AE0033D00BD263A;
+					};
+				};
+			};
+			buildConfigurationList = E8A9C2972AE0033D00BD263A /* Build configuration list for PBXProject "ChargeFlix" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E8A9C2932AE0033D00BD263A;
+			productRefGroup = E8A9C29D2AE0033D00BD263A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E8A9C29B2AE0033D00BD263A /* ChargeFlix */,
+				E8A9C2B42AE0033E00BD263A /* ChargeFlixTests */,
+				E8A9C2BE2AE0033E00BD263A /* ChargeFlixUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E8A9C29A2AE0033D00BD263A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8A9C2AF2AE0033D00BD263A /* LaunchScreen.storyboard in Resources */,
+				E8A9C2AC2AE0033D00BD263A /* Assets.xcassets in Resources */,
+				E8A9C2A72AE0033D00BD263A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8A9C2B32AE0033E00BD263A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8A9C2BD2AE0033E00BD263A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E8A9C2982AE0033D00BD263A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8A9C2AA2AE0033D00BD263A /* ChargeFlix.xcdatamodeld in Sources */,
+				E8A9C2A42AE0033D00BD263A /* ViewController.swift in Sources */,
+				E8A9C2A02AE0033D00BD263A /* AppDelegate.swift in Sources */,
+				E8A9C2A22AE0033D00BD263A /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8A9C2B12AE0033E00BD263A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8A9C2BA2AE0033E00BD263A /* ChargeFlixTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8A9C2BB2AE0033E00BD263A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8A9C2C42AE0033E00BD263A /* ChargeFlixUITests.swift in Sources */,
+				E8A9C2C62AE0033E00BD263A /* ChargeFlixUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E8A9C2B72AE0033E00BD263A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8A9C29B2AE0033D00BD263A /* ChargeFlix */;
+			targetProxy = E8A9C2B62AE0033E00BD263A /* PBXContainerItemProxy */;
+		};
+		E8A9C2C12AE0033E00BD263A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8A9C29B2AE0033D00BD263A /* ChargeFlix */;
+			targetProxy = E8A9C2C02AE0033E00BD263A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E8A9C2A52AE0033D00BD263A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E8A9C2A62AE0033D00BD263A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E8A9C2AD2AE0033D00BD263A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E8A9C2AE2AE0033D00BD263A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E8A9C2C72AE0033E00BD263A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E8A9C2C82AE0033E00BD263A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E8A9C2CA2AE0033E00BD263A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ChargeFlix/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Nothing.ChargeFlix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E8A9C2CB2AE0033E00BD263A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ChargeFlix/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Nothing.ChargeFlix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E8A9C2CD2AE0033E00BD263A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Nothing.ChargeFlixTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChargeFlix.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ChargeFlix";
+			};
+			name = Debug;
+		};
+		E8A9C2CE2AE0033E00BD263A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Nothing.ChargeFlixTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ChargeFlix.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ChargeFlix";
+			};
+			name = Release;
+		};
+		E8A9C2D02AE0033E00BD263A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Nothing.ChargeFlixUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ChargeFlix;
+			};
+			name = Debug;
+		};
+		E8A9C2D12AE0033E00BD263A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Nothing.ChargeFlixUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ChargeFlix;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E8A9C2972AE0033D00BD263A /* Build configuration list for PBXProject "ChargeFlix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8A9C2C72AE0033E00BD263A /* Debug */,
+				E8A9C2C82AE0033E00BD263A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E8A9C2C92AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8A9C2CA2AE0033E00BD263A /* Debug */,
+				E8A9C2CB2AE0033E00BD263A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E8A9C2CC2AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlixTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8A9C2CD2AE0033E00BD263A /* Debug */,
+				E8A9C2CE2AE0033E00BD263A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E8A9C2CF2AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlixUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8A9C2D02AE0033E00BD263A /* Debug */,
+				E8A9C2D12AE0033E00BD263A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E8A9C2A82AE0033D00BD263A /* ChargeFlix.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E8A9C2A92AE0033D00BD263A /* ChargeFlix.xcdatamodel */,
+			);
+			currentVersion = E8A9C2A92AE0033D00BD263A /* ChargeFlix.xcdatamodel */;
+			path = ChargeFlix.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = E8A9C2942AE0033D00BD263A /* Project object */;
+}
