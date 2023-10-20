@@ -1,0 +1,6 @@
+framework module Pods_ChargeFlix_ChargeFlixUITests {
+  umbrella header "Pods-ChargeFlix-ChargeFlixUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
