@@ -7,9 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18EB1EBB0FC585ADFF0E8F04 /* Pods_ChargeFlixTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B6D2EECAF9E54277611149 /* Pods_ChargeFlixTests.framework */; };
+		50A19EB71834DE4E7FC2E0E4 /* Pods_ChargeFlix.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F734CCC185738701D7106F9A /* Pods_ChargeFlix.framework */; };
+		80ED5BB4DCB460E97CE981C0 /* Pods_ChargeFlix_ChargeFlixUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 707A3F95D6935270F34F661D /* Pods_ChargeFlix_ChargeFlixUITests.framework */; };
+		E8321BCD2AE119B7003D2696 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8321BCC2AE119B7003D2696 /* Constants.swift */; };
+		E8321BD12AE119E6003D2696 /* TVShowAPIEndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8321BD02AE119E6003D2696 /* TVShowAPIEndPoints.swift */; };
+		E8321BD32AE11A08003D2696 /* CastAPIEnpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8321BD22AE11A08003D2696 /* CastAPIEnpoints.swift */; };
+		E86BD3A62AE286E70006EFB8 /* MovieRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86BD3A52AE286E70006EFB8 /* MovieRepository.swift */; };
+		E86BD3A82AE28D800006EFB8 /* TVShowRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86BD3A72AE28D800006EFB8 /* TVShowRepository.swift */; };
+		E86BD3AA2AE28DEA0006EFB8 /* CastRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86BD3A92AE28DEA0006EFB8 /* CastRepository.swift */; };
+		E87EAB562AE23454006A343A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87EAB552AE23454006A343A /* Models.swift */; };
+		E87EAB582AE25767006A343A /* ImageExtesntions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87EAB572AE25767006A343A /* ImageExtesntions.swift */; };
+		E87EAB5A2AE2580B006A343A /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87EAB592AE2580B006A343A /* Repository.swift */; };
+		E87EAB5C2AE25DD8006A343A /* MovieAPIEndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87EAB5B2AE25DD8006A343A /* MovieAPIEndPoints.swift */; };
 		E8A9C2A02AE0033D00BD263A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C29F2AE0033D00BD263A /* AppDelegate.swift */; };
 		E8A9C2A22AE0033D00BD263A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2A12AE0033D00BD263A /* SceneDelegate.swift */; };
-		E8A9C2A42AE0033D00BD263A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2A32AE0033D00BD263A /* ViewController.swift */; };
 		E8A9C2A72AE0033D00BD263A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8A9C2A52AE0033D00BD263A /* Main.storyboard */; };
 		E8A9C2AA2AE0033D00BD263A /* ChargeFlix.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2A82AE0033D00BD263A /* ChargeFlix.xcdatamodeld */; };
 		E8A9C2AC2AE0033D00BD263A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8A9C2AB2AE0033D00BD263A /* Assets.xcassets */; };
@@ -17,6 +29,9 @@
 		E8A9C2BA2AE0033E00BD263A /* ChargeFlixTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2B92AE0033E00BD263A /* ChargeFlixTests.swift */; };
 		E8A9C2C42AE0033E00BD263A /* ChargeFlixUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2C32AE0033E00BD263A /* ChargeFlixUITests.swift */; };
 		E8A9C2C62AE0033E00BD263A /* ChargeFlixUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A9C2C52AE0033E00BD263A /* ChargeFlixUITestsLaunchTests.swift */; };
+		E8B399A52AE11187005B0A77 /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B399A42AE11187005B0A77 /* TabBarVC.swift */; };
+		E8B399AB2AE113FB005B0A77 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B399AA2AE113FB005B0A77 /* APIManager.swift */; };
+		E8B399AD2AE11445005B0A77 /* ApiEndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B399AC2AE11445005B0A77 /* ApiEndPoints.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,10 +52,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05D0728B9574DF72B55BCA14 /* Pods-ChargeFlix.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChargeFlix.debug.xcconfig"; path = "Target Support Files/Pods-ChargeFlix/Pods-ChargeFlix.debug.xcconfig"; sourceTree = "<group>"; };
+		15B6D2EECAF9E54277611149 /* Pods_ChargeFlixTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChargeFlixTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D34B155EDCE3FD0B50B442F /* Pods-ChargeFlix-ChargeFlixUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChargeFlix-ChargeFlixUITests.debug.xcconfig"; path = "Target Support Files/Pods-ChargeFlix-ChargeFlixUITests/Pods-ChargeFlix-ChargeFlixUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		5E988F561A3BDCCCAFB32AA4 /* Pods-ChargeFlixTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChargeFlixTests.debug.xcconfig"; path = "Target Support Files/Pods-ChargeFlixTests/Pods-ChargeFlixTests.debug.xcconfig"; sourceTree = "<group>"; };
+		707A3F95D6935270F34F661D /* Pods_ChargeFlix_ChargeFlixUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChargeFlix_ChargeFlixUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7CBC22F2283A9E03C652804 /* Pods-ChargeFlix.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChargeFlix.release.xcconfig"; path = "Target Support Files/Pods-ChargeFlix/Pods-ChargeFlix.release.xcconfig"; sourceTree = "<group>"; };
+		B3EA8E203B7262AD1AC767D4 /* Pods-ChargeFlix-ChargeFlixUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChargeFlix-ChargeFlixUITests.release.xcconfig"; path = "Target Support Files/Pods-ChargeFlix-ChargeFlixUITests/Pods-ChargeFlix-ChargeFlixUITests.release.xcconfig"; sourceTree = "<group>"; };
+		E8321BCC2AE119B7003D2696 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		E8321BD02AE119E6003D2696 /* TVShowAPIEndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowAPIEndPoints.swift; sourceTree = "<group>"; };
+		E8321BD22AE11A08003D2696 /* CastAPIEnpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastAPIEnpoints.swift; sourceTree = "<group>"; };
+		E86BD3A52AE286E70006EFB8 /* MovieRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRepository.swift; sourceTree = "<group>"; };
+		E86BD3A72AE28D800006EFB8 /* TVShowRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVShowRepository.swift; sourceTree = "<group>"; };
+		E86BD3A92AE28DEA0006EFB8 /* CastRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastRepository.swift; sourceTree = "<group>"; };
+		E87EAB552AE23454006A343A /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		E87EAB572AE25767006A343A /* ImageExtesntions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtesntions.swift; sourceTree = "<group>"; };
+		E87EAB592AE2580B006A343A /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		E87EAB5B2AE25DD8006A343A /* MovieAPIEndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAPIEndPoints.swift; sourceTree = "<group>"; };
 		E8A9C29C2AE0033D00BD263A /* ChargeFlix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChargeFlix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8A9C29F2AE0033D00BD263A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E8A9C2A12AE0033D00BD263A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E8A9C2A32AE0033D00BD263A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E8A9C2A62AE0033D00BD263A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E8A9C2A92AE0033D00BD263A /* ChargeFlix.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ChargeFlix.xcdatamodel; sourceTree = "<group>"; };
 		E8A9C2AB2AE0033D00BD263A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -51,6 +82,11 @@
 		E8A9C2BF2AE0033E00BD263A /* ChargeFlixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChargeFlixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8A9C2C32AE0033E00BD263A /* ChargeFlixUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeFlixUITests.swift; sourceTree = "<group>"; };
 		E8A9C2C52AE0033E00BD263A /* ChargeFlixUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargeFlixUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E8B399A42AE11187005B0A77 /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
+		E8B399AA2AE113FB005B0A77 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		E8B399AC2AE11445005B0A77 /* ApiEndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiEndPoints.swift; sourceTree = "<group>"; };
+		F52AD9E8D299BD32E3081038 /* Pods-ChargeFlixTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChargeFlixTests.release.xcconfig"; path = "Target Support Files/Pods-ChargeFlixTests/Pods-ChargeFlixTests.release.xcconfig"; sourceTree = "<group>"; };
+		F734CCC185738701D7106F9A /* Pods_ChargeFlix.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChargeFlix.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50A19EB71834DE4E7FC2E0E4 /* Pods_ChargeFlix.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18EB1EBB0FC585ADFF0E8F04 /* Pods_ChargeFlixTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +110,76 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80ED5BB4DCB460E97CE981C0 /* Pods_ChargeFlix_ChargeFlixUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		840514B3C420B8806ECAAFD5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				05D0728B9574DF72B55BCA14 /* Pods-ChargeFlix.debug.xcconfig */,
+				A7CBC22F2283A9E03C652804 /* Pods-ChargeFlix.release.xcconfig */,
+				2D34B155EDCE3FD0B50B442F /* Pods-ChargeFlix-ChargeFlixUITests.debug.xcconfig */,
+				B3EA8E203B7262AD1AC767D4 /* Pods-ChargeFlix-ChargeFlixUITests.release.xcconfig */,
+				5E988F561A3BDCCCAFB32AA4 /* Pods-ChargeFlixTests.debug.xcconfig */,
+				F52AD9E8D299BD32E3081038 /* Pods-ChargeFlixTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		8ADCE9A1373D3ADC8BE03592 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F734CCC185738701D7106F9A /* Pods_ChargeFlix.framework */,
+				707A3F95D6935270F34F661D /* Pods_ChargeFlix_ChargeFlixUITests.framework */,
+				15B6D2EECAF9E54277611149 /* Pods_ChargeFlixTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E8321BD42AE1288B003D2696 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		E8321BD52AE128CB003D2696 /* Movie */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Movie;
+			sourceTree = "<group>";
+		};
+		E8321BD62AE128D5003D2696 /* TVShows */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TVShows;
+			sourceTree = "<group>";
+		};
+		E8321BD72AE12914003D2696 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E87EAB552AE23454006A343A /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E87EAB5D2AE26165006A343A /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				E87EAB592AE2580B006A343A /* Repository.swift */,
+				E86BD3A52AE286E70006EFB8 /* MovieRepository.swift */,
+				E86BD3A72AE28D800006EFB8 /* TVShowRepository.swift */,
+				E86BD3A92AE28DEA0006EFB8 /* CastRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
 		E8A9C2932AE0033D00BD263A = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +187,8 @@
 				E8A9C2B82AE0033E00BD263A /* ChargeFlixTests */,
 				E8A9C2C22AE0033E00BD263A /* ChargeFlixUITests */,
 				E8A9C29D2AE0033D00BD263A /* Products */,
+				840514B3C420B8806ECAAFD5 /* Pods */,
+				8ADCE9A1373D3ADC8BE03592 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,9 +205,12 @@
 		E8A9C29E2AE0033D00BD263A /* ChargeFlix */ = {
 			isa = PBXGroup;
 			children = (
-				E8A9C29F2AE0033D00BD263A /* AppDelegate.swift */,
-				E8A9C2A12AE0033D00BD263A /* SceneDelegate.swift */,
-				E8A9C2A32AE0033D00BD263A /* ViewController.swift */,
+				E87EAB5D2AE26165006A343A /* Repository */,
+				E8B3999F2AE1108A005B0A77 /* Network */,
+				E8321BD72AE12914003D2696 /* Models */,
+				E8B399A22AE110AF005B0A77 /* Application */,
+				E8B399A12AE1109F005B0A77 /* Extensions */,
+				E8B399A02AE11093005B0A77 /* Screens */,
 				E8A9C2A52AE0033D00BD263A /* Main.storyboard */,
 				E8A9C2AB2AE0033D00BD263A /* Assets.xcassets */,
 				E8A9C2AD2AE0033D00BD263A /* LaunchScreen.storyboard */,
@@ -130,6 +237,55 @@
 			path = ChargeFlixUITests;
 			sourceTree = "<group>";
 		};
+		E8B3999F2AE1108A005B0A77 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				E8321BCC2AE119B7003D2696 /* Constants.swift */,
+				E8B399AA2AE113FB005B0A77 /* APIManager.swift */,
+				E8B399AC2AE11445005B0A77 /* ApiEndPoints.swift */,
+				E8321BD02AE119E6003D2696 /* TVShowAPIEndPoints.swift */,
+				E8321BD22AE11A08003D2696 /* CastAPIEnpoints.swift */,
+				E87EAB5B2AE25DD8006A343A /* MovieAPIEndPoints.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		E8B399A02AE11093005B0A77 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				E8B399A32AE11130005B0A77 /* TabController */,
+				E8321BD42AE1288B003D2696 /* Home */,
+				E8321BD52AE128CB003D2696 /* Movie */,
+				E8321BD62AE128D5003D2696 /* TVShows */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		E8B399A12AE1109F005B0A77 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E87EAB572AE25767006A343A /* ImageExtesntions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E8B399A22AE110AF005B0A77 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				E8A9C29F2AE0033D00BD263A /* AppDelegate.swift */,
+				E8A9C2A12AE0033D00BD263A /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		E8B399A32AE11130005B0A77 /* TabController */ = {
+			isa = PBXGroup;
+			children = (
+				E8B399A42AE11187005B0A77 /* TabBarVC.swift */,
+			);
+			path = TabController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -137,9 +293,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E8A9C2C92AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlix" */;
 			buildPhases = (
+				6D98568A952DE9B4AFB817F1 /* [CP] Check Pods Manifest.lock */,
 				E8A9C2982AE0033D00BD263A /* Sources */,
 				E8A9C2992AE0033D00BD263A /* Frameworks */,
 				E8A9C29A2AE0033D00BD263A /* Resources */,
+				D17A79B2974D6792418C7913 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -154,6 +312,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E8A9C2CC2AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlixTests" */;
 			buildPhases = (
+				362A4095BD02EAB51437D645 /* [CP] Check Pods Manifest.lock */,
 				E8A9C2B12AE0033E00BD263A /* Sources */,
 				E8A9C2B22AE0033E00BD263A /* Frameworks */,
 				E8A9C2B32AE0033E00BD263A /* Resources */,
@@ -172,9 +331,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E8A9C2CF2AE0033E00BD263A /* Build configuration list for PBXNativeTarget "ChargeFlixUITests" */;
 			buildPhases = (
+				B9B0D6BCB410A54DC70697C7 /* [CP] Check Pods Manifest.lock */,
 				E8A9C2BB2AE0033E00BD263A /* Sources */,
 				E8A9C2BC2AE0033E00BD263A /* Frameworks */,
 				E8A9C2BD2AE0033E00BD263A /* Resources */,
+				D72C0DF7E9C3E2361043B700 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -256,15 +417,130 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		362A4095BD02EAB51437D645 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChargeFlixTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6D98568A952DE9B4AFB817F1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChargeFlix-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B9B0D6BCB410A54DC70697C7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChargeFlix-ChargeFlixUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D17A79B2974D6792418C7913 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChargeFlix/Pods-ChargeFlix-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChargeFlix/Pods-ChargeFlix-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChargeFlix/Pods-ChargeFlix-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D72C0DF7E9C3E2361043B700 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChargeFlix-ChargeFlixUITests/Pods-ChargeFlix-ChargeFlixUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChargeFlix-ChargeFlixUITests/Pods-ChargeFlix-ChargeFlixUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChargeFlix-ChargeFlixUITests/Pods-ChargeFlix-ChargeFlixUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E8A9C2982AE0033D00BD263A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E8A9C2AA2AE0033D00BD263A /* ChargeFlix.xcdatamodeld in Sources */,
-				E8A9C2A42AE0033D00BD263A /* ViewController.swift in Sources */,
+				E8B399AD2AE11445005B0A77 /* ApiEndPoints.swift in Sources */,
+				E8321BD32AE11A08003D2696 /* CastAPIEnpoints.swift in Sources */,
+				E8321BD12AE119E6003D2696 /* TVShowAPIEndPoints.swift in Sources */,
+				E86BD3A62AE286E70006EFB8 /* MovieRepository.swift in Sources */,
+				E8B399A52AE11187005B0A77 /* TabBarVC.swift in Sources */,
+				E87EAB582AE25767006A343A /* ImageExtesntions.swift in Sources */,
+				E8B399AB2AE113FB005B0A77 /* APIManager.swift in Sources */,
+				E8321BCD2AE119B7003D2696 /* Constants.swift in Sources */,
+				E86BD3A82AE28D800006EFB8 /* TVShowRepository.swift in Sources */,
+				E86BD3AA2AE28DEA0006EFB8 /* CastRepository.swift in Sources */,
 				E8A9C2A02AE0033D00BD263A /* AppDelegate.swift in Sources */,
 				E8A9C2A22AE0033D00BD263A /* SceneDelegate.swift in Sources */,
+				E87EAB562AE23454006A343A /* Models.swift in Sources */,
+				E87EAB5A2AE2580B006A343A /* Repository.swift in Sources */,
+				E87EAB5C2AE25DD8006A343A /* MovieAPIEndPoints.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,11 +717,13 @@
 		};
 		E8A9C2CA2AE0033E00BD263A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05D0728B9574DF72B55BCA14 /* Pods-ChargeFlix.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChargeFlix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -468,11 +746,13 @@
 		};
 		E8A9C2CB2AE0033E00BD263A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7CBC22F2283A9E03C652804 /* Pods-ChargeFlix.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ChargeFlix/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -495,6 +775,7 @@
 		};
 		E8A9C2CD2AE0033E00BD263A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5E988F561A3BDCCCAFB32AA4 /* Pods-ChargeFlixTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -514,6 +795,7 @@
 		};
 		E8A9C2CE2AE0033E00BD263A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F52AD9E8D299BD32E3081038 /* Pods-ChargeFlixTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -533,6 +815,7 @@
 		};
 		E8A9C2D02AE0033E00BD263A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D34B155EDCE3FD0B50B442F /* Pods-ChargeFlix-ChargeFlixUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -550,6 +833,7 @@
 		};
 		E8A9C2D12AE0033E00BD263A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B3EA8E203B7262AD1AC767D4 /* Pods-ChargeFlix-ChargeFlixUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
