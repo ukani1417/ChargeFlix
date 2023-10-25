@@ -7,19 +7,17 @@
 
 import Foundation
 
-
-
 // MARK: - Movie
 struct Movie: Codable {
     let id: Int?
     let adult: Bool?
-    let backdropPath:  URL?
+    let backdropPath: String?
     let genres: [Genre]?
     let originalLanguage: String?
     let originalTitle: String?
     let overview: String?
     let popularity: Double?
-    let posterPath: URL?
+    let posterPath: String?
     let releaseDate: String?
     let status: String?
     let title: String?
@@ -27,7 +25,7 @@ struct Movie: Codable {
     let voteAverage: Double?
     
     enum CodingKeys: String, CodingKey {
-        case id,adult,genres,overview,popularity,status,title,runtime
+        case id, adult, genres, overview, popularity, status, title, runtime
         case backdropPath = "backdrop_path"
         case posterPath = "poster_path"
         case originalLanguage = "original_language"
@@ -40,8 +38,8 @@ struct Movie: Codable {
 
 struct MovieListObj: Codable {
     let id: Int?
-    let backdropPath:  URL?
-    let posterPath: URL?
+    let backdropPath: String?
+    let posterPath: String?
     let originalTitle: String?
     
     enum CodingKeys: String, CodingKey {
@@ -88,7 +86,7 @@ struct UpcomingMoviesList: Codable {
     let list: [MovieListObj]?
     
     enum CodingKeys: String, CodingKey {
-        case page,dates
+        case page, dates
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
@@ -104,7 +102,7 @@ struct NowPlayingMoviesList: Codable {
     let list: [MovieListObj]?
     
     enum CodingKeys: String, CodingKey {
-        case page,dates
+        case page, dates
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
@@ -118,7 +116,7 @@ struct Genre: Codable {
 }
 
 struct Dates: Codable {
-    let maximum,minimum: String?
+    let maximum, minimum: String?
 }
 
 // MARK: - TVShow
@@ -126,8 +124,8 @@ struct TVShow: Codable {
     let id: Int?
     let adult: Bool?
     let name: String?
-    let backdropPath: URL?
-    let posterPath: URL?
+    let backdropPath: String?
+    let posterPath: String?
     let episodeRunTime: [Int]?
     let firstAirDate: String?
     let genres: [Genre]?
@@ -149,7 +147,7 @@ struct TVShow: Codable {
     let type: String?
 
     enum CodingKeys: String, CodingKey {
-        case id,adult,genres,languages,name,overview,popularity,seasons,status,type
+        case id, adult, genres, languages, name, overview, popularity, seasons, status, type
         case backdropPath = "backdrop_path"
         case posterPath = "poster_path"
         case episodeRunTime = "episode_run_time"
@@ -179,10 +177,10 @@ struct Episode: Codable {
     let voteCount: Int?
     let airDate: String?
     let episodeType: String?
-    let stillPath: URL?
+    let stillPath: String?
 
     enum CodingKeys: String, CodingKey {
-        case id,name,overview,runtime
+        case id, name, overview, runtime
         case showId = "show_id"
         case seasonNumber = "season_number"
         case episodeNumber = "episode_number"
@@ -205,7 +203,7 @@ struct Season: Codable {
     let voteAverage: Double?
     
     enum CodingKeys: String, CodingKey {
-        case id,name,overview
+        case id, name, overview
         case posterPath = "poster_path"
         case airDate = "air_date"
         case seasonNumber = "season_number"
@@ -217,7 +215,7 @@ struct Season: Codable {
 
 struct TVShowListObj: Codable {
     let id: Int?
-    let backdropPath:  String?
+    let backdropPath: String?
     let posterPath: String?
     let originalName: String?
     
@@ -265,10 +263,10 @@ struct Person: Codable {
     let gender: Int?
     let name: String?
     let knownForDepartement: String?
-    let profilePath: URL?
+    let profilePath: String?
     
     enum CodingKeys: String, CodingKey {
-        case id,adult,biography,name,gender
+        case id, adult, biography, name, gender
         case knownForDepartement = "known_for_department"
         case profilePath = "profile_path"
     }
@@ -293,8 +291,7 @@ struct KnownForMovie: Codable {
     let crew: [MovieListObj]?
     
     enum CodingKeys: String, CodingKey {
-        case id,cast,crew
-       
+        case id, cast, crew
     }
     
 }
@@ -305,22 +302,22 @@ struct KnownForTVShow: Codable {
     let crew: [TVShowListObj]?
     
     enum CodingKeys: String, CodingKey {
-        case id,cast,crew
+        case id, cast, crew
     }
 }
 
 struct PersonImages: Codable {
     let id: Int?
     let profiles: [Image]?
-    
+
     enum CodingKeys: String, CodingKey {
-        case id,profiles
+        case id, profiles
     }
     
 }
 
 struct Image: Codable {
-    let filePath: URL?
+    let filePath: String?
     
     enum CodingKeys: String, CodingKey {
         case filePath = "file_path"
