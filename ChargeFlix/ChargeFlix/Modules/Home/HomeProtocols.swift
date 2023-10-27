@@ -9,12 +9,12 @@ import UIKit
 
 protocol HomeViewInterface: AnyObject {
     var presenter: HomePresenterInterface? { get set }
-  
-    func onFetchPopularMovieListSuccess()
-    func onFetchTopRatedMovieListSuccess()
-    func onFetchUpComingMovieListSuccess()
-    func onFetchNowPlayingMovieListSuccess()
     
+    func showActity()
+    func hideActivity()
+    func reloadTable()
+    func setupHeaderView(title: String, poster: String)
+        
     func onFetchPopularMovieListFailure()
     func onFetchTopRatedMovieListFailure()
     func onFetchUpComingMovieListFailure()
@@ -33,7 +33,7 @@ protocol HomePresenterInterface: AnyObject {
     func cellForRowAt(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func heightForRowAt(tableView: UITableView, indexPath: IndexPath) -> CGFloat
     func heightForSectionAt(tableView: UITableView, section: Int) -> CGFloat
-    func titleForHeaderSectionAt(tableView: UITableView, section: Int) -> String
+    func setupHeaderView(section: Int) -> UIView
     
     func onFetchPopularMovieListSuccess()
     func onFetchTopRatedMovieListSuccess()
@@ -44,6 +44,11 @@ protocol HomePresenterInterface: AnyObject {
     func onFetchTopRatedMovieListFailure()
     func onFetchUpComingMovieListFailure()
     func onFetchNowPlayingMovieListFailure()
+    
+    func numsOfSectionInCollection(sectionForCollection: Int) -> Int
+    func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int
+    func setupCollectionCell(collectionView: UICollectionView, indexPath: IndexPath, sectionForCollection: Int) -> UICollectionViewCell
+    
 }
 
 protocol HomeInteractorInterface {
@@ -54,7 +59,7 @@ protocol HomeInteractorInterface {
     var upComingMovieList: UpcomingMoviesList? { get set }
     var nowPlayingMovieList: NowPlayingMoviesList? { get set }
     
-    func getPopularMovies() 
+    func getPopularMovies()
     func getTopRatedMovies()
     func getUpComingMovies()
     func getNowPlayingMovies()
@@ -62,4 +67,10 @@ protocol HomeInteractorInterface {
 
 protocol HomeRouterInterface {
     
+}
+
+protocol MovieTableCellToView {
+    func numsOfSectionInCollection(sectionForCollection: Int) -> Int
+    func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int
+    func setupCollectionCell(collectionView: UICollectionView, indexPath: IndexPath, sectionForCollection: Int) -> UICollectionViewCell
 }

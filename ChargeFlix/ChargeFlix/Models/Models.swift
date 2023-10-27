@@ -227,7 +227,7 @@ struct TVShowListObj: Codable {
     }
 }
 
-struct PopularTVShows: Codable {
+struct PopularTVShowsList: Codable {
     let page: Int?
     let totalPages: Int?
     let totalResults: Int?
@@ -241,7 +241,7 @@ struct PopularTVShows: Codable {
     }
 }
 
-struct TopRatedTVShows: Codable {
+struct TopRatedTVShowsList: Codable {
     let page: Int?
     let totalPages: Int?
     let totalResults: Int?

@@ -13,6 +13,7 @@ class TVShowRouter: TVShowRouterInterface {
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.navigationItem.title = "TV Shows"
         navigationController.navigationBar.prefersLargeTitles = true
+        
         let router: TVShowRouterInterface = TVShowRouter()
         let interactor: TVShowInteractorInterface = TVShowInteractor()
         

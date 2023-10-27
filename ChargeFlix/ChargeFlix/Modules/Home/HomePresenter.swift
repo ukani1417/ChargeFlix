@@ -19,11 +19,6 @@ class HomePresenter: HomePresenterInterface {
     private var upComingMovieList: UpcomingMoviesList?
     private var nowPlayingMovieList: NowPlayingMoviesList?
     
-//    private var popularMoviePublisher = PassthroughSubject<PopularMoviesList, Error>()
-//    private var topRateMoviePublisher = PassthroughSubject<TopRatedTVShows, Error>()
-//    private var upComingMoviePublisher = PassthroughSubject<UpcomingMoviesList, Error>()
-//    private var nowPlayingMoviePublisher = PassthroughSubject<NowPlayingMoviesList, Error>()
-//    
     init(view: HomeViewInterface? = nil, router: HomeRouterInterface? = nil, interactor: HomeInteractorInterface? = nil) {
         self.view = view
         self.router = router
@@ -37,25 +32,30 @@ class HomePresenter: HomePresenterInterface {
         interactor?.getNowPlayingMovies()
     }
     
+    // Api Success
+    
     func onFetchPopularMovieListSuccess() {
         popularMovieList = interactor?.popularMovieList
-        view?.onFetchPopularMovieListSuccess()
+        view?.reloadTable()
+        view?.setupHeaderView(title: popularMovieList?.list?[0].originalTitle ?? "", poster: popularMovieList?.list?[0].backdropPath ?? "")
     }
     
     func onFetchTopRatedMovieListSuccess() {
         topRateMovieList = interactor?.topRateMovieList
-        view?.onFetchTopRatedMovieListSuccess()
+        view?.reloadTable()
     }
     
     func onFetchUpComingMovieListSuccess() {
         upComingMovieList = interactor?.upComingMovieList
-        view?.onFetchUpComingMovieListSuccess()
+        view?.reloadTable()
     }
     
     func onFetchNowPlayingMovieListSuccess() {
         nowPlayingMovieList = interactor?.nowPlayingMovieList
-        view?.onFetchNowPlayingMovieListSuccess()
+        view?.reloadTable()
     }
+    
+    // Api failure
     
     func onFetchPopularMovieListFailure() {
         view?.onFetchPopularMovieListFailure()
@@ -73,13 +73,13 @@ class HomePresenter: HomePresenterInterface {
         view?.onFetchNowPlayingMovieListFailure()
     }
     
-//    Table DataSource & Delegate
+    //    Table DataSource & Delegate
     func heightForSectionAt(tableView: UITableView, section: Int) -> CGFloat {
         return 30.0
     }
     
     func heightForRowAt(tableView: UITableView, indexPath: IndexPath) -> CGFloat {
-        return 50.0
+        return 210.0
     }
     
     func numsOfSection() -> Int {
@@ -91,26 +91,59 @@ class HomePresenter: HomePresenterInterface {
     }
     
     func cellForRowAt(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        print(indexPath.section)
-        switch indexPath.section {
-        case 0: cell.textLabel?.text = String(popularMovieList?.list?.count ?? 0)
-        case 1: cell.textLabel?.text = String(topRateMovieList?.list?.count ?? 0)
-        case 2: cell.textLabel?.text = String(upComingMovieList?.list?.count ?? 0)
-        case 3: cell.textLabel?.text = String(nowPlayingMovieList?.list?.count ?? 0)
-        default: cell.textLabel?.text = "Not matching case"
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifire, for: indexPath) as? MovieTableViewCell else {
+            return UITableViewCell()
         }
-        
+        cell.viewController = view as? MovieTableCellToView
+        cell.sectionForCollection = indexPath.section
         return cell
     }
     
-    func titleForHeaderSectionAt(tableView: UITableView, section: Int) -> String {
+    func setupHeaderView(section: Int) -> UIView {
+        let header = TableSectionHeaderView()
         switch section {
-        case 0: return String("Populer Movies")
-        case 1: return String("Top Movies")
-        case 2: return String("UpComing")
-        case 3: return String("In Theaters")
-        default: return  "Not matching case"
+        case 0: header.configContent(sectionTitle: "Populer Movies", section: section)
+        case 1: header.configContent(sectionTitle: "Top Movies", section: section)
+        case 2: header.configContent(sectionTitle: "UpComing", section: section)
+        case 3: header.configContent(sectionTitle: "In Theaters", section: section)
+        default: break
         }
+        return header
+    }
+    
+    //    Collection Data Source & Delegate
+    
+    func numsOfSectionInCollection(sectionForCollection: Int) -> Int {
+        return 1
+    }
+    
+    func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int {
+        switch sectionForCollection {
+        case 0: return popularMovieList?.list?.count ?? 0
+        case 1: return topRateMovieList?.list?.count ?? 0
+        case 2: return upComingMovieList?.list?.count ?? 0
+        case 3: return nowPlayingMovieList?.list?.count ?? 0
+        default: return 0
+        }
+    }
+    
+    func setupCollectionCell(collectionView: UICollectionView, indexPath: IndexPath, sectionForCollection: Int) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifire, for: indexPath) as? CollectionViewCell else {
+            return UICollectionViewCell()
+        }
+       
+        switch sectionForCollection {
+        case 0: 
+            cell.configCellContent(title: popularMovieList?.list?[indexPath.row].originalTitle ?? "", posterPath: popularMovieList?.list?[indexPath.row].posterPath ?? "")
+        case 1: 
+            cell.configCellContent(title: topRateMovieList?.list?[indexPath.row].originalTitle ?? "", posterPath: topRateMovieList?.list?[indexPath.row].posterPath ?? "")
+        case 2: 
+            cell.configCellContent(title: upComingMovieList?.list?[indexPath.row].originalTitle ?? "", posterPath: upComingMovieList?.list?[indexPath.row].posterPath ?? "")
+        case 3: 
+            cell.configCellContent(title: nowPlayingMovieList?.list?[indexPath.row].originalTitle ?? "", posterPath: nowPlayingMovieList?.list?[indexPath.row].posterPath ?? "")
+        default: break
+        }
+        
+        return cell
     }
 }
