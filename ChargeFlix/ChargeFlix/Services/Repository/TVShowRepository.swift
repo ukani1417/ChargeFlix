@@ -19,8 +19,8 @@ class TVShowRepository {
         
         var apiEndPoint: TVShowAPIEndPoints? {
             switch modelType {
-            case is PopularTVShows.Type: return .populer(page: page)
-            case is TopRatedTVShows.Type: return .topRated(page: page)
+            case is PopularTVShowsList.Type: return .populer(page: page)
+            case is TopRatedTVShowsList.Type: return .topRated(page: page)
             default: return  nil
             }
         }

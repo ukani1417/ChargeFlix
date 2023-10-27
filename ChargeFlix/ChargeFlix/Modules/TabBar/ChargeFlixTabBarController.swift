@@ -20,7 +20,6 @@ class ChargeFlixTabBarController: UITabBarController {
     }
     
     private func setupUI() {
-        self.tabBar.backgroundColor = AppTheme.tabBarBGColor
         self.tabBar.tintColor = AppTheme.tabBarTintColor
         self.tabBar.unselectedItemTintColor = AppTheme.tabBarUnselectedColor
     }

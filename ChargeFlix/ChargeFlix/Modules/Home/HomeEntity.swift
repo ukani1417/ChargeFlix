@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct GenreList: Codable {
+    let list: [Genre]
+}
