@@ -20,10 +20,10 @@ class HomePresenter: HomePresenterInterface {
     private var upComingMovieList: UpcomingMoviesList?
     private var nowPlayingMovieList: NowPlayingMoviesList?
     
-    private var filteredPopularMovieList: PopularMoviesList?
-    private var filteredTopRateMovieList: TopRatedMoviesList?
-    private var filteredUpComingMovieList: UpcomingMoviesList?
-    private var filteredNowPlayingMovieList: NowPlayingMoviesList?
+    private var filteredPopularMovieList: [ListObj] = []
+    private var filteredTopRateMovieList: [ListObj] = []
+    private var filteredUpComingMovieList: [ListObj] = []
+    private var filteredNowPlayingMovieList: [ListObj] = []
     
     private var movieGenreList: MovieGenreList?
     
@@ -46,10 +46,10 @@ class HomePresenter: HomePresenterInterface {
     func onFetchPopularMovieListSuccess() {
         
         popularMovieList = interactor?.popularMovieList
-        filteredPopularMovieList = interactor?.popularMovieList
+        filteredPopularMovieList = popularMovieList?.ToListObj() ?? []
         view?.reloadTable()
         
-        let voteaverage = ((filteredPopularMovieList?.list?[0].voteAvarage ?? 0.0)/2.0)
+        let voteaverage = ((popularMovieList?.list?[0].voteAvarage ?? 0.0)/2.0)
         let rounded: Double = voteaverage.rounded(.down)
         
         let fullStar: Int = Int(rounded)
@@ -68,19 +68,19 @@ class HomePresenter: HomePresenterInterface {
     
     func onFetchTopRatedMovieListSuccess() {
         topRateMovieList = interactor?.topRateMovieList
-        filteredTopRateMovieList = interactor?.topRateMovieList
+        filteredTopRateMovieList = topRateMovieList?.ToListObj() ?? []
         view?.reloadTable()
     }
     
     func onFetchUpComingMovieListSuccess() {
         upComingMovieList = interactor?.upComingMovieList
-        filteredUpComingMovieList = interactor?.upComingMovieList
+        filteredUpComingMovieList = upComingMovieList?.ToListObj() ?? []
         view?.reloadTable()
     }
     
     func onFetchNowPlayingMovieListSuccess() {
         nowPlayingMovieList = interactor?.nowPlayingMovieList
-        filteredNowPlayingMovieList = interactor?.nowPlayingMovieList
+        filteredNowPlayingMovieList = nowPlayingMovieList?.ToListObj() ?? []
         view?.reloadTable()
     }
     
@@ -133,6 +133,15 @@ class HomePresenter: HomePresenterInterface {
         }
         cell.viewController = view as? MovieTableCellToView
         cell.sectionForCollection = indexPath.section
+        
+        switch indexPath.section {
+        case 0: cell.configContent(data: filteredPopularMovieList)
+        case 1: cell.configContent(data: filteredTopRateMovieList)
+        case 2: cell.configContent(data: filteredUpComingMovieList)
+        case 3: cell.configContent(data: filteredNowPlayingMovieList)
+        default: break
+        }
+        
         return cell
     }
     
@@ -148,9 +157,9 @@ class HomePresenter: HomePresenterInterface {
         return header
     }
     
-    func filterDataFromGenre(indexPath: IndexPath) {
-        let index = indexPath.row
+    func filterDataFromGenre(index: Int) {
         let genreId = movieGenreList?.genres[index].id
+//        view?.reloadTable()
     }
     
     func numsOfRowsInGenreCollection(section: Int) -> Int {
@@ -173,10 +182,10 @@ class HomePresenter: HomePresenterInterface {
     
     func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int {
         switch sectionForCollection {
-        case 0: return popularMovieList?.list?.count ?? 0
-        case 1: return topRateMovieList?.list?.count ?? 0
-        case 2: return upComingMovieList?.list?.count ?? 0
-        case 3: return nowPlayingMovieList?.list?.count ?? 0
+        case 0: return filteredPopularMovieList.count
+        case 1: return filteredTopRateMovieList.count
+        case 2: return filteredUpComingMovieList.count
+        case 3: return filteredNowPlayingMovieList.count
         default: return 0
         }
     }
@@ -188,13 +197,13 @@ class HomePresenter: HomePresenterInterface {
        
         switch sectionForCollection {
         case 0: 
-            cell.configCellContent(title: popularMovieList?.list?[indexPath.row].originalTitle ?? "", posterPath: popularMovieList?.list?[indexPath.row].posterPath ?? "")
-        case 1: 
-            cell.configCellContent(title: topRateMovieList?.list?[indexPath.row].originalTitle ?? "", posterPath: topRateMovieList?.list?[indexPath.row].posterPath ?? "")
-        case 2: 
-            cell.configCellContent(title: upComingMovieList?.list?[indexPath.row].originalTitle ?? "", posterPath: upComingMovieList?.list?[indexPath.row].posterPath ?? "")
-        case 3: 
-            cell.configCellContent(title: nowPlayingMovieList?.list?[indexPath.row].originalTitle ?? "", posterPath: nowPlayingMovieList?.list?[indexPath.row].posterPath ?? "")
+            cell.configCellContent(title: filteredPopularMovieList[indexPath.row].title ?? "", posterPath: filteredPopularMovieList[indexPath.row].posterPath ?? "" )
+        case 1:
+            cell.configCellContent(title: filteredTopRateMovieList[indexPath.row].title ?? "", posterPath: filteredTopRateMovieList[indexPath.row].posterPath ?? "")
+        case 2:
+            cell.configCellContent(title: filteredUpComingMovieList[indexPath.row].title ?? "", posterPath: filteredUpComingMovieList[indexPath.row].posterPath ?? "")
+        case 3:
+            cell.configCellContent(title: filteredNowPlayingMovieList[indexPath.row].title ?? "", posterPath: filteredNowPlayingMovieList[indexPath.row].posterPath ?? "")
         default: break
         }
         

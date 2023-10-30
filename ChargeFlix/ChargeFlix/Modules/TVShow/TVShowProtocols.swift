@@ -13,7 +13,7 @@ protocol TVShowViewInterface: AnyObject {
     func showActivity()
     func hideActivity()
     
-    func onFetchPopularTVShowsListSuccess(list: PopularTVShowsList?)
+    func onFetchPopularTVShowsListSuccess(list: [ListObj])
     func onFetchPopularTVShowsListFailure()
 }
 

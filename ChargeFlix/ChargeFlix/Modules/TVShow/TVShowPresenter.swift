@@ -29,7 +29,8 @@ class TVShowPresenter: TVShowPresenterInterface {
     func onFetchPopularTVShowsListSuccess() {
         popularTVShowsList = interactor?.popularTVShowsList
         view?.hideActivity()
-        view?.onFetchPopularTVShowsListSuccess(list: popularTVShowsList)
+       
+        view?.onFetchPopularTVShowsListSuccess(list: popularTVShowsList?.ToListObj() ?? [])
     }
     
     func onFetchPopularTVShowsListFailure() {

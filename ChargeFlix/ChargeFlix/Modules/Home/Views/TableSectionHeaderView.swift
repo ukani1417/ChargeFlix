@@ -42,10 +42,6 @@ class TableSectionHeaderView: UIView {
         showAllButton.addTarget(self, action: #selector(TableSectionHeaderView.showAllButtonTapped), for: .touchUpInside)
     }
     
-    private func setupDelegates() {
-       
-    }
-    
     private func setupConstraint() {
         
         NSLayoutConstraint.activate([

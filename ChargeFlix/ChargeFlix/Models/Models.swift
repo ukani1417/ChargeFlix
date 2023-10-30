@@ -43,6 +43,7 @@ struct MovieListObj: Codable {
     let originalTitle: String?
     let voteAvarage: Double?
     let voteCount: Int?
+    let genre: [Int]?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -51,6 +52,7 @@ struct MovieListObj: Codable {
         case originalTitle = "original_title"
         case voteCount = "vote_count"
         case voteAvarage = "vote_average"
+        case genre = "genre_ids"
     }
 }
 
@@ -59,14 +61,18 @@ struct PopularMoviesList: Codable {
     let totalPages: Int?
     let totalResults: Int?
     let list: [MovieListObj]?
-    let genre: [Int]?
-    
+
     enum CodingKeys: String, CodingKey {
         case page
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
-        case genre = "genre_ids"
+    }
+    
+    func ToListObj() -> [ListObj] {
+        return self.list?.map({ obj in
+            return ListObj(title: obj.originalTitle, posterPath: obj.posterPath)
+        }) ?? []
     }
 }
 
@@ -75,15 +81,20 @@ struct TopRatedMoviesList: Codable {
     let totalPages: Int?
     let totalResults: Int?
     let list: [MovieListObj]?
-    let genre: [Int]?
-    
+
     enum CodingKeys: String, CodingKey {
         case page
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
-        case genre = "genre_ids"
     }
+    
+    func ToListObj() -> [ListObj] {
+        return self.list?.map({ obj in
+            return ListObj(title: obj.originalTitle, posterPath: obj.posterPath)
+        }) ?? []
+    }
+
 }
 
 struct UpcomingMoviesList: Codable {
@@ -92,16 +103,19 @@ struct UpcomingMoviesList: Codable {
     let totalPages: Int?
     let totalResults: Int?
     let list: [MovieListObj]?
-    let genre: [Int]?
     
     enum CodingKeys: String, CodingKey {
         case page, dates
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
-        case genre = "genre_ids"
     }
     
+    func ToListObj() -> [ListObj] {
+        return self.list?.map({ obj in
+            return ListObj(title: obj.originalTitle, posterPath: obj.posterPath)
+        }) ?? []
+    }
 }
 
 struct NowPlayingMoviesList: Codable {
@@ -110,14 +124,18 @@ struct NowPlayingMoviesList: Codable {
     let totalPages: Int?
     let totalResults: Int?
     let list: [MovieListObj]?
-    let genre: [Int]?
     
     enum CodingKeys: String, CodingKey {
         case page, dates
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
-        case genre = "genre_ids"
+    }
+    
+    func ToListObj() -> [ListObj] {
+        return self.list?.map({ obj in
+            return ListObj(title: obj.originalTitle, posterPath: obj.posterPath)
+        }) ?? []
     }
     
 }
@@ -255,6 +273,12 @@ struct PopularTVShowsList: Codable {
         case totalResults = "total_results"
         case list = "results"
     }
+    
+    func ToListObj() -> [ListObj] {
+        return self.list?.map({ obj in
+            return ListObj(title: obj.originalName, posterPath: obj.posterPath)
+        }) ?? []
+    }
 }
 
 struct TopRatedTVShowsList: Codable {
@@ -269,6 +293,12 @@ struct TopRatedTVShowsList: Codable {
         case totalResults = "total_results"
         case list = "results"
         
+    }
+    
+    func ToListObj() -> [ListObj] {
+        return self.list?.map({ obj in
+            return ListObj(title: obj.originalName, posterPath: obj.posterPath)
+        }) ?? []
     }
 }
 // MARK: - Cast
@@ -339,4 +369,9 @@ struct Image: Codable {
     enum CodingKeys: String, CodingKey {
         case filePath = "file_path"
     }
+}
+
+struct ListObj {
+    let title: String?
+    let posterPath: String?
 }
