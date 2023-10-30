@@ -40,6 +40,7 @@ class HomeViewController: UIViewController {
         let view = UITableView(frame: .zero, style: .grouped)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifire)
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     
@@ -99,6 +100,7 @@ extension HomeViewController: HomeViewInterface {
     func reloadTable() {
         DispatchQueue.main.async {
             self.movieTableView.reloadData()
+            self.movieTableView.layoutIfNeeded()
         }
     }
 
@@ -154,29 +156,6 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-extension HomeViewController: MovieTableCellToView {
-    func numsOfSectionInCollection(sectionForCollection: Int) -> Int {
-        return presenter?.numsOfSectionInCollection(sectionForCollection: sectionForCollection) ?? 0
-    }
-    
-    func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int {
-        return presenter?.numsOfRowsCollectionSection(section: section, 
-                                                      sectionForCollection: sectionForCollection) ?? 0
-    }
-    
-    func setupCollectionCell(collectionView: UICollectionView,
-                             indexPath: IndexPath,
-                             sectionForCollection: Int) -> UICollectionViewCell {
-        return presenter?.setupCollectionCell(collectionView: collectionView,
-                                              indexPath: indexPath,
-                                              sectionForCollection: sectionForCollection) ?? UICollectionViewCell()
-    }
-    
-    func didselectItemAt(indexPath: IndexPath) {
-        presenter?.filterDataFromGenre(indexPath: indexPath)
-    }
-}
-
 extension HomeViewController: MovieHeaderViewToView {
     func numsOfRowsInGenreCollection(section: Int) -> Int {
         return presenter?.numsOfRowsInGenreCollection(section: section) ?? 0
@@ -185,4 +164,10 @@ extension HomeViewController: MovieHeaderViewToView {
     func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
         return presenter?.setupGenreCollectionCell(collectionView: collectionView, indexPath: indexPath) ?? UICollectionViewCell()
     }
+    
+    func didSelect(at: Int) {
+        print("did select tapped")
+        presenter?.filterDataFromGenre(index: at)
+    }
+    
 }

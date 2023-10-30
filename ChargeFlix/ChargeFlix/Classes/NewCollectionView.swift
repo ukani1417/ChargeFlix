@@ -10,11 +10,13 @@ import UIKit
 
 class NewCollectionView: UIView {
     var collectionview: UICollectionView!
-    var populerList: PopularTVShowsList? 
+    var layout: UICollectionViewFlowLayout!
+    var list: [ListObj] = []
    
     init(scrollDirection: UICollectionView.ScrollDirection) {
         super.init(frame: .zero)
         setupLayout(scrollDirection: scrollDirection)
+        setupCollectionView()
         setupConstraint()
     }
 
@@ -23,22 +25,23 @@ class NewCollectionView: UIView {
     }
     
     func setupLayout(scrollDirection: UICollectionView.ScrollDirection) {
-        let collectionLayout = UICollectionViewFlowLayout()
-        collectionLayout.scrollDirection = scrollDirection
-        collectionLayout.itemSize = CGSize(width: 120, height: 180)
-        collectionLayout.minimumLineSpacing = 4
-        collectionLayout.minimumInteritemSpacing = 4
-        collectionLayout.sectionInset = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
+        layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = scrollDirection
+        layout.itemSize = CGSize(width: 130, height: 180)
+        layout.minimumLineSpacing = 2
+        layout.minimumInteritemSpacing = 2
+        layout.sectionInset = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
         
-        collectionview = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
+    }
+    
+    func setupCollectionView() {
+        collectionview = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionview?.delegate = self
         collectionview?.dataSource = self
         collectionview?.register(CollectionViewCell.self,
                                  forCellWithReuseIdentifier: CollectionViewCell.identifire)
         collectionview.translatesAutoresizingMaskIntoConstraints = false
-        
         self.addSubview(collectionview)
-    
     }
 
     private func setupConstraint() {
@@ -50,23 +53,26 @@ class NewCollectionView: UIView {
         ])
     }
     
-    func configContent(list: PopularTVShowsList?) {
-        self.populerList = list
+    func configContent(list: [ListObj]) {
+        self.list = list
     }
     
 }
 
 extension NewCollectionView: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return populerList?.list?.count ?? 0
+        if list.isEmpty {
+            return 0
+        }
+        return list.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifire, for: indexPath) as? CollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configCellContent(title: populerList?.list?[indexPath.row].originalName ?? "",
-                               posterPath: populerList?.list?[indexPath.row].posterPath ?? "")
+        cell.configCellContent(title: list[indexPath.row].title ?? "",
+                               posterPath: list[indexPath.row].posterPath ?? "")
         return cell
     }
 }

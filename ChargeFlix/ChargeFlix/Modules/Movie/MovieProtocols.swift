@@ -14,7 +14,7 @@ protocol MovieViewInterface: AnyObject {
     func showActity()
     func hideActivity()
     
-    func onFetchPopularMovieListSuccess()
+    func onFetchPopularMovieListSuccess(data: [ListObj])
     func onFetchPopularMovieListFailure()
 }
 

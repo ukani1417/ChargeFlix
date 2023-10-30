@@ -20,7 +20,7 @@ class HomeInteractor: HomeInteractorInterface {
     init(repository: MovieRepository? = MovieRepository()) {
         self.repository = repository
     }
-    
+        
     func getPopularMovies() {
         repository?.get(modelType: PopularMoviesList.self) { result in
             switch result {

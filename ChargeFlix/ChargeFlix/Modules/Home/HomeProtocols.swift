@@ -34,7 +34,7 @@ protocol HomePresenterInterface: AnyObject {
     func heightForRowAt(tableView: UITableView, indexPath: IndexPath) -> CGFloat
     func heightForSectionAt(tableView: UITableView, section: Int) -> CGFloat
     func setupHeaderView(section: Int) -> UIView
-    func filterDataFromGenre(indexPath: IndexPath)
+    func filterDataFromGenre(index: Int)
     func numsOfRowsInGenreCollection(section: Int) -> Int
     func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
     
@@ -86,4 +86,5 @@ protocol MovieTableCellToView {
 protocol MovieHeaderViewToView {
     func numsOfRowsInGenreCollection(section: Int) -> Int
     func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
+    func didSelect(at: Int)
 }

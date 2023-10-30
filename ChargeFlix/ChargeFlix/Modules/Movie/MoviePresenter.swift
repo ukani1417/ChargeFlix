@@ -32,7 +32,7 @@ class MoviePresenter: MoviePresenterInterface {
     func onFetchPopularMovieListSuccess() {
         populerMovieList = interactor?.popularMovieList
         view?.hideActivity()
-        view?.onFetchPopularMovieListSuccess()
+        view?.onFetchPopularMovieListSuccess(data: populerMovieList?.ToListObj() ?? [])
     }
     
     func onFetchPopularMovieListFailure() {

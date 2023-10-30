@@ -15,18 +15,11 @@ class MovieTableViewCell: UITableViewCell {
     
     var sectionForCollection: Int = 0
     
-    private  var movieCollectionView = {
-        let view =  CollectionView(
-            layout: ConfigLayout(scrollDirection: .horizontal,
-                                 itemSize: CGSize(width: 100, height: 200),
-                                 sectionInset: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1),
-                                 minimumLineSpaceing: 10,
-                                 minimumInteritemSpacing: 1),
-            sections: 1
-        )
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.identifire)
-        return view
+    var moviessCollectionView: NewCollectionView = {
+        let cView = NewCollectionView(scrollDirection: .horizontal)
+        cView.translatesAutoresizingMaskIntoConstraints = false
+        cView.collectionview.showsHorizontalScrollIndicator = false
+        return cView
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -40,37 +33,19 @@ class MovieTableViewCell: UITableViewCell {
     }
     
     private func setupUI() {
-        contentView.addSubview(movieCollectionView)
-        movieCollectionView.dataSource = self
-        movieCollectionView.delegate = self
-        
+        contentView.addSubview(moviessCollectionView)
+    }
+    
+    func configContent(data: [ListObj]) {
+        self.moviessCollectionView.configContent(list: data)
     }
     
     private func setupConstraint() {
         NSLayoutConstraint.activate([
-            movieCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            movieCollectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            movieCollectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            movieCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            moviessCollectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            moviessCollectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            moviessCollectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            moviessCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-    }
-    
-}
-
-extension MovieTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewController?.numsOfSectionInCollection(sectionForCollection: self.sectionForCollection) ?? 0
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewController?.numsOfRowsCollectionSection(section: section, sectionForCollection: self.sectionForCollection) ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return viewController?.setupCollectionCell(collectionView: collectionView, indexPath: indexPath, sectionForCollection: self.sectionForCollection) ?? UICollectionViewCell()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewController?.didselectItemAt(indexPath: indexPath)
     }
 }

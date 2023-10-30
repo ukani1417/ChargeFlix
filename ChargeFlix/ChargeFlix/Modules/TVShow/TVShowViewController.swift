@@ -16,9 +16,10 @@ class TVShowViewController: UIViewController {
  
     var presenter: TVShowPresenterInterface?
     
-    private var newView: NewCollectionView = {
+    private var tvShowsCollectionView: NewCollectionView = {
         let cView = NewCollectionView(scrollDirection: .vertical)
         cView.translatesAutoresizingMaskIntoConstraints = false
+        cView.collectionview.showsVerticalScrollIndicator = false
         return cView
     }()
     
@@ -41,30 +42,28 @@ class TVShowViewController: UIViewController {
     private func setupUI() {
         self.title = "TV Shows"
         view.backgroundColor = .systemBackground
-        view.addSubview(newView)
+        view.addSubview(tvShowsCollectionView)
         view.addSubview(activityIndicator)
     }
     
     private func setupConstraint() {
         NSLayoutConstraint.activate([
-            newView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            newView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
-            newView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            newView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
+            tvShowsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tvShowsCollectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            tvShowsCollectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+            tvShowsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
-
 }
 
 extension TVShowViewController: TVShowViewInterface {
-    func onFetchPopularTVShowsListSuccess(list: PopularTVShowsList?) {
+    func onFetchPopularTVShowsListSuccess(list: [ListObj]) {
         DispatchQueue.main.async {
-            self.newView.configContent(list: list)
-            self.newView.collectionview.reloadData()
+            self.tvShowsCollectionView.configContent(list: list)
+            self.tvShowsCollectionView.collectionview.reloadData()
         }
     }
     
@@ -86,4 +85,3 @@ extension TVShowViewController: TVShowViewInterface {
         }
     }
 }
-
