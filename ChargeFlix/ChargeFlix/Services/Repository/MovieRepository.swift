@@ -23,6 +23,7 @@ class MovieRepository {
             case is TopRatedMoviesList.Type: return .topRated(page: page)
             case is UpcomingMoviesList.Type: return .upComing(page: page)
             case is NowPlayingMoviesList.Type: return .nowPlaying(page: page)
+            case is MovieGenreList.Type: return .genreList
             default: return  nil
             }
         }

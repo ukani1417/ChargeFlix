@@ -10,3 +10,10 @@ import Foundation
 struct GenreList: Codable {
     let list: [Genre]
 }
+
+struct MovieList: Codable {
+    var populerMovies: PopularMoviesList
+    var topRatedMovies: TopRatedMoviesList
+    var upcomingMovies: UpcomingMoviesList
+    var nowPlayingMovies: NowPlayingMoviesList
+}

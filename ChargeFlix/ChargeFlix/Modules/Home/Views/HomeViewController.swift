@@ -39,7 +39,6 @@ class HomeViewController: UIViewController {
     private let movieTableView: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.tableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 200))
         view.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifire)
         return view
     }()
@@ -76,14 +75,15 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: HomeViewInterface {
-    func setupHeaderView(title: String, poster: String) {
+    func setupHeaderView(title: String, poster: String, votes: String, fullStar: Int, halfStar: Int) {
         DispatchQueue.main.async {
-            let headerView: TableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 200))
-            headerView.configContent(title: title, poster: poster)
+            let headerView: TableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 300))
+            headerView.delegate = self
+            headerView.configContent(title: title, poster: poster, votes: votes, fullStar: fullStar, halfStar: halfStar)
             self.movieTableView.tableHeaderView = headerView
         }
     }
-    
+
     func showActity() {
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()
@@ -126,11 +126,9 @@ extension HomeViewController: HomeViewInterface {
             self.showAlert(title: "Failed", message: "On NowPlaying Movies")
         }
     }
-    
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         presenter?.heightForSectionAt(tableView: tableView, section: section) ?? 0.0
     }
@@ -154,7 +152,6 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return presenter?.setupHeaderView(section: section)
     }
-    
 }
 
 extension HomeViewController: MovieTableCellToView {
@@ -163,7 +160,8 @@ extension HomeViewController: MovieTableCellToView {
     }
     
     func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int {
-        return presenter?.numsOfRowsCollectionSection(section: section, sectionForCollection: sectionForCollection) ?? 0
+        return presenter?.numsOfRowsCollectionSection(section: section, 
+                                                      sectionForCollection: sectionForCollection) ?? 0
     }
     
     func setupCollectionCell(collectionView: UICollectionView,
@@ -174,4 +172,17 @@ extension HomeViewController: MovieTableCellToView {
                                               sectionForCollection: sectionForCollection) ?? UICollectionViewCell()
     }
     
+    func didselectItemAt(indexPath: IndexPath) {
+        presenter?.filterDataFromGenre(indexPath: indexPath)
+    }
+}
+
+extension HomeViewController: MovieHeaderViewToView {
+    func numsOfRowsInGenreCollection(section: Int) -> Int {
+        return presenter?.numsOfRowsInGenreCollection(section: section) ?? 0
+    }
+    
+    func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        return presenter?.setupGenreCollectionCell(collectionView: collectionView, indexPath: indexPath) ?? UICollectionViewCell()
+    }
 }

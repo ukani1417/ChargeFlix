@@ -61,7 +61,6 @@ class TableSectionHeaderView: UIView {
             showAllButton.topAnchor.constraint(equalTo: headerContentView.topAnchor),
             showAllButton.bottomAnchor.constraint(equalTo: headerContentView.bottomAnchor),
             showAllButton.trailingAnchor.constraint(equalTo: headerContentView.trailingAnchor, constant: -15)
-            
         ])
     }
     

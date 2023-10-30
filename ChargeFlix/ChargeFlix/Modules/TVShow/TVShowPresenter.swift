@@ -13,7 +13,7 @@ class TVShowPresenter: TVShowPresenterInterface {
     var interactor: TVShowInteractorInterface?
     var view: TVShowViewInterface?
     
-    private var popularTVShowsList: PopularTVShowsList?
+    private var popularTVShowsList: PopularTVShowsList? 
     
     init(router: TVShowRouterInterface? = nil, interactor: TVShowInteractorInterface? = nil, view: TVShowViewInterface? = nil) {
         self.router = router
@@ -29,7 +29,7 @@ class TVShowPresenter: TVShowPresenterInterface {
     func onFetchPopularTVShowsListSuccess() {
         popularTVShowsList = interactor?.popularTVShowsList
         view?.hideActivity()
-        view?.onFetchPopularTVShowsListSuccess()
+        view?.onFetchPopularTVShowsListSuccess(list: popularTVShowsList)
     }
     
     func onFetchPopularTVShowsListFailure() {

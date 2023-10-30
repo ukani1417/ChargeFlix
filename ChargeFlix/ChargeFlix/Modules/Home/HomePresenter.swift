@@ -13,11 +13,19 @@ class HomePresenter: HomePresenterInterface {
     weak var view: HomeViewInterface?
     var router: HomeRouterInterface?
     var interactor: HomeInteractorInterface?
+    var moviesList: MovieList?
     
     private var popularMovieList: PopularMoviesList?
     private var topRateMovieList: TopRatedMoviesList?
     private var upComingMovieList: UpcomingMoviesList?
     private var nowPlayingMovieList: NowPlayingMoviesList?
+    
+    private var filteredPopularMovieList: PopularMoviesList?
+    private var filteredTopRateMovieList: TopRatedMoviesList?
+    private var filteredUpComingMovieList: UpcomingMoviesList?
+    private var filteredNowPlayingMovieList: NowPlayingMoviesList?
+    
+    private var movieGenreList: MovieGenreList?
     
     init(view: HomeViewInterface? = nil, router: HomeRouterInterface? = nil, interactor: HomeInteractorInterface? = nil) {
         self.view = view
@@ -26,6 +34,7 @@ class HomePresenter: HomePresenterInterface {
     }
     
     func viewDidLoad() {
+        interactor?.getMovieGenreList()
         interactor?.getPopularMovies()
         interactor?.getTopRatedMovies()
         interactor?.getUpComingMovies()
@@ -35,24 +44,48 @@ class HomePresenter: HomePresenterInterface {
     // Api Success
     
     func onFetchPopularMovieListSuccess() {
+        
         popularMovieList = interactor?.popularMovieList
+        filteredPopularMovieList = interactor?.popularMovieList
         view?.reloadTable()
-        view?.setupHeaderView(title: popularMovieList?.list?[0].originalTitle ?? "", poster: popularMovieList?.list?[0].backdropPath ?? "")
+        
+        let voteaverage = ((filteredPopularMovieList?.list?[0].voteAvarage ?? 0.0)/2.0)
+        let rounded: Double = voteaverage.rounded(.down)
+        
+        let fullStar: Int = Int(rounded)
+        var halfStar: Int = 0
+        
+        if rounded != voteaverage && rounded != 5 {
+            halfStar = 1
+        }
+    
+        view?.setupHeaderView(title: popularMovieList?.list?[0].originalTitle ?? "",
+                              poster: popularMovieList?.list?[0].backdropPath ?? "",
+                              votes: String(popularMovieList?.list?[0].voteCount ?? 0) + " Votes",
+                              fullStar: fullStar,
+                              halfStar: halfStar)
     }
     
     func onFetchTopRatedMovieListSuccess() {
         topRateMovieList = interactor?.topRateMovieList
+        filteredTopRateMovieList = interactor?.topRateMovieList
         view?.reloadTable()
     }
     
     func onFetchUpComingMovieListSuccess() {
         upComingMovieList = interactor?.upComingMovieList
+        filteredUpComingMovieList = interactor?.upComingMovieList
         view?.reloadTable()
     }
     
     func onFetchNowPlayingMovieListSuccess() {
         nowPlayingMovieList = interactor?.nowPlayingMovieList
+        filteredNowPlayingMovieList = interactor?.nowPlayingMovieList
         view?.reloadTable()
+    }
+    
+    func onFetchMovieGenreListSuccess() {
+        movieGenreList = interactor?.movieGenreList
     }
     
     // Api failure
@@ -71,6 +104,10 @@ class HomePresenter: HomePresenterInterface {
     
     func onFetchNowPlayingMovieListFailure() {
         view?.onFetchNowPlayingMovieListFailure()
+    }
+    
+    func onFetchMovieGenreListFailure() {
+        
     }
     
     //    Table DataSource & Delegate
@@ -109,6 +146,23 @@ class HomePresenter: HomePresenterInterface {
         default: break
         }
         return header
+    }
+    
+    func filterDataFromGenre(indexPath: IndexPath) {
+        let index = indexPath.row
+        let genreId = movieGenreList?.genres[index].id
+    }
+    
+    func numsOfRowsInGenreCollection(section: Int) -> Int {
+        return movieGenreList?.genres.count ?? 0
+    }
+    
+    func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCollectionCell.identifire, for: indexPath) as? GenreCollectionCell else {
+            return UICollectionViewCell()
+        }
+        cell.configCellContent(genre: movieGenreList?.genres[indexPath.row].name ?? "")
+        return cell
     }
     
     //    Collection Data Source & Delegate
