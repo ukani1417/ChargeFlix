@@ -69,4 +69,8 @@ extension MovieTableViewCell: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return viewController?.setupCollectionCell(collectionView: collectionView, indexPath: indexPath, sectionForCollection: self.sectionForCollection) ?? UICollectionViewCell()
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewController?.didselectItemAt(indexPath: indexPath)
+    }
 }

@@ -13,7 +13,7 @@ protocol HomeViewInterface: AnyObject {
     func showActity()
     func hideActivity()
     func reloadTable()
-    func setupHeaderView(title: String, poster: String)
+    func setupHeaderView(title: String, poster: String, votes: String, fullStar: Int, halfStar: Int)    
         
     func onFetchPopularMovieListFailure()
     func onFetchTopRatedMovieListFailure()
@@ -34,16 +34,21 @@ protocol HomePresenterInterface: AnyObject {
     func heightForRowAt(tableView: UITableView, indexPath: IndexPath) -> CGFloat
     func heightForSectionAt(tableView: UITableView, section: Int) -> CGFloat
     func setupHeaderView(section: Int) -> UIView
+    func filterDataFromGenre(indexPath: IndexPath)
+    func numsOfRowsInGenreCollection(section: Int) -> Int
+    func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
     
     func onFetchPopularMovieListSuccess()
     func onFetchTopRatedMovieListSuccess()
     func onFetchUpComingMovieListSuccess()
     func onFetchNowPlayingMovieListSuccess()
+    func onFetchMovieGenreListSuccess()
     
     func onFetchPopularMovieListFailure()
     func onFetchTopRatedMovieListFailure()
     func onFetchUpComingMovieListFailure()
     func onFetchNowPlayingMovieListFailure()
+    func onFetchMovieGenreListFailure()
     
     func numsOfSectionInCollection(sectionForCollection: Int) -> Int
     func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int
@@ -58,7 +63,9 @@ protocol HomeInteractorInterface {
     var topRateMovieList: TopRatedMoviesList? { get set }
     var upComingMovieList: UpcomingMoviesList? { get set }
     var nowPlayingMovieList: NowPlayingMoviesList? { get set }
+    var movieGenreList: MovieGenreList? { get set }
     
+    func getMovieGenreList()
     func getPopularMovies()
     func getTopRatedMovies()
     func getUpComingMovies()
@@ -73,4 +80,10 @@ protocol MovieTableCellToView {
     func numsOfSectionInCollection(sectionForCollection: Int) -> Int
     func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int
     func setupCollectionCell(collectionView: UICollectionView, indexPath: IndexPath, sectionForCollection: Int) -> UICollectionViewCell
+    func didselectItemAt(indexPath: IndexPath)
+}
+
+protocol MovieHeaderViewToView {
+    func numsOfRowsInGenreCollection(section: Int) -> Int
+    func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
 }

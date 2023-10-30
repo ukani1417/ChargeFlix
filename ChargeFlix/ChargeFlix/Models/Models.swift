@@ -41,12 +41,16 @@ struct MovieListObj: Codable {
     let backdropPath: String?
     let posterPath: String?
     let originalTitle: String?
+    let voteAvarage: Double?
+    let voteCount: Int?
     
     enum CodingKeys: String, CodingKey {
         case id
         case backdropPath = "backdrop_path"
         case posterPath = "poster_path"
         case originalTitle = "original_title"
+        case voteCount = "vote_count"
+        case voteAvarage = "vote_average"
     }
 }
 
@@ -55,12 +59,14 @@ struct PopularMoviesList: Codable {
     let totalPages: Int?
     let totalResults: Int?
     let list: [MovieListObj]?
+    let genre: [Int]?
     
     enum CodingKeys: String, CodingKey {
         case page
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
+        case genre = "genre_ids"
     }
 }
 
@@ -69,12 +75,14 @@ struct TopRatedMoviesList: Codable {
     let totalPages: Int?
     let totalResults: Int?
     let list: [MovieListObj]?
+    let genre: [Int]?
     
     enum CodingKeys: String, CodingKey {
         case page
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
+        case genre = "genre_ids"
     }
 }
 
@@ -84,12 +92,14 @@ struct UpcomingMoviesList: Codable {
     let totalPages: Int?
     let totalResults: Int?
     let list: [MovieListObj]?
+    let genre: [Int]?
     
     enum CodingKeys: String, CodingKey {
         case page, dates
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
+        case genre = "genre_ids"
     }
     
 }
@@ -100,14 +110,20 @@ struct NowPlayingMoviesList: Codable {
     let totalPages: Int?
     let totalResults: Int?
     let list: [MovieListObj]?
+    let genre: [Int]?
     
     enum CodingKeys: String, CodingKey {
         case page, dates
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
+        case genre = "genre_ids"
     }
     
+}
+
+struct MovieGenreList: Codable {
+    let genres: [Genre]
 }
 
 struct Genre: Codable {
@@ -252,6 +268,7 @@ struct TopRatedTVShowsList: Codable {
         case totalPages = "total_pages"
         case totalResults = "total_results"
         case list = "results"
+        
     }
 }
 // MARK: - Cast

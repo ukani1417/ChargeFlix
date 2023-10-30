@@ -15,6 +15,7 @@ class HomeInteractor: HomeInteractorInterface {
     var topRateMovieList: TopRatedMoviesList?
     var upComingMovieList: UpcomingMoviesList?
     var nowPlayingMovieList: NowPlayingMoviesList?
+    var movieGenreList: MovieGenreList?
     
     init(repository: MovieRepository? = MovieRepository()) {
         self.repository = repository
@@ -68,6 +69,19 @@ class HomeInteractor: HomeInteractorInterface {
             case .failure(let error):
                 debugPrint(error.localizedDescription)
                 self.presenter?.onFetchNowPlayingMovieListFailure()
+            }
+        }
+    }
+    
+    func getMovieGenreList() {
+        repository?.get(modelType: MovieGenreList.self) { result in
+            switch result {
+            case .success(let data):
+                self.movieGenreList = data
+                self.presenter?.onFetchMovieGenreListSuccess()
+            case .failure(let error):
+                debugPrint(error.localizedDescription)
+                self.presenter?.onFetchMovieGenreListFailure()
             }
         }
     }

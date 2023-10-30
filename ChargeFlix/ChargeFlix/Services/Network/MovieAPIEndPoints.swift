@@ -13,17 +13,18 @@ enum MovieAPIEndPoints: ApiEndPoints {
     case upComing(page: Int = 1)
     case nowPlaying(page: Int = 1)
     case movieDetails(id: Int)
+    case genreList
     
     var host: String {
         switch self {
-        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing:
+        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing, .genreList:
             return Constants.host
         }
     }
     
     var schema: String {
         switch self {
-        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing:
+        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing, .genreList:
             return "https"
         }
     }
@@ -40,12 +41,14 @@ enum MovieAPIEndPoints: ApiEndPoints {
             return "/\(Constants.version)/movie/now_playing"
         case .movieDetails(let id):
             return "/\(Constants.version)/movie/\(id)"
+        case .genreList:
+            return "/\(Constants.version)/genre/movie/list"
         }
     }
     
     var methode: String {
         switch self {
-        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing:
+        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing, .genreList:
             return "GET"
         }
     }
@@ -57,7 +60,7 @@ enum MovieAPIEndPoints: ApiEndPoints {
                     URLQueryItem(name: "page", value: String(page)),
                     URLQueryItem(name: "api_key", value: Constants.apiKey)]
             
-        case .movieDetails:
+        case .movieDetails, .genreList:
             return [URLQueryItem(name: "language", value: String("en-US")),
                     URLQueryItem(name: "api_key", value: Constants.apiKey)]
             
@@ -66,21 +69,21 @@ enum MovieAPIEndPoints: ApiEndPoints {
     
     var headers: [(String, String)] {
         switch self {
-        case .populer, .nowPlaying, .topRated, .upComing, .movieDetails:
+        case .populer, .nowPlaying, .topRated, .upComing, .movieDetails, .genreList:
             return [("Content-Type", "application-json")]
         }
     }
     
     var statusCode: Int {
         switch self {
-        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing:
+        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing, .genreList:
             return 200
         }
     }
     
     var body: Codable? {
         switch self {
-        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing:
+        case .movieDetails, .nowPlaying, .populer, .topRated, .upComing, .genreList:
             return nil
         }
     }
