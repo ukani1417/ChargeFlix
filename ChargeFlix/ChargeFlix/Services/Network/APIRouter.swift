@@ -37,15 +37,15 @@ final class APIManager {
         components.path = apiRouter.path
         components.queryItems = apiRouter.queryItems
         
-        guard let url = components.url else {
+        guard let apiUrl = components.url else {
             completion(.failure(.badUrl))
             return
         }
-        var urlRequest = URLRequest(url: url)
+        var urlRequest = URLRequest(url: apiUrl)
         urlRequest.httpMethod = apiRouter.methode
         
-        apiRouter.headers.forEach { (key, value) in
-            urlRequest.addValue(value, forHTTPHeaderField: key)
+        apiRouter.headers.forEach { (headerKey, headerValue) in
+            urlRequest.addValue(headerValue, forHTTPHeaderField: headerKey)
         }
         
         if let requestBody = apiRouter.body {

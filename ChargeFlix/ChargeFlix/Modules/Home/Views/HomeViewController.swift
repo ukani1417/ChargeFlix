@@ -76,11 +76,13 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: HomeViewInterface {
-    func setupHeaderView(title: String, poster: String, votes: String, fullStar: Int, halfStar: Int) {
+    func setupHeaderView(input: TableHeaderInput) {
         DispatchQueue.main.async {
-            let headerView: TableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 300))
-            headerView.delegate = self
-            headerView.configContent(title: title, poster: poster, votes: votes, fullStar: fullStar, halfStar: halfStar)
+            let headerView: TableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0, 
+                                                                            width: self.view.frame.width,
+                                                                            height: 300))
+            
+            headerView.configContent(input: input)
             self.movieTableView.tableHeaderView = headerView
         }
     }
@@ -103,29 +105,10 @@ extension HomeViewController: HomeViewInterface {
             self.movieTableView.layoutIfNeeded()
         }
     }
-
-    func onFetchPopularMovieListFailure() {
-        DispatchQueue.main.async {
-            self.showAlert(title: "Failed", message: "On Populer Movies")
-        }
-        
-    }
     
-    func onFetchTopRatedMovieListFailure() {
+    func onFetchFailure(message: String) {
         DispatchQueue.main.async {
-            self.showAlert(title: "Failed", message: "On TopRated Movies")
-        }
-    }
-    
-    func onFetchUpComingMovieListFailure() {
-        DispatchQueue.main.async {
-            self.showAlert(title: "Failed", message: "On UpComing Movies")
-        }
-    }
-    
-    func onFetchNowPlayingMovieListFailure() {
-        DispatchQueue.main.async {
-            self.showAlert(title: "Failed", message: "On NowPlaying Movies")
+            self.showAlert(title: "Failed", message: message)
         }
     }
 }
@@ -154,20 +137,4 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return presenter?.setupHeaderView(section: section)
     }
-}
-
-extension HomeViewController: MovieHeaderViewToView {
-    func numsOfRowsInGenreCollection(section: Int) -> Int {
-        return presenter?.numsOfRowsInGenreCollection(section: section) ?? 0
-    }
-    
-    func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
-        return presenter?.setupGenreCollectionCell(collectionView: collectionView, indexPath: indexPath) ?? UICollectionViewCell()
-    }
-    
-    func didSelect(at: Int) {
-        print("did select tapped")
-        presenter?.filterDataFromGenre(index: at)
-    }
-    
 }

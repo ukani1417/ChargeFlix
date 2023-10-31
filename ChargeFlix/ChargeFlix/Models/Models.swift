@@ -69,9 +69,12 @@ struct PopularMoviesList: Codable {
         case list = "results"
     }
     
-    func ToListObj() -> [ListObj] {
-        return self.list?.map({ obj in
-            return ListObj(title: obj.originalTitle, posterPath: obj.posterPath)
+    func toListObj() -> [ListObj] {
+        return self.list?.map({ movie in
+            return ListObj(id: movie.id, title: movie.originalTitle, 
+                           posterPath: movie.posterPath, backdropPath: movie.backdropPath,
+                           genre: movie.genre, voteAverage: movie.voteAvarage,
+                           voteCount: movie.voteCount)
         }) ?? []
     }
 }
@@ -89,9 +92,12 @@ struct TopRatedMoviesList: Codable {
         case list = "results"
     }
     
-    func ToListObj() -> [ListObj] {
-        return self.list?.map({ obj in
-            return ListObj(title: obj.originalTitle, posterPath: obj.posterPath)
+    func toListObj() -> [ListObj] {
+        return self.list?.map({ movie in
+            return ListObj(id: movie.id, title: movie.originalTitle, 
+                           posterPath: movie.posterPath, backdropPath: movie.backdropPath,
+                           genre: movie.genre, voteAverage: movie.voteAvarage, 
+                           voteCount: movie.voteCount)
         }) ?? []
     }
 
@@ -111,9 +117,12 @@ struct UpcomingMoviesList: Codable {
         case list = "results"
     }
     
-    func ToListObj() -> [ListObj] {
-        return self.list?.map({ obj in
-            return ListObj(title: obj.originalTitle, posterPath: obj.posterPath)
+    func toListObj() -> [ListObj] {
+        return self.list?.map({ movie in
+            return ListObj(id: movie.id, title: movie.originalTitle, 
+                           posterPath: movie.posterPath, backdropPath: movie.backdropPath,
+                           genre: movie.genre, voteAverage: movie.voteAvarage,
+                           voteCount: movie.voteCount)
         }) ?? []
     }
 }
@@ -132,9 +141,11 @@ struct NowPlayingMoviesList: Codable {
         case list = "results"
     }
     
-    func ToListObj() -> [ListObj] {
-        return self.list?.map({ obj in
-            return ListObj(title: obj.originalTitle, posterPath: obj.posterPath)
+    func toListObj() -> [ListObj] {
+        return self.list?.map({ movie in
+            return ListObj(id: movie.id, title: movie.originalTitle, 
+                           posterPath: movie.posterPath, backdropPath: movie.backdropPath,
+                           genre: movie.genre, voteAverage: movie.voteAvarage, voteCount: movie.voteCount)
         }) ?? []
     }
     
@@ -252,12 +263,17 @@ struct TVShowListObj: Codable {
     let backdropPath: String?
     let posterPath: String?
     let originalName: String?
-    
+    let genre: [Int]?
+    let voteAverage: Double?
+    let voteCount: Int?
     enum CodingKeys: String, CodingKey {
         case id
         case backdropPath = "backdrop_path"
         case posterPath = "poster_path"
         case originalName = "original_name"
+        case genre = "genre_ids"
+        case voteAverage = "vote_average"
+        case voteCount = "vote_count"
     }
 }
 
@@ -274,9 +290,12 @@ struct PopularTVShowsList: Codable {
         case list = "results"
     }
     
-    func ToListObj() -> [ListObj] {
-        return self.list?.map({ obj in
-            return ListObj(title: obj.originalName, posterPath: obj.posterPath)
+    func toListObj() -> [ListObj] {
+        return self.list?.map({ show in
+            return ListObj(id: show.id, title: show.originalName, 
+                           posterPath: show.posterPath, backdropPath: show.backdropPath,
+                           genre: show.genre, voteAverage: show.voteAverage,
+                           voteCount: show.voteCount)
         }) ?? []
     }
 }
@@ -295,9 +314,12 @@ struct TopRatedTVShowsList: Codable {
         
     }
     
-    func ToListObj() -> [ListObj] {
-        return self.list?.map({ obj in
-            return ListObj(title: obj.originalName, posterPath: obj.posterPath)
+    func toListObj() -> [ListObj] {
+        return self.list?.map({ show in
+            return ListObj(id: show.id, title: show.originalName,
+                           posterPath: show.posterPath, backdropPath: show.backdropPath,
+                           genre: show.genre, voteAverage: show.voteAverage,
+                           voteCount: show.voteCount)
         }) ?? []
     }
 }
@@ -369,9 +391,4 @@ struct Image: Codable {
     enum CodingKeys: String, CodingKey {
         case filePath = "file_path"
     }
-}
-
-struct ListObj {
-    let title: String?
-    let posterPath: String?
 }

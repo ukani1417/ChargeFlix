@@ -10,8 +10,6 @@ import Kingfisher
 
 class TableHeaderView: UIView {
     
-    var delegate: MovieHeaderViewToView?
-    
     private var containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -24,16 +22,21 @@ class TableHeaderView: UIView {
         view.contentMode = .scaleToFill
         return view
     }()
-    
-    private let genreCollectionView: UICollectionView = {
-        let view = CollectionView(layout: ConfigLayout(scrollDirection: .horizontal, itemSize: CGSize(width: 100, height: 50), sectionInset: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1), minimumLineSpaceing: 10, minimumInteritemSpacing: 10), sections: 1)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.register(GenreCollectionCell.self, forCellWithReuseIdentifier: GenreCollectionCell.identifire)
         
-        return view
+    var genreCollectionView: NewCollectionView = {
+        let cView = NewCollectionView(scrollDirection: .horizontal,
+                                      cellSize: CGSize(width: 100, height: 50),
+                                      cellClass: GenreCollectionCell.self,
+                                      cellIdentifire: GenreCollectionCell.identifire)
+        cView.translatesAutoresizingMaskIntoConstraints = false
+        cView.collectionview.showsHorizontalScrollIndicator = false
+        return cView
     }()
     
-    private var movieName: UILabel = UILabel().setLabel(text: "MovieName", textColor: .white, bgColor: nil, font: AppTheme.tableHeaderMovieLableFont)
+    private var movieName: UILabel = UILabel().setLabel(text: "MovieName", 
+                                                        textColor: .white,
+                                                        bgColor: nil,
+                                                        font: AppTheme.tableHeaderMovieLableFont)
     
     private var stackView: UIStackView = {
         let view = UIStackView()
@@ -45,7 +48,10 @@ class TableHeaderView: UIView {
         return view
     }()
     
-    private var votes: UILabel = UILabel().setLabel(text: "0", textColor: AppTheme.votesLabelTextColot, bgColor: nil, font: AppTheme.votesLabelFont)
+    private var votes: UILabel = UILabel().setLabel(text: "0", 
+                                                    textColor: AppTheme.votesLabelTextColot,
+                                                    bgColor: nil,
+                                                    font: AppTheme.votesLabelFont)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -65,16 +71,14 @@ class TableHeaderView: UIView {
         containerView.addSubview(stackView)
         containerView.addSubview(votes)
         containerView.addSubview(genreCollectionView)
-        
-        genreCollectionView.dataSource = self
-        genreCollectionView.delegate = self
     }
     
-    func configContent(title: String, poster: String, votes: String, fullStar: Int, halfStar: Int) {
-        movieName.text = title
-        moviePoster.setImage(with: poster)
-        self.votes.text = String(votes)
-        addStarToStack(fullStar: fullStar, halfStar: halfStar)
+    func configContent(input: TableHeaderInput) {
+        movieName.text = input.title
+        moviePoster.setImage(with: input.poster)
+        votes.text = String(input.votes)
+        addStarToStack(fullStar: input.fullStar, halfStar: input.halfStar)
+        genreCollectionView.configContent(list: input.genreList)
     }
     
     func addStarToStack(fullStar: Int, halfStar: Int) {
@@ -132,18 +136,4 @@ class TableHeaderView: UIView {
         ])
     }
     
-}
-
-extension TableHeaderView: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return delegate?.numsOfRowsInGenreCollection(section: section) ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return delegate?.setupGenreCollectionCell(collectionView: collectionView, indexPath: indexPath) ?? UICollectionViewCell()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.didSelect(at: indexPath.section)
-    }
 }

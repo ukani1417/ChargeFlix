@@ -16,7 +16,9 @@ class MovieRouter: MovieRouterInterface {
         let router: MovieRouterInterface = MovieRouter()
         let interactor: MovieInteractorInterface = MovieInteractor()
         
-        let presenter: MoviePresenterInterface = MoviePresenter(view: viewController, router: router, interactor: interactor)
+        let presenter: MoviePresenterInterface = MoviePresenter(view: viewController, 
+                                                                router: router,
+                                                                interactor: interactor)
         
         viewController.presenter = presenter
         viewController.presenter?.router = router

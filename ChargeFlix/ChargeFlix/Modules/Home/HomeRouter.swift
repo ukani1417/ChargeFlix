@@ -16,7 +16,9 @@ class HomeRouter: HomeRouterInterface {
         
         let router: HomeRouterInterface = HomeRouter()
         let interactor: HomeInteractorInterface = HomeInteractor()
-        let presenter: HomePresenterInterface = HomePresenter(view: viewController, router: router, interactor: interactor)
+        let presenter: HomePresenterInterface = HomePresenter(view: viewController, 
+                                                              router: router,
+                                                              interactor: interactor)
         
         viewController.presenter = presenter
         viewController.presenter?.router = router

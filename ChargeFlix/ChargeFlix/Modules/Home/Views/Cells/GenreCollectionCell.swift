@@ -10,7 +10,10 @@ import UIKit
 class GenreCollectionCell: UICollectionViewCell {
     static let identifire = GenreCollectionCell.description()
 
-    private var genreLabel: UILabel = UILabel().setLabel(text: "", textColor: .white, bgColor: nil, font: AppTheme.genreButtonFont)
+    private var genreLabel: UILabel = UILabel().setLabel(text: "", 
+                                                         textColor: .white,
+                                                         bgColor: nil,
+                                                         font: AppTheme.genreButtonFont)
     
     override init(frame: CGRect) {
         super.init(frame: frame)

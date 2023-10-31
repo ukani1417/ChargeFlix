@@ -19,22 +19,22 @@ final class APIManager {
     private init() {}
     
     func request<T: Codable> (apiRouter: ApiEndPoints, modelType: T.Type, completion: @escaping Handler<T>) {
-        
         var components = URLComponents()
         components.host = apiRouter.host
         components.scheme = apiRouter.schema
         components.path = apiRouter.path
         components.queryItems = apiRouter.queryItems
         
-        guard let url = components.url else {
+        guard let apiUrl = components.url else {
             completion(.failure(.badUrl))
             return
         }
-        var urlRequest = URLRequest(url: url)
+        
+        var urlRequest = URLRequest(url: apiUrl)
         urlRequest.httpMethod = apiRouter.methode
         
-        apiRouter.headers.forEach { (key, value) in
-            urlRequest.addValue(value, forHTTPHeaderField: key)
+        apiRouter.headers.forEach { (headerKey, value) in
+            urlRequest.addValue(value, forHTTPHeaderField: headerKey)
         }
         
         if let requestBody = apiRouter.body {
@@ -47,18 +47,15 @@ final class APIManager {
         }
         
         URLSession.shared.dataTask(with: urlRequest) { data, responce, error in
-            
             guard let data = data, error == nil else {
                 completion(.failure(.invalidData))
                 return
             }
-            
             guard let httpResponse = responce as? HTTPURLResponse,
                   httpResponse.statusCode == apiRouter.statusCode else {
                 completion(.failure(.invalidResponce))
                 return
             }
-            
             do {
                 let responce = try JSONDecoder().decode(T.self, from: data)
                 completion(.success(responce))

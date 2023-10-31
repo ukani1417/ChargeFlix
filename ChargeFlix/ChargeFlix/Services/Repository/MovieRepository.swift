@@ -15,7 +15,7 @@ class MovieRepository {
     
     func get<T: Codable>(modelType: T.Type,
                          page: Int = 1,
-                         _completation: @escaping (Result<T, MovieRepositoryError>) -> Void) {
+                         completation: @escaping (Result<T, MovieRepositoryError>) -> Void) {
         
         var apiEndPoint: MovieAPIEndPoints? {
             switch modelType {
@@ -29,31 +29,31 @@ class MovieRepository {
         }
         
         guard let apiEnd = apiEndPoint else {
-            return _completation(.failure(.serverError))
+            return completation(.failure(.serverError))
         }
         
         APIManager.shared.request(apiRouter: apiEnd, modelType: modelType) { result in
             switch result {
             case .success(let data):
-                _completation(.success(data))
+                completation(.success(data))
             case .failure(let error):
                 debugPrint(error)
-                _completation(.failure(.serverError))
+                completation(.failure(.serverError))
             }
         }
     }
    
     func getDetails<T: Codable>(modelType: T.Type,
                                 id: Int,
-                                _completation: @escaping (Result<T, MovieRepositoryError>) -> Void ) {
+                                completation: @escaping (Result<T, MovieRepositoryError>) -> Void ) {
         
         APIManager.shared.request(apiRouter: MovieAPIEndPoints.movieDetails(id: id), modelType: modelType) { result in
             switch result {
             case .success(let data):
-                _completation(.success(data))
+                completation(.success(data))
             case .failure(let error):
                 debugPrint(error)
-                _completation(.failure(.serverError))
+                completation(.failure(.serverError))
             }
         }
     }

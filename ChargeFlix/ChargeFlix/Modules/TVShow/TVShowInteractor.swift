@@ -18,7 +18,7 @@ class TVShowInteractor: TVShowInteractorInterface {
     }
     
     func getPopulerTVShows() {
-        repository?.get(modelType: PopularTVShowsList.self, _completation: { result in
+        repository?.get(modelType: PopularTVShowsList.self, completation: { result in
             switch result {
             case .success(let data):
                 self.popularTVShowsList = data

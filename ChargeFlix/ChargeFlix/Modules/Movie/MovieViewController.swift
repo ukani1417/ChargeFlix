@@ -12,7 +12,10 @@ class MovieViewController: UIViewController {
     var presenter: MoviePresenterInterface?
     
     private var moviessCollectionView: NewCollectionView = {
-        let cView = NewCollectionView(scrollDirection: .vertical)
+        let cView = NewCollectionView(scrollDirection: .vertical,
+                                      cellSize: CGSize(width: 130, height: 180),
+                                      cellClass: CollectionViewCell.self,
+                                      cellIdentifire: CollectionViewCell.identifire)
         cView.translatesAutoresizingMaskIntoConstraints = false
         cView.collectionview.showsVerticalScrollIndicator = false
         return cView

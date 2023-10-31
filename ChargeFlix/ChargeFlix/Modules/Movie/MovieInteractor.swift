@@ -13,14 +13,17 @@ class MovieInteractor: MovieInteractorInterface {
     var repository: MovieRepository?
     var popularMovieList: PopularMoviesList?
     
-    init(presenter: MoviePresenterInterface? = nil, repository: MovieRepository? = MovieRepository(), popularMovieList: PopularMoviesList? = nil) {
+    init(presenter: MoviePresenterInterface? = nil, 
+         repository: MovieRepository? = MovieRepository(),
+         popularMovieList: PopularMoviesList? = nil) {
+        
         self.presenter = presenter
         self.repository = repository
         self.popularMovieList = popularMovieList
     }
     
     func getPopularMovies() {
-        repository?.get(modelType: PopularMoviesList.self, _completation: { result in
+        repository?.get(modelType: PopularMoviesList.self, completation: { result in
             switch result {
             case .success(let data):
                 self.popularMovieList = data

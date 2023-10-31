@@ -13,12 +13,8 @@ protocol HomeViewInterface: AnyObject {
     func showActity()
     func hideActivity()
     func reloadTable()
-    func setupHeaderView(title: String, poster: String, votes: String, fullStar: Int, halfStar: Int)    
-        
-    func onFetchPopularMovieListFailure()
-    func onFetchTopRatedMovieListFailure()
-    func onFetchUpComingMovieListFailure()
-    func onFetchNowPlayingMovieListFailure()
+    func setupHeaderView(input: TableHeaderInput)
+    func onFetchFailure(message: String)
 }
 
 protocol HomePresenterInterface: AnyObject {
@@ -28,42 +24,25 @@ protocol HomePresenterInterface: AnyObject {
     
     func viewDidLoad()
     
+//   for  tableView
     func numsOfSection() -> Int
     func numsOfRows(section: Int) -> Int
     func cellForRowAt(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     func heightForRowAt(tableView: UITableView, indexPath: IndexPath) -> CGFloat
     func heightForSectionAt(tableView: UITableView, section: Int) -> CGFloat
     func setupHeaderView(section: Int) -> UIView
-    func filterDataFromGenre(index: Int)
-    func numsOfRowsInGenreCollection(section: Int) -> Int
-    func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
+      
+//  Api Callbacks
+    func onfetchSuccess(movieType: MovieType, data: [ListObj])
+    func onFetchMovieGenreListSuccess(data: MovieGenreList)
     
-    func onFetchPopularMovieListSuccess()
-    func onFetchTopRatedMovieListSuccess()
-    func onFetchUpComingMovieListSuccess()
-    func onFetchNowPlayingMovieListSuccess()
-    func onFetchMovieGenreListSuccess()
-    
-    func onFetchPopularMovieListFailure()
-    func onFetchTopRatedMovieListFailure()
-    func onFetchUpComingMovieListFailure()
-    func onFetchNowPlayingMovieListFailure()
+    func onFetchFailure(movieType: MovieType)
     func onFetchMovieGenreListFailure()
-    
-    func numsOfSectionInCollection(sectionForCollection: Int) -> Int
-    func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int
-    func setupCollectionCell(collectionView: UICollectionView, indexPath: IndexPath, sectionForCollection: Int) -> UICollectionViewCell
-    
 }
 
 protocol HomeInteractorInterface {
     var presenter: HomePresenterInterface? { get set }
     var repository: MovieRepository? { get set }
-    var popularMovieList: PopularMoviesList? { get set }
-    var topRateMovieList: TopRatedMoviesList? { get set }
-    var upComingMovieList: UpcomingMoviesList? { get set }
-    var nowPlayingMovieList: NowPlayingMoviesList? { get set }
-    var movieGenreList: MovieGenreList? { get set }
     
     func getMovieGenreList()
     func getPopularMovies()
@@ -74,17 +53,4 @@ protocol HomeInteractorInterface {
 
 protocol HomeRouterInterface {
     
-}
-
-protocol MovieTableCellToView {
-    func numsOfSectionInCollection(sectionForCollection: Int) -> Int
-    func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int
-    func setupCollectionCell(collectionView: UICollectionView, indexPath: IndexPath, sectionForCollection: Int) -> UICollectionViewCell
-    func didselectItemAt(indexPath: IndexPath)
-}
-
-protocol MovieHeaderViewToView {
-    func numsOfRowsInGenreCollection(section: Int) -> Int
-    func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell
-    func didSelect(at: Int)
 }

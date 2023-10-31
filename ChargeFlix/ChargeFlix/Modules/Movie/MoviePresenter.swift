@@ -18,7 +18,9 @@ class MoviePresenter: MoviePresenterInterface {
     
     private var populerMovieList: PopularMoviesList?
     
-    init(view: MovieViewInterface? = nil, router: MovieRouterInterface? = nil, interactor: MovieInteractorInterface? = nil) {
+    init(view: MovieViewInterface? = nil, 
+         router: MovieRouterInterface? = nil,
+         interactor: MovieInteractorInterface? = nil) {
         self.view = view
         self.router = router
         self.interactor = interactor
@@ -32,7 +34,7 @@ class MoviePresenter: MoviePresenterInterface {
     func onFetchPopularMovieListSuccess() {
         populerMovieList = interactor?.popularMovieList
         view?.hideActivity()
-        view?.onFetchPopularMovieListSuccess(data: populerMovieList?.ToListObj() ?? [])
+        view?.onFetchPopularMovieListSuccess(data: populerMovieList?.toListObj() ?? [])
     }
     
     func onFetchPopularMovieListFailure() {
@@ -45,7 +47,9 @@ class MoviePresenter: MoviePresenterInterface {
     }
     
     func setupCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifire, for: indexPath) as? CollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CollectionViewCell.identifire,
+            for: indexPath) as? CollectionViewCell else {
             return UICollectionViewCell()
         }
         let title = populerMovieList?.list?[indexPath.row].originalTitle ?? "MovieName"
