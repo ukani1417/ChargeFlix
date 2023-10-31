@@ -14,7 +14,7 @@ enum CastRepositoryError: String, Error {
 class CastRepository {
     func getDetails<T: Codable>(modelType: T.Type,
                                 id: Int,
-                                _completation: @escaping (Result<T, CastRepositoryError>) -> Void) {
+                                completation: @escaping (Result<T, CastRepositoryError>) -> Void) {
         
         var apiEndPoints: CastAPIEnpoints? {
             switch modelType {
@@ -29,16 +29,16 @@ class CastRepository {
         }
         
         guard let apiEnd = apiEndPoints else {
-            return _completation(.failure(.serverError))
+            return completation(.failure(.serverError))
         }
         
         APIManager.shared.request(apiRouter: apiEnd, modelType: modelType) { result in
             switch result {
             case .success(let data):
-                _completation(.success(data))
+                completation(.success(data))
             case .failure(let error):
                 debugPrint(error)
-                _completation(.failure(.serverError))
+                completation(.failure(.serverError))
             }
         }
     }

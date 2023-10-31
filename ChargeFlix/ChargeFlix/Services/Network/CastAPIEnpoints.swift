@@ -10,9 +10,6 @@ import Foundation
 struct CastConstant {
     static let host: String = "api.themoviedb.org"
     static let schema: String = "https"
-    static let tvCastPath = "3/tv/"
-    static let movieCastPath = "3/movie/"
-    static let personPath = "3/person/"
     static let version: String = "3"
 }
 

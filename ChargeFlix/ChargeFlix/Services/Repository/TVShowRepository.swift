@@ -15,7 +15,7 @@ class TVShowRepository {
     
     func get<T: Codable>(modelType: T.Type,
                          page: Int = 1,
-                         _completation: @escaping (Result<T, TVShowRepositoryError>) -> Void ) {
+                         completation: @escaping (Result<T, TVShowRepositoryError>) -> Void ) {
         
         var apiEndPoint: TVShowAPIEndPoints? {
             switch modelType {
@@ -26,32 +26,32 @@ class TVShowRepository {
         }
         
         guard let apiEnd = apiEndPoint else {
-            return _completation(.failure(.serverError))
+            return completation(.failure(.serverError))
         }
         
         APIManager.shared.request(apiRouter: apiEnd, modelType: modelType) { result in
             switch result {
             case .success(let data):
-                _completation(.success(data))
+                completation(.success(data))
             case .failure(let error):
                 debugPrint(error)
-                _completation(.failure(.serverError))
+                completation(.failure(.serverError))
             }
         }
     }
        
     func getDetails<T: Codable>(modelType: T.Type,
                                 id: Int,
-                                _completation: @escaping (Result<T, TVShowRepositoryError>) -> Void ) {
+                                completation: @escaping (Result<T, TVShowRepositoryError>) -> Void ) {
         
         APIManager.shared.request(apiRouter: TVShowAPIEndPoints.tVShowDetails(id: id),
                                   modelType: modelType) { result in
             switch result {
             case .success(let data):
-                _completation(.success(data))
+                completation(.success(data))
             case .failure(let error):
                 debugPrint(error)
-                _completation(.failure(.serverError))
+                completation(.failure(.serverError))
             }
         }
     }

@@ -39,7 +39,9 @@ class TableSectionHeaderView: UIView {
         headerContentView.addSubview(sectionLabel)
         headerContentView.addSubview(showAllButton)
        
-        showAllButton.addTarget(self, action: #selector(TableSectionHeaderView.showAllButtonTapped), for: .touchUpInside)
+        showAllButton.addTarget(self, 
+                                action: #selector(TableSectionHeaderView.showAllButtonTapped),
+                                for: .touchUpInside)
     }
     
     private func setupConstraint() {

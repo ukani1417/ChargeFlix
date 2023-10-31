@@ -11,12 +11,12 @@ class MovieTableViewCell: UITableViewCell {
     
     static let identifire = MovieTableViewCell.description()
     
-    var viewController: MovieTableCellToView?
-    
-    var sectionForCollection: Int = 0
-    
+    var type: String = ""
     var moviessCollectionView: NewCollectionView = {
-        let cView = NewCollectionView(scrollDirection: .horizontal)
+        let cView = NewCollectionView(scrollDirection: .horizontal,
+                                      cellSize: CGSize(width: 130, height: 180),
+                                      cellClass: CollectionViewCell.self,
+                                      cellIdentifire: CollectionViewCell.identifire)
         cView.translatesAutoresizingMaskIntoConstraints = false
         cView.collectionview.showsHorizontalScrollIndicator = false
         return cView

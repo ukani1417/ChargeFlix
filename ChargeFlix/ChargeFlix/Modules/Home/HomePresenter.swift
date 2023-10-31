@@ -8,26 +8,29 @@
 import UIKit
 import Combine
 
+enum MovieType {
+    case populer
+    case topRated
+    case upcoming
+    case nowPlaying
+}
+
 class HomePresenter: HomePresenterInterface {
     
     weak var view: HomeViewInterface?
     var router: HomeRouterInterface?
     var interactor: HomeInteractorInterface?
-    var moviesList: MovieList?
     
-    private var popularMovieList: PopularMoviesList?
-    private var topRateMovieList: TopRatedMoviesList?
-    private var upComingMovieList: UpcomingMoviesList?
-    private var nowPlayingMovieList: NowPlayingMoviesList?
+    var moviessList = [[ListObj]](repeating: [], count: 4)
+    var filteredMoviesList = [[ListObj]](repeating: [], count: 4)
     
-    private var filteredPopularMovieList: [ListObj] = []
-    private var filteredTopRateMovieList: [ListObj] = []
-    private var filteredUpComingMovieList: [ListObj] = []
-    private var filteredNowPlayingMovieList: [ListObj] = []
+    var moviesData: [MovieData] = []
+    var filteredData: [MovieData] = []
     
     private var movieGenreList: MovieGenreList?
-    
-    init(view: HomeViewInterface? = nil, router: HomeRouterInterface? = nil, interactor: HomeInteractorInterface? = nil) {
+        
+    init(view: HomeViewInterface? = nil, router: HomeRouterInterface? = nil, 
+         interactor: HomeInteractorInterface? = nil) {
         self.view = view
         self.router = router
         self.interactor = interactor
@@ -43,71 +46,62 @@ class HomePresenter: HomePresenterInterface {
     
     // Api Success
     
-    func onFetchPopularMovieListSuccess() {
+    func onfetchSuccess(movieType: MovieType, data: [ListObj]) {
+        moviesData.append(MovieData(type: movieType, data: data))
+        filteredData.append(MovieData(type: movieType, data: data))
         
-        popularMovieList = interactor?.popularMovieList
-        filteredPopularMovieList = popularMovieList?.ToListObj() ?? []
+        if movieType == .populer {
+            setupHeaderView()
+        }
         view?.reloadTable()
-        
-        let voteaverage = ((popularMovieList?.list?[0].voteAvarage ?? 0.0)/2.0)
+    }
+    
+    private func setupHeaderView() {
+        let data = filteredData.first(where: { $0.type == .populer })?.data ?? []
+        if data.isEmpty {
+            return
+        }
+        let randomIndex = Int.random(in: 0..<(data.count ))
+        let movie = data[randomIndex]
+        let voteaverage = ((movie.voteAverage ?? 0.0)/2.0)
         let rounded: Double = voteaverage.rounded(.down)
-        
         let fullStar: Int = Int(rounded)
         var halfStar: Int = 0
         
         if rounded != voteaverage && rounded != 5 {
             halfStar = 1
         }
-    
-        view?.setupHeaderView(title: popularMovieList?.list?[0].originalTitle ?? "",
-                              poster: popularMovieList?.list?[0].backdropPath ?? "",
-                              votes: String(popularMovieList?.list?[0].voteCount ?? 0) + " Votes",
-                              fullStar: fullStar,
-                              halfStar: halfStar)
+        print(movie)
+        let input: TableHeaderInput = TableHeaderInput(title: movie.title ?? "",
+                                                       poster:  movie.backdropPath ?? "",
+                                                       votes: String(movie.voteCount ?? 0) + " Votes",
+                                                       fullStar: fullStar,
+                                                       halfStar: halfStar,
+                                                       genreList: movieGenreList?.genres ?? [])
+        view?.setupHeaderView(input: input)
     }
-    
-    func onFetchTopRatedMovieListSuccess() {
-        topRateMovieList = interactor?.topRateMovieList
-        filteredTopRateMovieList = topRateMovieList?.ToListObj() ?? []
-        view?.reloadTable()
-    }
-    
-    func onFetchUpComingMovieListSuccess() {
-        upComingMovieList = interactor?.upComingMovieList
-        filteredUpComingMovieList = upComingMovieList?.ToListObj() ?? []
-        view?.reloadTable()
-    }
-    
-    func onFetchNowPlayingMovieListSuccess() {
-        nowPlayingMovieList = interactor?.nowPlayingMovieList
-        filteredNowPlayingMovieList = nowPlayingMovieList?.ToListObj() ?? []
-        view?.reloadTable()
-    }
-    
-    func onFetchMovieGenreListSuccess() {
-        movieGenreList = interactor?.movieGenreList
+
+    func onFetchMovieGenreListSuccess(data: MovieGenreList) {
+        movieGenreList = data
     }
     
     // Api failure
     
-    func onFetchPopularMovieListFailure() {
-        view?.onFetchPopularMovieListFailure()
+    func onFetchFailure(movieType: MovieType) {
+        switch movieType {
+        case .populer:
+            view?.onFetchFailure(message: "Failed in popular movies")
+        case .topRated:
+            view?.onFetchFailure(message: "Failed in topRated movies")
+        case .upcoming:
+            view?.onFetchFailure(message: "Failed in upComing movies")
+        case .nowPlaying:
+            view?.onFetchFailure(message: "Failed in nowPlaying movies")
+        }
     }
-    
-    func onFetchTopRatedMovieListFailure() {
-        view?.onFetchTopRatedMovieListFailure()
-    }
-    
-    func onFetchUpComingMovieListFailure() {
-        view?.onFetchUpComingMovieListFailure()
-    }
-    
-    func onFetchNowPlayingMovieListFailure() {
-        view?.onFetchNowPlayingMovieListFailure()
-    }
-    
+
     func onFetchMovieGenreListFailure() {
-        
+        view?.onFetchFailure(message: "Failed in fetching genre list")
     }
     
     //    Table DataSource & Delegate
@@ -128,17 +122,20 @@ class HomePresenter: HomePresenterInterface {
     }
     
     func cellForRowAt(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifire, for: indexPath) as? MovieTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifire, 
+                                                       for: indexPath) as? MovieTableViewCell else {
             return UITableViewCell()
         }
-        cell.viewController = view as? MovieTableCellToView
-        cell.sectionForCollection = indexPath.section
         
         switch indexPath.section {
-        case 0: cell.configContent(data: filteredPopularMovieList)
-        case 1: cell.configContent(data: filteredTopRateMovieList)
-        case 2: cell.configContent(data: filteredUpComingMovieList)
-        case 3: cell.configContent(data: filteredNowPlayingMovieList)
+        case 0:
+            cell.configContent(data: filteredData.first(where: { $0.type == .populer })?.data ?? [])
+        case 1:
+            cell.configContent(data: filteredData.first(where: { $0.type == .topRated })?.data ?? [])
+        case 2:
+            cell.configContent(data: filteredData.first(where: { $0.type == .upcoming })?.data ?? [])
+        case 3:
+            cell.configContent(data: filteredData.first(where: { $0.type == .nowPlaying })?.data ?? [])
         default: break
         }
         
@@ -157,56 +154,4 @@ class HomePresenter: HomePresenterInterface {
         return header
     }
     
-    func filterDataFromGenre(index: Int) {
-        let genreId = movieGenreList?.genres[index].id
-//        view?.reloadTable()
-    }
-    
-    func numsOfRowsInGenreCollection(section: Int) -> Int {
-        return movieGenreList?.genres.count ?? 0
-    }
-    
-    func setupGenreCollectionCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreCollectionCell.identifire, for: indexPath) as? GenreCollectionCell else {
-            return UICollectionViewCell()
-        }
-        cell.configCellContent(genre: movieGenreList?.genres[indexPath.row].name ?? "")
-        return cell
-    }
-    
-    //    Collection Data Source & Delegate
-    
-    func numsOfSectionInCollection(sectionForCollection: Int) -> Int {
-        return 1
-    }
-    
-    func numsOfRowsCollectionSection(section: Int, sectionForCollection: Int) -> Int {
-        switch sectionForCollection {
-        case 0: return filteredPopularMovieList.count
-        case 1: return filteredTopRateMovieList.count
-        case 2: return filteredUpComingMovieList.count
-        case 3: return filteredNowPlayingMovieList.count
-        default: return 0
-        }
-    }
-    
-    func setupCollectionCell(collectionView: UICollectionView, indexPath: IndexPath, sectionForCollection: Int) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifire, for: indexPath) as? CollectionViewCell else {
-            return UICollectionViewCell()
-        }
-       
-        switch sectionForCollection {
-        case 0: 
-            cell.configCellContent(title: filteredPopularMovieList[indexPath.row].title ?? "", posterPath: filteredPopularMovieList[indexPath.row].posterPath ?? "" )
-        case 1:
-            cell.configCellContent(title: filteredTopRateMovieList[indexPath.row].title ?? "", posterPath: filteredTopRateMovieList[indexPath.row].posterPath ?? "")
-        case 2:
-            cell.configCellContent(title: filteredUpComingMovieList[indexPath.row].title ?? "", posterPath: filteredUpComingMovieList[indexPath.row].posterPath ?? "")
-        case 3:
-            cell.configCellContent(title: filteredNowPlayingMovieList[indexPath.row].title ?? "", posterPath: filteredNowPlayingMovieList[indexPath.row].posterPath ?? "")
-        default: break
-        }
-        
-        return cell
-    }
 }

@@ -15,7 +15,9 @@ class TVShowPresenter: TVShowPresenterInterface {
     
     private var popularTVShowsList: PopularTVShowsList? 
     
-    init(router: TVShowRouterInterface? = nil, interactor: TVShowInteractorInterface? = nil, view: TVShowViewInterface? = nil) {
+    init(router: TVShowRouterInterface? = nil, 
+         interactor: TVShowInteractorInterface? = nil,
+         view: TVShowViewInterface? = nil) {
         self.router = router
         self.interactor = interactor
         self.view = view
@@ -30,7 +32,7 @@ class TVShowPresenter: TVShowPresenterInterface {
         popularTVShowsList = interactor?.popularTVShowsList
         view?.hideActivity()
        
-        view?.onFetchPopularTVShowsListSuccess(list: popularTVShowsList?.ToListObj() ?? [])
+        view?.onFetchPopularTVShowsListSuccess(list: popularTVShowsList?.toListObj() ?? [])
     }
     
     func onFetchPopularTVShowsListFailure() {
@@ -43,7 +45,9 @@ class TVShowPresenter: TVShowPresenterInterface {
     }
     
     func setupCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifire, for: indexPath) as? CollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CollectionViewCell.identifire,
+            for: indexPath) as? CollectionViewCell else {
             return UICollectionViewCell()
         }
         let title = popularTVShowsList?.list?[indexPath.row].originalName ?? "TVShowName"

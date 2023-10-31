@@ -24,9 +24,15 @@ class ChargeFlixTabBarController: UITabBarController {
         self.tabBar.unselectedItemTintColor = AppTheme.tabBarUnselectedColor
     }
     private func setupTabs() {
-        let homeTabItem = UITabBarItem(title: "Home", image: UIImage(named: "house"), selectedImage: UIImage(named: "play.house.fill"))
-        let movieTabItem = UITabBarItem(title: "Movie", image: UIImage(named: "movieclapper"), selectedImage: UIImage(named: "movieclapper.fill"))
-        let tvShowTabItem = UITabBarItem(title: "TVShow", image: UIImage(named: "tv"), selectedImage: UIImage(named: "play.tv.fill"))
+        let homeTabItem = UITabBarItem(title: "Home", 
+                                       image: UIImage(named: "house"),
+                                       selectedImage: UIImage(named: "play.house.fill"))
+        let movieTabItem = UITabBarItem(title: "Movie", 
+                                        image: UIImage(named: "movieclapper"),
+                                        selectedImage: UIImage(named: "movieclapper.fill"))
+        let tvShowTabItem = UITabBarItem(title: "TVShow",
+                                         image: UIImage(named: "tv"),
+                                         selectedImage: UIImage(named: "play.tv.fill"))
         
         homeViewController.tabBarItem = homeTabItem
         movieViewController.tabBarItem = movieTabItem

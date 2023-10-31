@@ -11,25 +11,18 @@ class HomeInteractor: HomeInteractorInterface {
     var repository: MovieRepository?
     weak var presenter: HomePresenterInterface?
     
-    var popularMovieList: PopularMoviesList?
-    var topRateMovieList: TopRatedMoviesList?
-    var upComingMovieList: UpcomingMoviesList?
-    var nowPlayingMovieList: NowPlayingMoviesList?
-    var movieGenreList: MovieGenreList?
-    
     init(repository: MovieRepository? = MovieRepository()) {
         self.repository = repository
     }
-        
+    
     func getPopularMovies() {
         repository?.get(modelType: PopularMoviesList.self) { result in
             switch result {
             case .success(let data):
-                self.popularMovieList = data
-                self.presenter?.onFetchPopularMovieListSuccess()
+                self.presenter?.onfetchSuccess(movieType: .populer, data: data.toListObj())
             case .failure(let error):
                 debugPrint(error.localizedDescription)
-                self.presenter?.onFetchPopularMovieListFailure()
+                self.presenter?.onFetchFailure(movieType: .populer)
             }
         }
     }
@@ -38,11 +31,10 @@ class HomeInteractor: HomeInteractorInterface {
         repository?.get(modelType: TopRatedMoviesList.self) { result in
             switch result {
             case .success(let data):
-                self.topRateMovieList = data
-                self.presenter?.onFetchTopRatedMovieListSuccess()
+                self.presenter?.onfetchSuccess(movieType: .topRated, data: data.toListObj())
             case .failure(let error):
                 debugPrint(error.localizedDescription)
-                self.presenter?.onFetchTopRatedMovieListFailure()
+                self.presenter?.onFetchFailure(movieType: .topRated)
             }
         }
     }
@@ -51,11 +43,10 @@ class HomeInteractor: HomeInteractorInterface {
         repository?.get(modelType: UpcomingMoviesList.self) { result in
             switch result {
             case .success(let data):
-                self.upComingMovieList = data
-                self.presenter?.onFetchUpComingMovieListSuccess()
+                self.presenter?.onfetchSuccess(movieType: .upcoming, data: data.toListObj())
             case .failure(let error):
                 debugPrint(error.localizedDescription)
-                self.presenter?.onFetchUpComingMovieListFailure()
+                self.presenter?.onFetchFailure(movieType: .upcoming)
             }
         }
     }
@@ -64,11 +55,10 @@ class HomeInteractor: HomeInteractorInterface {
         repository?.get(modelType: NowPlayingMoviesList.self) { result in
             switch result {
             case .success(let data):
-                self.nowPlayingMovieList = data
-                self.presenter?.onFetchNowPlayingMovieListSuccess()
+                self.presenter?.onfetchSuccess(movieType: .nowPlaying, data: data.toListObj())
             case .failure(let error):
                 debugPrint(error.localizedDescription)
-                self.presenter?.onFetchNowPlayingMovieListFailure()
+                self.presenter?.onFetchFailure(movieType: .nowPlaying)
             }
         }
     }
@@ -77,8 +67,7 @@ class HomeInteractor: HomeInteractorInterface {
         repository?.get(modelType: MovieGenreList.self) { result in
             switch result {
             case .success(let data):
-                self.movieGenreList = data
-                self.presenter?.onFetchMovieGenreListSuccess()
+                self.presenter?.onFetchMovieGenreListSuccess(data: data)
             case .failure(let error):
                 debugPrint(error.localizedDescription)
                 self.presenter?.onFetchMovieGenreListFailure()

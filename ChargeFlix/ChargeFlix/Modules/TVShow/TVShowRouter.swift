@@ -17,7 +17,9 @@ class TVShowRouter: TVShowRouterInterface {
         let router: TVShowRouterInterface = TVShowRouter()
         let interactor: TVShowInteractorInterface = TVShowInteractor()
         
-        let presenter: TVShowPresenterInterface = TVShowPresenter(router: router, interactor: interactor, view: viewController)
+        let presenter: TVShowPresenterInterface = TVShowPresenter(router: router, 
+                                                                  interactor: interactor,
+                                                                  view: viewController)
         
         viewController.presenter = presenter
         viewController.presenter?.router = router
