@@ -10,7 +10,7 @@ import UIKit
 class CollectionViewCell: UICollectionViewCell {
 
     static let identifire = CollectionViewCell.description()
-
+    
     private var posterImage: UIImageView = {
        let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -18,13 +18,19 @@ class CollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private var movieTitle: UILabel = UILabel().setLabel(text: "Name",
-                                                textColor: .white,
-                                                bgColor: nil,
-                                                font: AppTheme.cellLabelFont)
+    private var movieTitle: UILabel = {
+       let label = UILabel()
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        return label
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        layer.cornerRadius = 16
+        clipsToBounds = true
+        self.backgroundColor = .black
         setupUI()
         setupConstraint()
     }
@@ -56,8 +62,8 @@ class CollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configCellContent(title: String, posterPath: String) {
-        movieTitle.text = " \(title)"
-        posterImage.setImage(with: posterPath)
+    func configCellContent(data: ListObj) {
+        movieTitle.text = " \(String(describing: data.title!))"
+        posterImage.setImage(with: data.posterPath!)
     }
 }

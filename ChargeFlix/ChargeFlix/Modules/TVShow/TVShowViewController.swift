@@ -22,7 +22,7 @@ class TVShowViewController: UIViewController {
                                       cellClass: CollectionViewCell.self,
                                       cellIdentifire: CollectionViewCell.identifire)
         cView.translatesAutoresizingMaskIntoConstraints = false
-        cView.collectionview.showsVerticalScrollIndicator = false
+        cView.collectionview?.showsVerticalScrollIndicator = false
         return cView
     }()
     
@@ -36,6 +36,7 @@ class TVShowViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         setupUI()
         setupConstraint()
         presenter?.viewDidLoad()
@@ -66,7 +67,7 @@ extension TVShowViewController: TVShowViewInterface {
     func onFetchPopularTVShowsListSuccess(list: [ListObj]) {
         DispatchQueue.main.async {
             self.tvShowsCollectionView.configContent(list: list)
-            self.tvShowsCollectionView.collectionview.reloadData()
+            self.tvShowsCollectionView.collectionview?.reloadData()
         }
     }
     

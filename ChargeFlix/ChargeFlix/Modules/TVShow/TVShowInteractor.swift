@@ -17,15 +17,14 @@ class TVShowInteractor: TVShowInteractorInterface {
         self.repository = repository
     }
     
-    func getPopulerTVShows() {
-        repository?.get(modelType: PopularTVShowsList.self, completation: { result in
+    func getTVShow(type: TVShowType) {
+        repository?.get(type: type) { result in
             switch result {
             case .success(let data):
-                self.popularTVShowsList = data
-                self.presenter?.onFetchPopularTVShowsListSuccess()
+                self.presenter?.onfetchSuccess(tvShowType: type, data: data.toListObj())
             case .failure:
                 self.presenter?.onFetchPopularTVShowsListFailure()
             }
-        })
+        }
     }
 }

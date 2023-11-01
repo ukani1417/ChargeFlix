@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol HomeToMovieProtocol {
+    func setupMovieModule(title: String, data: [ListObj])
+}
+
 class ChargeFlixTabBarController: UITabBarController {
     
     let homeViewController = HomeRouter.createModule()
@@ -23,6 +27,7 @@ class ChargeFlixTabBarController: UITabBarController {
         self.tabBar.tintColor = AppTheme.tabBarTintColor
         self.tabBar.unselectedItemTintColor = AppTheme.tabBarUnselectedColor
     }
+    
     private func setupTabs() {
         let homeTabItem = UITabBarItem(title: "Home", 
                                        image: UIImage(named: "house"),
@@ -33,11 +38,9 @@ class ChargeFlixTabBarController: UITabBarController {
         let tvShowTabItem = UITabBarItem(title: "TVShow",
                                          image: UIImage(named: "tv"),
                                          selectedImage: UIImage(named: "play.tv.fill"))
-        
         homeViewController.tabBarItem = homeTabItem
         movieViewController.tabBarItem = movieTabItem
         tvShowViewController.tabBarItem = tvShowTabItem
-    
         self.viewControllers = [homeViewController, movieViewController, tvShowViewController]
     }
 }

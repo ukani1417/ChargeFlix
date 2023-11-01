@@ -13,41 +13,22 @@ enum MovieRepositoryError: String, Error {
 
 class MovieRepository {
     
-    func get<T: Codable>(modelType: T.Type,
-                         page: Int = 1,
-                         completation: @escaping (Result<T, MovieRepositoryError>) -> Void) {
-        
-        var apiEndPoint: MovieAPIEndPoints? {
-            switch modelType {
-            case is PopularMoviesList.Type: return .populer(page: page)
-            case is TopRatedMoviesList.Type: return .topRated(page: page)
-            case is UpcomingMoviesList.Type: return .upComing(page: page)
-            case is NowPlayingMoviesList.Type: return .nowPlaying(page: page)
-            case is MovieGenreList.Type: return .genreList
-            default: return  nil
-            }
+    func get(type: MovieType,
+             page: Int = 1,
+             completation: @escaping (Result<MovieList, MovieRepositoryError>) -> Void) {
+        var endPoint = MovieAPIEndPoints.populer(page: 1)
+        switch type {
+        case .populer:
+            endPoint = .populer(page: page)
+        case .topRated:
+            endPoint = .topRated(page: page)
+        case .upcoming:
+            endPoint = .upComing(page: page)
+        case .nowPlaying:
+            endPoint = .nowPlaying(page: page)
         }
         
-        guard let apiEnd = apiEndPoint else {
-            return completation(.failure(.serverError))
-        }
-        
-        APIManager.shared.request(apiRouter: apiEnd, modelType: modelType) { result in
-            switch result {
-            case .success(let data):
-                completation(.success(data))
-            case .failure(let error):
-                debugPrint(error)
-                completation(.failure(.serverError))
-            }
-        }
-    }
-   
-    func getDetails<T: Codable>(modelType: T.Type,
-                                id: Int,
-                                completation: @escaping (Result<T, MovieRepositoryError>) -> Void ) {
-        
-        APIManager.shared.request(apiRouter: MovieAPIEndPoints.movieDetails(id: id), modelType: modelType) { result in
+        APIManager.shared.request(apiRouter: endPoint, modelType: MovieList.self) { result in
             switch result {
             case .success(let data):
                 completation(.success(data))
@@ -58,4 +39,29 @@ class MovieRepository {
         }
     }
     
+    func getGenreList(completation: @escaping (Result<MovieGenreList, MovieRepositoryError>) -> Void) {
+        APIManager.shared.request(apiRouter: MovieAPIEndPoints.genreList, modelType: MovieGenreList.self) { result in
+            switch result {
+            case .success(let data):
+                completation(.success(data))
+            case .failure(let error):
+                debugPrint(error)
+                completation(.failure(.serverError))
+            }
+        }
+    }
+    
+    func getDetails(id: Int,
+                    completation: @escaping (Result<Movie, MovieRepositoryError>) -> Void ) {
+        APIManager.shared.request(apiRouter: MovieAPIEndPoints.movieDetails(id: id),
+                                  modelType: Movie.self) { result in
+            switch result {
+            case .success(let data):
+                completation(.success(data))
+            case .failure(let error):
+                debugPrint(error)
+                completation(.failure(.serverError))
+            }
+        }
+    }
 }

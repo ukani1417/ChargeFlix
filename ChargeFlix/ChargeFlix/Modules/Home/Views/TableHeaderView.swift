@@ -8,7 +8,14 @@
 import UIKit
 import Kingfisher
 
+protocol TableHeaderViewToViewController {
+    func filterDataUsingGenre(index: Int)
+}
+
 class TableHeaderView: UIView {
+    var delegate: TableHeaderViewToViewController?
+    
+    private var genreList: [Genre] = [Genre(id: -1, name: "All")]
     
     private var containerView: UIView = {
         let view = UIView()
@@ -23,38 +30,49 @@ class TableHeaderView: UIView {
         return view
     }()
         
-    var genreCollectionView: NewCollectionView = {
-        let cView = NewCollectionView(scrollDirection: .horizontal,
-                                      cellSize: CGSize(width: 100, height: 50),
-                                      cellClass: GenreCollectionCell.self,
-                                      cellIdentifire: GenreCollectionCell.identifire)
-        cView.translatesAutoresizingMaskIntoConstraints = false
-        cView.collectionview.showsHorizontalScrollIndicator = false
-        return cView
+    private var genreCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 100, height: 30)
+        
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.register(GenreCollectionCell.self, forCellWithReuseIdentifier: GenreCollectionCell.identifire)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = .black
+        return view
     }()
     
-    private var movieName: UILabel = UILabel().setLabel(text: "MovieName", 
-                                                        textColor: .white,
-                                                        bgColor: nil,
-                                                        font: AppTheme.tableHeaderMovieLableFont)
+    private var movieName: UILabel = {
+        let label = UILabel()
+         label.numberOfLines = 1
+         label.translatesAutoresizingMaskIntoConstraints = false
+         label.textColor = .white
+        label.font = .boldSystemFont(ofSize: 36)
+         return label
+    }()
     
     private var stackView: UIStackView = {
         let view = UIStackView()
         view.axis = .horizontal
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.distribution = .fillEqually
+        view.distribution = .fill
         view.spacing = 5
-        
         return view
     }()
     
-    private var votes: UILabel = UILabel().setLabel(text: "0", 
-                                                    textColor: AppTheme.votesLabelTextColot,
-                                                    bgColor: nil,
-                                                    font: AppTheme.votesLabelFont)
-    
+    private var votes: UILabel = {
+        let label = UILabel()
+         label.numberOfLines = 1
+         label.translatesAutoresizingMaskIntoConstraints = false
+         label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+   
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .black
         setupUI()
         setupConstraint()
         
@@ -71,69 +89,115 @@ class TableHeaderView: UIView {
         containerView.addSubview(stackView)
         containerView.addSubview(votes)
         containerView.addSubview(genreCollectionView)
+        genreCollectionView.delegate = self
+        genreCollectionView.dataSource = self
+    }
+
+    func addStarToStack(fullStar: Int, halfStar: Int) {
+        var halfStarValue = halfStar
+        for index in 1...5 {
+            
+            let view = UIImageView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.contentMode = .scaleToFill
+            view.widthAnchor.constraint(equalToConstant: 15).isActive = true
+           
+            if index <= fullStar {
+                view.image = UIImage(named: "star.fill")
+            } else if halfStarValue == 1 {
+                halfStarValue = 0
+                view.image = UIImage(named: "star.half.filled")
+            } else {
+                view.image = UIImage(named: "star")
+            }
+            
+            self.stackView.addArrangedSubview(view)
+        }
+        self.stackView.addArrangedSubview(votes)
+    }
+    
+    private func setupConstraint() {
+        setupContainerViewConstraint()
+        setupMoviePosterConstraint()
+        setupMovieNameConstraint()
+        setupStackViewConstraint()
+        setupGenericCollectionViewConstraint()
+    }
+    
+    private func setupContainerViewConstraint() {
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.leftAnchor.constraint(equalTo: leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: rightAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+    
+    private func setupMoviePosterConstraint() {
+        NSLayoutConstraint.activate([
+            moviePoster.topAnchor.constraint(equalTo: containerView.topAnchor),
+            moviePoster.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            moviePoster.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+            moviePoster.heightAnchor.constraint(equalToConstant: 250)
+            
+        ])
+    }
+    
+    private func setupMovieNameConstraint() {
+        NSLayoutConstraint.activate([
+            movieName.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: -40),
+            movieName.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            movieName.bottomAnchor.constraint(equalTo: moviePoster.bottomAnchor)
+        ])
+    }
+    
+    private func setupStackViewConstraint() {
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: 10),
+            stackView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            stackView.heightAnchor.constraint(equalToConstant: 15)
+        ])
+    }
+    
+    private func setupGenericCollectionViewConstraint() {
+        NSLayoutConstraint.activate([
+            genreCollectionView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 5),
+            genreCollectionView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            genreCollectionView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+            genreCollectionView.heightAnchor.constraint(equalToConstant: 40)
+        ])
     }
     
     func configContent(input: TableHeaderInput) {
         movieName.text = input.title
         moviePoster.setImage(with: input.poster)
-        votes.text = String(input.votes)
+        votes.text = "   \(String(input.votes))"
         addStarToStack(fullStar: input.fullStar, halfStar: input.halfStar)
-        genreCollectionView.configContent(list: input.genreList)
+        genreList.append(contentsOf: input.genreList)
     }
-    
-    func addStarToStack(fullStar: Int, halfStar: Int) {
-        DispatchQueue.main.async {
-            for _ in 1...fullStar {
-                let view = UIImageView(image: UIImage(named: "star.fill"))
-                view.translatesAutoresizingMaskIntoConstraints = false
-                view.contentMode = .scaleToFill
-                view.widthAnchor.constraint(equalToConstant: 15).isActive = true
-                self.stackView.addArrangedSubview(view)
-            }
-            
-            if halfStar == 1 {
-                let view = UIImageView(image: UIImage(named: "star.half.filled"))
-                view.translatesAutoresizingMaskIntoConstraints = false
-                view.contentMode = .scaleToFill
-                view.widthAnchor.constraint(equalToConstant: 15).isActive = true
-                self.stackView.addArrangedSubview(view)
-            }
-        }
-        
-    }
-    
-    private func setupConstraint() {
-        NSLayoutConstraint.activate([
-            
-            containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.leftAnchor.constraint(equalTo: leftAnchor),
-            containerView.rightAnchor.constraint(equalTo: rightAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
-            moviePoster.topAnchor.constraint(equalTo: containerView.topAnchor),
-            moviePoster.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            moviePoster.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            moviePoster.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -55),
-            moviePoster.heightAnchor.constraint(equalToConstant: 245),
-            
-            movieName.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: -45),
-            movieName.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            
-            stackView.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: 10),
-            stackView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: 15),
-            
-            votes.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: 10),
-            votes.leftAnchor.constraint(equalTo: stackView.rightAnchor, constant: 10),
-            votes.widthAnchor.constraint(equalToConstant: 70),
-            votes.centerYAnchor.constraint(equalTo: stackView.centerYAnchor),
+}
 
-            genreCollectionView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 5),
-            genreCollectionView.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            genreCollectionView.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            genreCollectionView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5)
+extension TableHeaderView: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, 
+                        numberOfItemsInSection section: Int) -> Int {
+        return genreList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, 
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        ])
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: GenreCollectionCell.identifire,
+            for: indexPath) as? GenreCollectionCell else {
+            return UICollectionViewCell()
+        }
+        cell.configCellContent(genre: genreList[indexPath.row].name ?? "")
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, 
+                        didSelectItemAt indexPath: IndexPath) {
+        delegate?.filterDataUsingGenre(index: indexPath.row)
     }
     
 }

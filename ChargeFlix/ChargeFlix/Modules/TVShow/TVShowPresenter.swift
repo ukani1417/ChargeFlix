@@ -8,12 +8,17 @@
 import Foundation
 import UIKit
 
+enum TVShowType: CaseIterable {
+    case populer
+    case topRated
+}
+
 class TVShowPresenter: TVShowPresenterInterface {
     var router: TVShowRouterInterface?
     var interactor: TVShowInteractorInterface?
     var view: TVShowViewInterface?
     
-    private var popularTVShowsList: PopularTVShowsList? 
+    private var popularTVShowsList: [ListObj] = []
     
     init(router: TVShowRouterInterface? = nil, 
          interactor: TVShowInteractorInterface? = nil,
@@ -25,38 +30,17 @@ class TVShowPresenter: TVShowPresenterInterface {
     
     func viewDidLoad() {
         view?.showActivity()
-        interactor?.getPopulerTVShows()
+        interactor?.getTVShow(type: .populer)
     }
     
-    func onFetchPopularTVShowsListSuccess() {
-        popularTVShowsList = interactor?.popularTVShowsList
+    func onfetchSuccess(tvShowType: TVShowType, data: [ListObj]) {
+        popularTVShowsList = data
         view?.hideActivity()
-       
-        view?.onFetchPopularTVShowsListSuccess(list: popularTVShowsList?.toListObj() ?? [])
+        view?.onFetchPopularTVShowsListSuccess(list: popularTVShowsList)
     }
-    
+
     func onFetchPopularTVShowsListFailure() {
         view?.hideActivity()
         view?.onFetchPopularTVShowsListFailure()
-    }
-    
-    func numbersOfItemInSection(section: Int) -> Int {
-        return popularTVShowsList?.list?.count ?? 0
-    }
-    
-    func setupCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: CollectionViewCell.identifire,
-            for: indexPath) as? CollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        let title = popularTVShowsList?.list?[indexPath.row].originalName ?? "TVShowName"
-        let poster = popularTVShowsList?.list?[indexPath.row].posterPath ?? ""
-        cell.configCellContent(title: title, posterPath: poster )
-        return cell
-    }
-    
-    func didSelect(indexPath: IndexPath) {
-        print("tapped index : \(indexPath.row)")
     }
 }

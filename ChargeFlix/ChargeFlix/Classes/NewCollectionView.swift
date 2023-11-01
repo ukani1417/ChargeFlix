@@ -8,13 +8,18 @@
 import Foundation
 import UIKit
 
+protocol CollectionViewToPresenter {
+    func didSelectItemAt(indexPath: IndexPath)
+}
+
 class NewCollectionView: UIView {
-    var collectionview: UICollectionView!
-    var layout: UICollectionViewFlowLayout!
+    var collectionview: UICollectionView?
+    var layout: UICollectionViewFlowLayout?
     var cellClass: AnyClass
     var cellIdentifire: String
     var cellSize: CGSize
-    var list: [Codable] = []
+    var list: [ListObj] = []
+    var delegate: CollectionViewToPresenter? 
    
     init(scrollDirection: UICollectionView.ScrollDirection, cellSize: CGSize, 
          cellClass: AnyClass, cellIdentifire: String) {
@@ -33,34 +38,34 @@ class NewCollectionView: UIView {
     
     func setupLayout(scrollDirection: UICollectionView.ScrollDirection) {
         layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = scrollDirection
-        layout.itemSize = cellSize
-        layout.minimumLineSpacing = 2
-        layout.minimumInteritemSpacing = 2
-        layout.sectionInset = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
+        layout?.scrollDirection = scrollDirection
+        layout?.itemSize = cellSize
+        layout?.collectionView?.showsVerticalScrollIndicator = false
+        layout?.collectionView?.showsHorizontalScrollIndicator = false
     }
     
     func setupCollectionView() {
-        collectionview = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionview = UICollectionView(frame: .zero, collectionViewLayout: layout ?? UICollectionViewFlowLayout())
         collectionview?.delegate = self
         collectionview?.dataSource = self
         collectionview?.register(cellClass,
                                  forCellWithReuseIdentifier: cellIdentifire)
-        collectionview.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(collectionview)
+        collectionview?.translatesAutoresizingMaskIntoConstraints = false
+        collectionview?.backgroundColor = .black
+        self.addSubview(collectionview ?? UICollectionView())
     }
 
     private func setupConstraint() {
-        NSLayoutConstraint.activate([
-            collectionview.topAnchor.constraint(equalTo: topAnchor),
-            collectionview.leftAnchor.constraint(equalTo: leftAnchor),
-            collectionview.rightAnchor.constraint(equalTo: rightAnchor),
-            collectionview.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        collectionview?.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        collectionview?.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        collectionview?.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        collectionview?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
     
-    func configContent(list: [Codable]) {
+    func configContent(list: [ListObj], delegate: CollectionViewToPresenter? = nil) {
         self.list = list
+        self.delegate = delegate
+        self.collectionview?.reloadData()
     }
     
 }
@@ -73,25 +78,23 @@ extension NewCollectionView: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, 
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifire, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifire, 
+                                                      for: indexPath)
+        
         switch cellIdentifire {
         case CollectionViewCell.identifire:
             guard let cell = cell as? CollectionViewCell else {
                 return UICollectionViewCell()
             }
-            if let data = list as? [ListObj] {
-                cell.configCellContent(title: data[indexPath.row].title ?? "",
-                                       posterPath: data[indexPath.row].posterPath ?? "")
-            }
-        case GenreCollectionCell.identifire:
-            guard let cell = cell as? GenreCollectionCell else {
-                return UICollectionViewCell()
-            }
-            if let data = list as? [Genre] {
-                cell.configCellContent(genre: data[indexPath.row].name ?? "")
-            }
+            cell.configCellContent(data: list[indexPath.row])
+            
         default: return UICollectionViewCell()
         }
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.didSelectItemAt(indexPath: indexPath)
+    }
+
 }

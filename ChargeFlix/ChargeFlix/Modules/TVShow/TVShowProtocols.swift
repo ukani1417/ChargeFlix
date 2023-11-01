@@ -23,13 +23,8 @@ protocol TVShowPresenterInterface: AnyObject {
     var interactor: TVShowInteractorInterface? { get set }
     
     func viewDidLoad()
-    
-    func onFetchPopularTVShowsListSuccess()
+    func onfetchSuccess(tvShowType: TVShowType, data: [ListObj])
     func onFetchPopularTVShowsListFailure()
-    
-    func numbersOfItemInSection(section: Int) -> Int
-    func setupCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
-    func didSelect(indexPath: IndexPath)
 }
 
 protocol TVShowInteractorInterface: AnyObject {
@@ -37,7 +32,7 @@ protocol TVShowInteractorInterface: AnyObject {
     var repository: TVShowRepository? { get set }
     var popularTVShowsList: PopularTVShowsList? { get set }
     
-    func getPopulerTVShows()
+    func getTVShow(type: TVShowType)
 }
 
 protocol TVShowRouterInterface: AnyObject {
