@@ -15,11 +15,14 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = "Home"
-        view.backgroundColor = .systemBackground
+       
+        view.backgroundColor = .black
+        
         setupUI()
         setupDelegates()
         setupConstraint()
         presenter?.viewDidLoad()
+    
     }
     
     private let contentView: UIView = {
@@ -31,7 +34,7 @@ class HomeViewController: UIViewController {
     private let activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.color = AppTheme.activityIndicatorColor
+        view.color = .red
         view.hidesWhenStopped = true
         return view
     }()
@@ -41,6 +44,7 @@ class HomeViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifire)
         view.showsVerticalScrollIndicator = false
+        view.backgroundColor = .black
         return view
     }()
     
@@ -80,9 +84,10 @@ extension HomeViewController: HomeViewInterface {
         DispatchQueue.main.async {
             let headerView: TableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0, 
                                                                             width: self.view.frame.width,
-                                                                            height: 300))
+                                                                            height: 330))
             
             headerView.configContent(input: input)
+            headerView.delegate = self
             self.movieTableView.tableHeaderView = headerView
         }
     }
@@ -136,5 +141,11 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return presenter?.setupHeaderView(section: section)
+    }
+}
+
+extension HomeViewController: TableHeaderViewToViewController {
+    func filterDataUsingGenre(index: Int) {
+        presenter?.filterDataUsingGenre(index: index)
     }
 }

@@ -13,23 +13,18 @@ enum TVShowRepositoryError: String, Error {
 
 class TVShowRepository {
     
-    func get<T: Codable>(modelType: T.Type,
-                         page: Int = 1,
-                         completation: @escaping (Result<T, TVShowRepositoryError>) -> Void ) {
+    func get(type: TVShowType,
+             page: Int = 1,
+             completation: @escaping (Result<TVShowList, TVShowRepositoryError>) -> Void ) {
         
-        var apiEndPoint: TVShowAPIEndPoints? {
-            switch modelType {
-            case is PopularTVShowsList.Type: return .populer(page: page)
-            case is TopRatedTVShowsList.Type: return .topRated(page: page)
-            default: return  nil
+        let endPoint: TVShowAPIEndPoints = {
+            switch type {
+            case .populer:  return TVShowAPIEndPoints.populer(page: page)
+            case .topRated: return  TVShowAPIEndPoints.topRated(page: page)
             }
-        }
-        
-        guard let apiEnd = apiEndPoint else {
-            return completation(.failure(.serverError))
-        }
-        
-        APIManager.shared.request(apiRouter: apiEnd, modelType: modelType) { result in
+        }()
+    
+        APIManager.shared.request(apiRouter: endPoint, modelType: TVShowList.self) { result in
             switch result {
             case .success(let data):
                 completation(.success(data))
@@ -40,12 +35,9 @@ class TVShowRepository {
         }
     }
        
-    func getDetails<T: Codable>(modelType: T.Type,
-                                id: Int,
-                                completation: @escaping (Result<T, TVShowRepositoryError>) -> Void ) {
-        
+    func getDetails(id: Int, completation: @escaping (Result<TVShow, TVShowRepositoryError>) -> Void ) {
         APIManager.shared.request(apiRouter: TVShowAPIEndPoints.tVShowDetails(id: id),
-                                  modelType: modelType) { result in
+                                  modelType: TVShow.self) { result in
             switch result {
             case .success(let data):
                 completation(.success(data))

@@ -7,7 +7,12 @@
 
 import UIKit
 
+protocol TableSectionHeaderViewToPresenter {
+    func showAll(section: Int)
+}
 class TableSectionHeaderView: UIView {
+    
+    var delegate: TableSectionHeaderViewToPresenter? 
     
     private var headerContentView: UIView = {
        let view = UIView()
@@ -15,17 +20,25 @@ class TableSectionHeaderView: UIView {
        return view
     }()
     
-    private var sectionLabel: UILabel = UILabel().setLabel(text: "Section", 
-                                                           textColor: .white,
-                                                           bgColor: nil,
-                                                           font: AppTheme.tableHeaderSectionLabelFont)
+    private var sectionLabel: UILabel = {
+        let label = UILabel()
+         label.numberOfLines = 1
+         label.translatesAutoresizingMaskIntoConstraints = false
+         label.textColor = .white
+         return label
+    }()
     
-    private var showAllButton: UIButton = UIButton().setButton(type: .custom, 
-                                                               title: "Show All",
-                                                               font: AppTheme.tableHeaderSectionButtonFont)
+    private var showAllButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("Show All", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitleColor(.white, for: .normal)
+        return button
+    }()
    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .black
         setupUI()
         setupConstraint()
     }
@@ -63,7 +76,7 @@ class TableSectionHeaderView: UIView {
     }
     
     @objc private func showAllButtonTapped() {
-        print(showAllButton.tag)
+        delegate?.showAll(section: showAllButton.tag)
     }
     
     func configContent(sectionTitle: String, section: Int) {

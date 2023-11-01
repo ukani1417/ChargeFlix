@@ -18,7 +18,7 @@ class MovieTableViewCell: UITableViewCell {
                                       cellClass: CollectionViewCell.self,
                                       cellIdentifire: CollectionViewCell.identifire)
         cView.translatesAutoresizingMaskIntoConstraints = false
-        cView.collectionview.showsHorizontalScrollIndicator = false
+        cView.collectionview?.showsHorizontalScrollIndicator = false
         return cView
     }()
     
@@ -36,8 +36,8 @@ class MovieTableViewCell: UITableViewCell {
         contentView.addSubview(moviessCollectionView)
     }
     
-    func configContent(data: [ListObj]) {
-        self.moviessCollectionView.configContent(list: data)
+    func configContent(data: [ListObj], delegate: CollectionViewToPresenter?) {
+        self.moviessCollectionView.configContent(list: data, delegate: delegate)
     }
     
     private func setupConstraint() {

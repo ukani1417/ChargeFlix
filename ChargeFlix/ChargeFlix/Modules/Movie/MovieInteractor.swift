@@ -11,26 +11,22 @@ class MovieInteractor: MovieInteractorInterface {
     
     weak var presenter: MoviePresenterInterface?
     var repository: MovieRepository?
-    var popularMovieList: PopularMoviesList?
     
     init(presenter: MoviePresenterInterface? = nil, 
-         repository: MovieRepository? = MovieRepository(),
-         popularMovieList: PopularMoviesList? = nil) {
+         repository: MovieRepository? = MovieRepository()) {
         
         self.presenter = presenter
         self.repository = repository
-        self.popularMovieList = popularMovieList
     }
     
-    func getPopularMovies() {
-        repository?.get(modelType: PopularMoviesList.self, completation: { result in
+    func getMoviesMovies(type: MovieType) {
+        repository?.get(type: type) { result in
             switch result {
             case .success(let data):
-                self.popularMovieList = data
-                self.presenter?.onFetchPopularMovieListSuccess()
+                self.presenter?.onfetchSuccess(movieType: .populer, data: data.toListObj())
             case .failure:
                 self.presenter?.onFetchPopularMovieListFailure()
             }
-        })
+        }
     }
 }

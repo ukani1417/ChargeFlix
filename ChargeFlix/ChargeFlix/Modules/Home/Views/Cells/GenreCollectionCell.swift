@@ -10,13 +10,25 @@ import UIKit
 class GenreCollectionCell: UICollectionViewCell {
     static let identifire = GenreCollectionCell.description()
 
-    private var genreLabel: UILabel = UILabel().setLabel(text: "", 
-                                                         textColor: .white,
-                                                         bgColor: nil,
-                                                         font: AppTheme.genreButtonFont)
+    private var genreLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
+    private var cellSelectedView: UIView = {
+       let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .red
+        return view
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.selectedBackgroundView = cellSelectedView
+        self.backgroundColor = .black
         setupUI()
         setupConstraint()
     }

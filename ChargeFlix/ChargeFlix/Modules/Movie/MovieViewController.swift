@@ -11,13 +11,13 @@ class MovieViewController: UIViewController {
 
     var presenter: MoviePresenterInterface?
     
-    private var moviessCollectionView: NewCollectionView = {
+     private var moviessCollectionView: NewCollectionView = {
         let cView = NewCollectionView(scrollDirection: .vertical,
                                       cellSize: CGSize(width: 130, height: 180),
                                       cellClass: CollectionViewCell.self,
                                       cellIdentifire: CollectionViewCell.identifire)
         cView.translatesAutoresizingMaskIntoConstraints = false
-        cView.collectionview.showsVerticalScrollIndicator = false
+        cView.collectionview?.showsVerticalScrollIndicator = false
         return cView
     }()
     
@@ -31,6 +31,7 @@ class MovieViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
         setupUI()
         setupConstraint()
         presenter?.viewDidLoad()
@@ -54,13 +55,14 @@ class MovieViewController: UIViewController {
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+
 }
 
 extension MovieViewController: MovieViewInterface {
     func onFetchPopularMovieListSuccess(data: [ListObj]) {
         DispatchQueue.main.async {
             self.moviessCollectionView.configContent(list: data)
-            self.moviessCollectionView.collectionview.reloadData()
+            self.moviessCollectionView.collectionview?.reloadData()
         }
     }
     

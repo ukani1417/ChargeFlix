@@ -31,26 +31,30 @@ protocol HomePresenterInterface: AnyObject {
     func heightForRowAt(tableView: UITableView, indexPath: IndexPath) -> CGFloat
     func heightForSectionAt(tableView: UITableView, section: Int) -> CGFloat
     func setupHeaderView(section: Int) -> UIView
+    func filterDataUsingGenre(index: Int)
       
 //  Api Callbacks
-    func onfetchSuccess(movieType: MovieType, data: [ListObj])
+    func onfetchMovieSuccess(movieType: MovieType, data: [ListObj])
+//    func onfetchTVShowSuccess(tvShowType: TVShowType, data: [ListObj])
     func onFetchMovieGenreListSuccess(data: MovieGenreList)
     
-    func onFetchFailure(movieType: MovieType)
+    func onFetchMovieFailure(movieType: MovieType)
+//    func onFetchTVShowFailure(tvShowType: TVShowType)
     func onFetchMovieGenreListFailure()
 }
 
 protocol HomeInteractorInterface {
     var presenter: HomePresenterInterface? { get set }
-    var repository: MovieRepository? { get set }
+    var movieRepository: MovieRepository? { get set }
+    var tvShowRepositoy: TVShowRepository? { get set }
     
+    func getMovies(type: MovieType)
+//    func getTVShows(type: TVShowType)
     func getMovieGenreList()
-    func getPopularMovies()
-    func getTopRatedMovies()
-    func getUpComingMovies()
-    func getNowPlayingMovies()
 }
 
 protocol HomeRouterInterface {
+    var viewController: UINavigationController? { get set }
+    func switchToMovieModule(data: [ListObj])
     
 }

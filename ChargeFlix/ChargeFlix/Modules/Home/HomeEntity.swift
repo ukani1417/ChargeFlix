@@ -13,7 +13,12 @@ struct GenreList: Codable {
 
 struct MovieData {
     let type: MovieType
-    let data: [ListObj]
+    var data: [ListObj]
+}
+
+struct TVShowData {
+    let type: TVShowType
+    var data: [ListObj]
 }
 
 struct TableHeaderInput {
@@ -35,3 +40,18 @@ struct ListObj: Codable {
     let voteCount: Int?
 }
 
+enum MovieType: CaseIterable {
+    case populer
+    case topRated
+    case upcoming
+    case nowPlaying
+}
+
+enum DataType: CaseIterable {
+    case popularMovies
+    case topRatedMovies
+    case upcomingMovies
+    case nowPlayingMovies
+    case popularTVShows
+    case topRatedTVShows
+}

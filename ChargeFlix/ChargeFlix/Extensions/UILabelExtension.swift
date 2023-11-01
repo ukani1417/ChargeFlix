@@ -15,10 +15,6 @@ extension UILabel {
         label.textAlignment = .center
         label.textColor = textColor
         
-        label.clipsToBounds = true
-        label.layer.cornerRadius = 10
-        label.layer.borderWidth = 1
-        
         if let bgColor = bgColor {
             label.backgroundColor = bgColor
         }

@@ -16,7 +16,7 @@ class MoviePresenter: MoviePresenterInterface {
     
     var interactor: MovieInteractorInterface?
     
-    private var populerMovieList: PopularMoviesList?
+    private var populerMovieList: [ListObj] = []
     
     init(view: MovieViewInterface? = nil, 
          router: MovieRouterInterface? = nil,
@@ -28,37 +28,27 @@ class MoviePresenter: MoviePresenterInterface {
     
     func viewDidLoad() {
         view?.showActity()
-        interactor?.getPopularMovies()
+        interactor?.getMoviesMovies(type: .populer)
     }
     
-    func onFetchPopularMovieListSuccess() {
-        populerMovieList = interactor?.popularMovieList
+    func onfetchSuccess(movieType: MovieType, data: [ListObj]) {
+        populerMovieList = data
         view?.hideActivity()
-        view?.onFetchPopularMovieListSuccess(data: populerMovieList?.toListObj() ?? [])
+        view?.onFetchPopularMovieListSuccess(data: populerMovieList)
     }
-    
+        
     func onFetchPopularMovieListFailure() {
         view?.hideActivity()
         view?.onFetchPopularMovieListFailure()
     }
-    
-    func numbersOfItemInSection(section: Int) -> Int {
-        return populerMovieList?.list?.count ?? 0
-    }
-    
-    func setupCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: CollectionViewCell.identifire,
-            for: indexPath) as? CollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        let title = populerMovieList?.list?[indexPath.row].originalTitle ?? "MovieName"
-        let poster = populerMovieList?.list?[indexPath.row].posterPath ?? ""
-        cell.configCellContent(title: title, posterPath: poster )
-        return cell
-    }
-    
+        
     func didSelect(indexPath: IndexPath) {
         print("tapped index : \(indexPath.row)")
+    }
+}
+
+extension MoviePresenter: HomeToMovieProtocol {
+    func setupMovieModule(title: String, data: [ListObj]) {
+        view?.onFetchPopularMovieListSuccess(data: data)
     }
 }

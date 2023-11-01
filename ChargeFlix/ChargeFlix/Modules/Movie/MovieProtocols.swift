@@ -25,20 +25,16 @@ protocol MoviePresenterInterface: AnyObject {
     
     func viewDidLoad()
     
-    func onFetchPopularMovieListSuccess()
+    func onfetchSuccess(movieType: MovieType, data: [ListObj])
     func onFetchPopularMovieListFailure()
-    
-    func numbersOfItemInSection(section: Int) -> Int
-    func setupCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     func didSelect(indexPath: IndexPath)
 }
 
 protocol MovieInteractorInterface: AnyObject {
     var presenter: MoviePresenterInterface? { get set }
     var repository: MovieRepository? { get set }
-    var popularMovieList: PopularMoviesList? { get set }
     
-    func getPopularMovies()
+    func getMoviesMovies(type: MovieType)
 }
 
 protocol MovieRouterInterface: AnyObject {
