@@ -7,11 +7,18 @@
 
 import Foundation
 
+protocol TVShowInteractorInterface: AnyObject {
+    var presenter: TVShowPresenterInterface? { get set }
+    var repository: TVShowRepository? { get set }
+    
+    func getTVShow(type: TVShowType)
+    func getTVShowById(id: Int)
+}
+
 class TVShowInteractor: TVShowInteractorInterface {
 
     var presenter: TVShowPresenterInterface?
     var repository: TVShowRepository?
-    var popularTVShowsList: PopularTVShowsList?
     
     init(repository: TVShowRepository? = TVShowRepository()) {
         self.repository = repository
@@ -26,5 +33,16 @@ class TVShowInteractor: TVShowInteractorInterface {
                 self.presenter?.onFetchPopularTVShowsListFailure()
             }
         }
+    }
+    
+    func getTVShowById(id: Int) {
+        repository?.getDetails(id: id, completation: { result in
+            switch result {
+            case .success(let data):
+                self.presenter?.onFetchByIdSuccess(data: data)
+            case .failure:
+                self.presenter?.onFetchByIdFailure()
+            }
+        })
     }
 }

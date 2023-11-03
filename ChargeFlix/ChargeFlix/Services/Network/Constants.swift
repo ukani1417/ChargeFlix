@@ -14,4 +14,5 @@ struct Constants {
     static let apiKey: String = "a5efcd11aa38dae27ea1ec70a4cb955c"
     static let schema: String = "https"
     static let imagePath = "https://image.tmdb.org/t/p/original/"
+    static let youtubeBasePath = "https://www.youtube.com/embed/"
 }

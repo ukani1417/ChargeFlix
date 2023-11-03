@@ -12,8 +12,8 @@ class MovieTableViewCell: UITableViewCell {
     static let identifire = MovieTableViewCell.description()
     
     var type: String = ""
-    var moviessCollectionView: NewCollectionView = {
-        let cView = NewCollectionView(scrollDirection: .horizontal,
+    var moviessCollectionView: CustomCollectionView = {
+        let cView = CustomCollectionView(scrollDirection: .horizontal,
                                       cellSize: CGSize(width: 130, height: 180),
                                       cellClass: CollectionViewCell.self,
                                       cellIdentifire: CollectionViewCell.identifire)

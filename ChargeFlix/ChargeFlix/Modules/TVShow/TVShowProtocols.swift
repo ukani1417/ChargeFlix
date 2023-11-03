@@ -16,25 +16,3 @@ protocol TVShowViewInterface: AnyObject {
     func onFetchPopularTVShowsListSuccess(list: [ListObj])
     func onFetchPopularTVShowsListFailure()
 }
-
-protocol TVShowPresenterInterface: AnyObject {
-    var view: TVShowViewInterface? { get set }
-    var router: TVShowRouterInterface? { get set }
-    var interactor: TVShowInteractorInterface? { get set }
-    
-    func viewDidLoad()
-    func onfetchSuccess(tvShowType: TVShowType, data: [ListObj])
-    func onFetchPopularTVShowsListFailure()
-}
-
-protocol TVShowInteractorInterface: AnyObject {
-    var presenter: TVShowPresenterInterface? { get set }
-    var repository: TVShowRepository? { get set }
-    var popularTVShowsList: PopularTVShowsList? { get set }
-    
-    func getTVShow(type: TVShowType)
-}
-
-protocol TVShowRouterInterface: AnyObject {
-    
-}

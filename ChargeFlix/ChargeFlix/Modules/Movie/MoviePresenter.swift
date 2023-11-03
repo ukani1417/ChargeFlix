@@ -5,8 +5,23 @@
 //  Created by Dhruv Ukani on 25/10/23.
 //
 
-import Foundation
 import UIKit
+
+protocol MoviePresenterInterface: AnyObject {
+    var view: MovieViewInterface? { get set }
+    var router: MovieRouterInterface? { get set }
+    var interactor: MovieInteractorInterface? { get set }
+    
+    func viewDidLoad()
+    
+    func onfetchSuccess(movieType: MovieType, data: [ListObj])
+    func onFetchPopularMovieListFailure()
+    func didSelect(indexPath: IndexPath)
+    func configerMovies(type: String, data: [ListObj])
+    
+    func onfetchMovieByIdSuccess(data: Movie)
+    func onfetchMovieBYIdFailure()
+}
 
 class MoviePresenter: MoviePresenterInterface {
    
@@ -45,10 +60,28 @@ class MoviePresenter: MoviePresenterInterface {
     func didSelect(indexPath: IndexPath) {
         print("tapped index : \(indexPath.row)")
     }
+    
+    func configerMovies(type: String, data: [ListObj]) {
+        view?.setupTitle(title: type)
+        view?.onFetchPopularMovieListSuccess(data: data)
+    }
+    
+    func onfetchMovieByIdSuccess(data: Movie) {
+        view?.hideActivity()
+        router?.pushToMovieDetail(with: data)
+    }
+    
+    func onfetchMovieBYIdFailure() {
+        view?.hideActivity()
+    }
 }
 
-extension MoviePresenter: HomeToMovieProtocol {
-    func setupMovieModule(title: String, data: [ListObj]) {
-        view?.onFetchPopularMovieListSuccess(data: data)
+// for didselect from CustomCollectionView
+extension MoviePresenter: CollectionViewToPresenter {
+    func didSelectItemAt(id: Int) {
+        if id != -1 {
+            view?.showActity()
+            interactor?.getMovieById(id: id)
+        }
     }
 }

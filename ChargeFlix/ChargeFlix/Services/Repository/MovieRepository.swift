@@ -64,4 +64,19 @@ class MovieRepository {
             }
         }
     }
+    
+    func getVideo(id: Int, completation: @escaping (Result<MovieVideo, MovieRepositoryError>) -> Void ) {
+        APIManager.shared.request(
+            apiRouter: MovieAPIEndPoints.movieVideo(id: id),
+            modelType: MovieVideo.self) { result in
+            switch result {
+            case .success(let data):
+                completation(.success(data))
+            case .failure(let error):
+                debugPrint(error)
+                completation(.failure(.serverError))
+            }
+        }
+        
+    }
 }

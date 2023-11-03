@@ -7,6 +7,16 @@
 
 import UIKit
 
+protocol HomeViewInterface: AnyObject {
+    var presenter: HomePresenterInterface? { get set }
+    
+    func showActity()
+    func hideActivity()
+    func reloadTable()
+    func setupHeaderView(input: TableHeaderInput)
+    func onFetchFailure(message: String)
+}
+
 class HomeViewController: UIViewController {
     
     var presenter: HomePresenterInterface?
@@ -20,7 +30,7 @@ class HomeViewController: UIViewController {
         
         setupUI()
         setupDelegates()
-        setupConstraint()
+        setupConstraints()
         presenter?.viewDidLoad()
     
     }
@@ -50,33 +60,41 @@ class HomeViewController: UIViewController {
     
     private func setupUI() {
         view.addSubview(contentView)
-        view.addSubview(activityIndicator)
+        contentView.addSubview(activityIndicator)
         contentView.addSubview(movieTableView)
     }
-    
+
     private func setupDelegates() {
         movieTableView.delegate = self
         movieTableView.dataSource = self
     }
-    
-    private func setupConstraint() {
+    private func setupConstraints() {
+        setupContentViewConstraints()
+        setupMovieTableViewConstraints()
+        setupActivityIndicatorConstraints()
+    }
+    private func setupContentViewConstraints() {
         NSLayoutConstraint.activate([
-            
             contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             contentView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             contentView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
+            contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+    private func setupMovieTableViewConstraints() {
+        NSLayoutConstraint.activate([
             movieTableView.topAnchor.constraint(equalTo: contentView.topAnchor),
             movieTableView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             movieTableView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            movieTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+            movieTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-
+    private func setupActivityIndicatorConstraints() {
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+    }
 }
 
 extension HomeViewController: HomeViewInterface {

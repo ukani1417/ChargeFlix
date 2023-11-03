@@ -47,4 +47,20 @@ class TVShowRepository {
             }
         }
     }
+    
+    func getVideos(id: Int, completation: @escaping (Result<MovieVideo, TVShowRepositoryError>) -> Void) {
+        
+        APIManager.shared.request(
+            apiRouter: TVShowAPIEndPoints.tvShowVideo(id: id),
+            modelType: MovieVideo.self) { result in
+            switch result {
+            case .success(let data):
+                completation(.success(data))
+            case .failure(let error):
+                debugPrint(error)
+                completation(.failure(.serverError))
+            }
+        }
+        
+    }
 }

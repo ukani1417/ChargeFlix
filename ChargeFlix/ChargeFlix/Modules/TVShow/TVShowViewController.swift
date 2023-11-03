@@ -16,8 +16,8 @@ class TVShowViewController: UIViewController {
  
     var presenter: TVShowPresenterInterface?
     
-    private var tvShowsCollectionView: NewCollectionView = {
-        let cView = NewCollectionView(scrollDirection: .vertical, 
+    private var tvShowsCollectionView: CustomCollectionView = {
+        let cView = CustomCollectionView(scrollDirection: .vertical, 
                                       cellSize: CGSize(width: 130, height: 180),
                                       cellClass: CollectionViewCell.self,
                                       cellIdentifire: CollectionViewCell.identifire)
@@ -29,7 +29,7 @@ class TVShowViewController: UIViewController {
     private let activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: .large)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.color = AppTheme.activityIndicatorColor
+        view.color = .red
         view.hidesWhenStopped = true
         return view
     }()
@@ -38,7 +38,7 @@ class TVShowViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         setupUI()
-        setupConstraint()
+        setupConstraints()
         presenter?.viewDidLoad()
         
     }
@@ -50,23 +50,31 @@ class TVShowViewController: UIViewController {
         view.addSubview(activityIndicator)
     }
     
-    private func setupConstraint() {
+    private func setupConstraints() {
+        setupTVShowsCollectionViewConstraints()
+        setupActivityIndicatorConstraints()
+    }
+    private func setupTVShowsCollectionViewConstraints() {
         NSLayoutConstraint.activate([
             tvShowsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tvShowsCollectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
             tvShowsCollectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
-            tvShowsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
+            tvShowsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+    private func setupActivityIndicatorConstraints() {
+        NSLayoutConstraint.activate([
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+
 }
 
 extension TVShowViewController: TVShowViewInterface {
     func onFetchPopularTVShowsListSuccess(list: [ListObj]) {
         DispatchQueue.main.async {
-            self.tvShowsCollectionView.configContent(list: list)
+            self.tvShowsCollectionView.configContent(list: list, delegate: self.presenter as? CollectionViewToPresenter)
             self.tvShowsCollectionView.collectionview?.reloadData()
         }
     }

@@ -6,6 +6,34 @@
 //
 
 import UIKit
+protocol HomePresenterInterface: AnyObject {
+    var view: HomeViewInterface? { get set }
+    var router: HomeRouterInterface? { get set }
+    var interactor: HomeInteractorInterface? { get set }
+    
+    func viewDidLoad()
+    
+//   for  tableView
+    func numsOfSection() -> Int
+    func numsOfRows(section: Int) -> Int
+    func cellForRowAt(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    func heightForRowAt(tableView: UITableView, indexPath: IndexPath) -> CGFloat
+    func heightForSectionAt(tableView: UITableView, section: Int) -> CGFloat
+    func setupHeaderView(section: Int) -> UIView
+    func filterDataUsingGenre(index: Int)
+      
+//  Api Callbacks
+    func onfetchMovieSuccess(movieType: MovieType, data: [ListObj])
+//    func onfetchTVShowSuccess(tvShowType: TVShowType, data: [ListObj])
+    func onFetchMovieGenreListSuccess(data: MovieGenreList)
+    
+    func onfetchMovieByIdSuccess(data: Movie)
+    func onfetchMovieBYIdFailure()
+    
+    func onFetchMovieFailure(movieType: MovieType)
+//    func onFetchTVShowFailure(tvShowType: TVShowType)
+    func onFetchMovieGenreListFailure()
+}
 
 class HomePresenter: HomePresenterInterface {
     
@@ -43,7 +71,6 @@ class HomePresenter: HomePresenterInterface {
     func onfetchMovieSuccess(movieType: MovieType, data: [ListObj]) {
         moviesData.append(MovieData(type: movieType, data: data))
         filteredData.append(MovieData(type: movieType, data: data))
-        
         if movieType == .populer {
             setupHeaderView()
         }
@@ -54,7 +81,6 @@ class HomePresenter: HomePresenterInterface {
         tvShowsData.append(TVShowData(type: tvShowType, data: data))
         filteredTVShowsData.append(TVShowData(type: tvShowType, data: data))
         view?.reloadTable()
-
     }
     
     func onFetchMovieGenreListSuccess(data: MovieGenreList) {
@@ -194,30 +220,49 @@ class HomePresenter: HomePresenterInterface {
         view?.reloadTable()
     }
     
+    func onfetchMovieByIdSuccess(data: Movie) {
+        view?.hideActivity()
+        router?.pushToMovieDetail(with: data)
+    }
+    
+    func onfetchMovieBYIdFailure() {
+        view?.hideActivity()
+    }
+    
 }
 
 // for didselect from CustomCollectionView
 extension HomePresenter: CollectionViewToPresenter {
-    func didSelectItemAt(indexPath: IndexPath) {
-        print("selected item : \(indexPath)")
+    func didSelectItemAt(id: Int) {
+        if id != -1 {
+            view?.showActity()
+            interactor?.getMovieById(id: id)
+        }
     }
 }
 
 // for showAll from table sectionheader
 extension HomePresenter: TableSectionHeaderViewToPresenter {
     func showAll(section: Int) {
-        print("show all section: \(section)")
-        let data : [ListObj] = {
-            switch section {
-            case 0: return filteredData.first(where: { $0.type == .populer })?.data ?? []
-            case 1: return filteredData.first(where: { $0.type == .topRated })?.data ?? []
-            case 2: return filteredData.first(where: { $0.type == .upcoming })?.data ?? []
-            case 3: return  filteredData.first(where: { $0.type == .nowPlaying })?.data ?? []
-            case 4: return filteredTVShowsData.first(where: { $0.type == .populer})?.data ?? []
-            case 5: return filteredTVShowsData.first(where: { $0.type == .topRated})?.data ?? []
-            default: return []
-            }
-        }()
-        router?.switchToMovieModule(data: data)
+        var data = [ListObj]()
+        var type = "Movies"
+        
+        switch section {
+        case 0:
+            data = filteredData.first(where: { $0.type == .populer })?.data ?? []
+            type = "Popular"
+        case 1:
+            data = filteredData.first(where: { $0.type == .topRated })?.data ?? []
+            type = "Top Rated"
+        case 2:
+            data = filteredData.first(where: { $0.type == .upcoming })?.data ?? []
+            type = "Up Coming"
+        case 3:
+            data = filteredData.first(where: { $0.type == .nowPlaying })?.data ?? []
+            type = "In Theaters"
+        default:
+            break
+        }
+        router?.switchToMovieModule(type: type, data: data)
     }
 }

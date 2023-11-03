@@ -9,16 +9,16 @@ import Foundation
 import UIKit
 
 protocol CollectionViewToPresenter {
-    func didSelectItemAt(indexPath: IndexPath)
+    func didSelectItemAt(id: Int)
 }
 
-class NewCollectionView: UIView {
+class CustomCollectionView: UIView {
     var collectionview: UICollectionView?
     var layout: UICollectionViewFlowLayout?
     var cellClass: AnyClass
     var cellIdentifire: String
     var cellSize: CGSize
-    var list: [ListObj] = []
+    var list: [Codable] = []
     var delegate: CollectionViewToPresenter? 
    
     init(scrollDirection: UICollectionView.ScrollDirection, cellSize: CGSize, 
@@ -45,7 +45,8 @@ class NewCollectionView: UIView {
     }
     
     func setupCollectionView() {
-        collectionview = UICollectionView(frame: .zero, collectionViewLayout: layout ?? UICollectionViewFlowLayout())
+        collectionview = UICollectionView(frame: .zero, 
+                                          collectionViewLayout: layout ?? UICollectionViewFlowLayout())
         collectionview?.delegate = self
         collectionview?.dataSource = self
         collectionview?.register(cellClass,
@@ -62,15 +63,18 @@ class NewCollectionView: UIView {
         collectionview?.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
     
-    func configContent(list: [ListObj], delegate: CollectionViewToPresenter? = nil) {
+    func configContent(list: [Codable], delegate: CollectionViewToPresenter? = nil) {
         self.list = list
         self.delegate = delegate
-        self.collectionview?.reloadData()
+        DispatchQueue.main.async {
+            self.collectionview?.reloadData()
+        }
+        
     }
     
 }
 
-extension NewCollectionView: UICollectionViewDelegate, UICollectionViewDataSource {
+extension CustomCollectionView: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return list.count
     }
@@ -80,21 +84,25 @@ extension NewCollectionView: UICollectionViewDelegate, UICollectionViewDataSourc
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifire, 
                                                       for: indexPath)
-        
         switch cellIdentifire {
         case CollectionViewCell.identifire:
             guard let cell = cell as? CollectionViewCell else {
                 return UICollectionViewCell()
             }
             cell.configCellContent(data: list[indexPath.row])
-            
+        case VideoCollectionCell.identifire:
+            guard let cell = cell as? VideoCollectionCell else {
+                return UICollectionViewCell()
+            }
+            cell.configCellContent(data: list[indexPath.row])
         default: return UICollectionViewCell()
         }
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.didSelectItemAt(indexPath: indexPath)
+        delegate?.didSelectItemAt(id: (list as? [ListObj])?[indexPath.row].id ?? -1)
     }
 
 }

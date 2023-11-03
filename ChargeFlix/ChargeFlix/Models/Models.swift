@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import UIKit
 // MARK: - Movie
 struct Movie: Codable {
     let id: Int?
@@ -23,6 +23,7 @@ struct Movie: Codable {
     let title: String?
     let runtime: Int?
     let voteAverage: Double?
+    let voteCount: Int?
     
     enum CodingKeys: String, CodingKey {
         case id, adult, genres, overview, popularity, status, title, runtime
@@ -32,6 +33,34 @@ struct Movie: Codable {
         case originalTitle = "original_title"
         case releaseDate = "release_date"
         case voteAverage = "vote_average"
+        case voteCount = "vote_count"
+    }
+    
+    func toCustomDetailView() -> CustomDetailViewModel {
+        
+        var genreList = ""
+        self.genres?.forEach({ genre in
+            genreList.append((genre.name ?? "") + " / ")
+        })
+        genreList.removeLast(2)
+        
+        let runtime: Int = self.runtime ?? 0
+        let hour = runtime/60
+        let minute = runtime - (60*hour)
+        let hourString = ( hour < 10) ? "0\(hour)" : "\(hour)"
+        let minuteString = ( minute < 10) ? "0\(minute)" : "\(minute)"
+        
+        return CustomDetailViewModel(title: self.originalTitle ?? "",
+                                     genreList: genreList,
+                                     halfStar: 0,
+                                     fullStar: 5,
+                                     overView: self.overview ?? "",
+                                     stackData: [
+                                        ("calendar",String(self.releaseDate ?? "") ),
+                                        ("clock","\(hourString):\(minuteString) / \(runtime) min"),
+                                        ("globe",self.originalLanguage ?? "")],
+                                     posterPath: self.backdropPath ?? "",
+                                     votes: String(self.voteCount ?? 0) + " Votes" )
     }
         
 }
@@ -136,6 +165,29 @@ struct TVShow: Codable {
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
     }
+    
+    func toCustomDetailView() -> CustomDetailViewModel {
+        
+        var genreList = ""
+        self.genres?.forEach({ genre in
+            genreList.append((genre.name ?? "") + " / ")
+        })
+        if genreList.count > 2 {
+            genreList.removeLast(2)
+        }
+        
+        return CustomDetailViewModel(title: self.originalName ?? "",
+                                     genreList: genreList,
+                                     halfStar: 0,
+                                     fullStar: 5,
+                                     overView: self.overview ?? "",
+                                     stackData: [
+                                        ("calendar",String(self.firstAirDate ?? "") ),
+                                        ("tv.play","Episodes: \(self.numberOfEpisodes ?? 0)"),
+                                        ("tv.play", "Seasons: \(self.numberOfSeasons ?? 0)")],
+                                     posterPath: self.backdropPath ?? "",
+                                     votes: String(self.voteCount ?? 0) + " Votes" )
+    }
 }
 
 struct Episode: Codable {
@@ -228,52 +280,6 @@ struct TVShowListObj: Codable {
     }
 }
 
-struct PopularTVShowsList: Codable {
-    let page: Int?
-    let totalPages: Int?
-    let totalResults: Int?
-    let list: [TVShowListObj]?
-    
-    enum CodingKeys: String, CodingKey {
-        case page
-        case totalPages = "total_pages"
-        case totalResults = "total_results"
-        case list = "results"
-    }
-    
-    func toListObj() -> [ListObj] {
-        return self.list?.map({ show in
-            return ListObj(id: show.id, title: show.originalName, 
-                           posterPath: show.posterPath, backdropPath: show.backdropPath,
-                           genre: show.genre, voteAverage: show.voteAverage,
-                           voteCount: show.voteCount)
-        }) ?? []
-    }
-}
-
-struct TopRatedTVShowsList: Codable {
-    let page: Int?
-    let totalPages: Int?
-    let totalResults: Int?
-    let list: [TVShowListObj]?
-    
-    enum CodingKeys: String, CodingKey {
-        case page
-        case totalPages = "total_pages"
-        case totalResults = "total_results"
-        case list = "results"
-        
-    }
-    
-    func toListObj() -> [ListObj] {
-        return self.list?.map({ show in
-            return ListObj(id: show.id, title: show.originalName,
-                           posterPath: show.posterPath, backdropPath: show.backdropPath,
-                           genre: show.genre, voteAverage: show.voteAverage,
-                           voteCount: show.voteCount)
-        }) ?? []
-    }
-}
 // MARK: - Cast
 
 struct Person: Codable {
@@ -296,12 +302,30 @@ struct TVShowCast: Codable {
     let id: Int?
     let cast: [Person]?
     let crew: [Person]?
+    
+    func getListObj() -> [ListObj] {
+        return self.cast?.map({ person in
+            return ListObj(id: person.id, title: person.name,
+                           posterPath: person.profilePath, backdropPath: person.profilePath,
+                           genre: nil, voteAverage: nil,
+                           voteCount: nil)
+        }) ?? []
+    }
 }
 
 struct MovieCast: Codable {
     let id: Int?
     let cast: [Person]?
     let crew: [Person]?
+    
+    func getListObj() -> [ListObj] {
+        return self.cast?.map({ person in
+            return ListObj(id: person.id, title: person.name,
+                           posterPath: person.profilePath, backdropPath: person.profilePath,
+                           genre: nil, voteAverage: nil,
+                           voteCount: nil)
+        }) ?? []
+    }
     
 }
 
@@ -314,6 +338,15 @@ struct KnownForMovie: Codable {
         case id, cast, crew
     }
     
+    func toListObj() -> [ListObj] {
+        return self.cast?.map({ show in
+            return ListObj(id: show.id, title: show.originalTitle,
+                           posterPath: show.posterPath, backdropPath: show.backdropPath,
+                           genre: show.genre, voteAverage: show.voteAvarage,
+                           voteCount: show.voteCount)
+        }) ?? []
+    }
+    
 }
 
 struct KnownForTVShow: Codable {
@@ -324,6 +357,15 @@ struct KnownForTVShow: Codable {
     enum CodingKeys: String, CodingKey {
         case id, cast, crew
     }
+    
+    func toListObj() -> [ListObj] {
+        return self.cast?.map({ show in
+            return ListObj(id: show.id, title: show.originalName,
+                           posterPath: show.posterPath, backdropPath: show.backdropPath,
+                           genre: show.genre, voteAverage: show.voteAverage,
+                           voteCount: show.voteCount)
+        }) ?? []
+    }
 }
 
 struct PersonImages: Codable {
@@ -332,6 +374,17 @@ struct PersonImages: Codable {
 
     enum CodingKeys: String, CodingKey {
         case id, profiles
+    }
+    
+    func toListObj() -> [ListObj] {
+        return self.profiles?.map { image in
+            return ListObj(id: self.id, title: "", 
+                           posterPath: image.filePath,
+                           backdropPath: image.filePath, 
+                           genre: nil, 
+                           voteAverage: nil,
+                           voteCount: nil)
+        } ?? []
     }
     
 }
