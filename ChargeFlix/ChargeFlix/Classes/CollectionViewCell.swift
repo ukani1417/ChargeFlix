@@ -10,11 +10,11 @@ import UIKit
 class CollectionViewCell: UICollectionViewCell {
 
     static let identifire = CollectionViewCell.description()
-    
     private var posterImage: UIImageView = {
        let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.contentMode = .scaleToFill
+        view.clipsToBounds = true
         return view
     }()
     
@@ -47,9 +47,7 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     private func setupConstraint() {
-        
         NSLayoutConstraint.activate([
-            
             posterImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImage.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             posterImage.rightAnchor.constraint(equalTo: contentView.rightAnchor),
@@ -62,8 +60,12 @@ class CollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configCellContent(data: ListObj) {
-        movieTitle.text = " \(String(describing: data.title!))"
-        posterImage.setImage(with: data.posterPath!)
+    func configCellContent(data: Codable) {
+        guard let data = data as? ListObj else {
+            return
+        }
+        movieTitle.text = " \(String(describing: data.title ?? ""   ))"
+        posterImage.setImage(with: data.posterPath ?? "")
+        self.tag = data.id ?? -1
     }
 }

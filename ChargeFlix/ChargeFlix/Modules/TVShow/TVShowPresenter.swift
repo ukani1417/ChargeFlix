@@ -13,6 +13,18 @@ enum TVShowType: CaseIterable {
     case topRated
 }
 
+protocol TVShowPresenterInterface: AnyObject {
+    var view: TVShowViewInterface? { get set }
+    var router: TVShowRouterInterface? { get set }
+    var interactor: TVShowInteractorInterface? { get set }
+    
+    func viewDidLoad()
+    func onfetchSuccess(tvShowType: TVShowType, data: [ListObj])
+    func onFetchPopularTVShowsListFailure()
+    func onFetchByIdSuccess(data: TVShow)
+    func onFetchByIdFailure()
+}
+
 class TVShowPresenter: TVShowPresenterInterface {
     var router: TVShowRouterInterface?
     var interactor: TVShowInteractorInterface?
@@ -42,5 +54,22 @@ class TVShowPresenter: TVShowPresenterInterface {
     func onFetchPopularTVShowsListFailure() {
         view?.hideActivity()
         view?.onFetchPopularTVShowsListFailure()
+    }
+    
+    func onFetchByIdSuccess(data: TVShow) {
+        view?.hideActivity()
+        router?.pushToTVShowDetail(with: data)
+    }
+    
+    func onFetchByIdFailure() {
+        view?.hideActivity()
+    }
+    
+}
+
+extension TVShowPresenter: CollectionViewToPresenter {
+    func didSelectItemAt(id: Int) {
+        view?.showActivity()
+        interactor?.getTVShowById(id: id)
     }
 }

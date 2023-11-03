@@ -18,17 +18,18 @@ enum TVShowAPIEndPoints: ApiEndPoints {
     case populer(page: Int = 1)
     case topRated(page: Int = 1)
     case tVShowDetails(id: Int)
+    case tvShowVideo(id: Int)
     
     var host: String {
         switch self {
-        case .populer, .topRated, .tVShowDetails:
+        case .populer, .topRated, .tVShowDetails, .tvShowVideo:
             return TVShowConstant.host
         }
     }
     
     var schema: String {
         switch self {
-        case .populer, .topRated, .tVShowDetails:
+        case .populer, .topRated, .tVShowDetails, .tvShowVideo:
             return TVShowConstant.schema
         }
     }
@@ -41,12 +42,14 @@ enum TVShowAPIEndPoints: ApiEndPoints {
             return "/\(Constants.version)/tv/top_rated"
         case .tVShowDetails(let id):
             return "/\(Constants.version)/tv/\(id)"
+        case .tvShowVideo(let id):
+            return "/\(Constants.version)/tv/\(id)/videos"
         }
     }
     
     var methode: String {
         switch self {
-        case .populer, .topRated, .tVShowDetails:
+        case .populer, .topRated, .tVShowDetails, .tvShowVideo:
             return "GET"
         }
     }
@@ -61,7 +64,7 @@ enum TVShowAPIEndPoints: ApiEndPoints {
             return [URLQueryItem(name: "language", value: String("en-US")),
                     URLQueryItem(name: "page", value: String(page)),
                     URLQueryItem(name: "api_key", value: Constants.apiKey)]
-        case .tVShowDetails:
+        case .tVShowDetails, .tvShowVideo:
             return [URLQueryItem(name: "language", value: String("en-US")),
                     URLQueryItem(name: "api_key", value: Constants.apiKey)]
         }
@@ -69,21 +72,21 @@ enum TVShowAPIEndPoints: ApiEndPoints {
     
     var headers: [(String, String)] {
         switch self {
-        case .populer, .topRated, .tVShowDetails:
+        case .populer, .topRated, .tVShowDetails, .tvShowVideo:
             return [("Content-Type", "application-json")]
         }
     }
     
     var statusCode: Int {
         switch self {
-        case .populer, .topRated, .tVShowDetails:
+        case .populer, .topRated, .tVShowDetails, .tvShowVideo:
             return 200
         }
     }
     
     var body: Codable? {
         switch self {
-        case .populer, .topRated, .tVShowDetails:
+        case .populer, .topRated, .tVShowDetails, .tvShowVideo:
             return nil
         }
     }

@@ -11,9 +11,13 @@ import UIKit
 
 extension UIImageView {
     func setImage(with urlString: String) {
-        guard let imageURL = URL.init(string: Constants.imagePath + urlString) else { return }
-        let resource = KF.ImageResource(downloadURL: imageURL)
-        kf.indicatorType = .activity
-        kf.setImage(with: resource)
+        if urlString == "" {
+            self.image = UIImage(named: "error")
+        } else {
+            guard let imageURL = URL.init(string: Constants.imagePath + urlString) else { return }
+            let resource = KF.ImageResource(downloadURL: imageURL)
+            kf.indicatorType = .activity
+            kf.setImage(with: resource)
+        }
       }
 }

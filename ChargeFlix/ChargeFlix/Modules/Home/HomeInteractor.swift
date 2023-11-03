@@ -7,6 +7,17 @@
 
 import Foundation
 
+protocol HomeInteractorInterface {
+    var presenter: HomePresenterInterface? { get set }
+    var movieRepository: MovieRepository? { get set }
+    var tvShowRepositoy: TVShowRepository? { get set }
+    
+    func getMovies(type: MovieType)
+//    func getTVShows(type: TVShowType)
+    func getMovieGenreList()
+    func getMovieById(id: Int)
+}
+
 class HomeInteractor: HomeInteractorInterface {
     var movieRepository: MovieRepository?
     var tvShowRepositoy: TVShowRepository?
@@ -38,6 +49,18 @@ class HomeInteractor: HomeInteractorInterface {
             case .failure(let error):
                 debugPrint(error.localizedDescription)
                 self.presenter?.onFetchMovieGenreListFailure()
+            }
+        }
+    }
+    
+    func getMovieById(id: Int) {
+        movieRepository?.getDetails(id: id ) { result in
+            switch result {
+            case .success(let data):
+                self.presenter?.onfetchMovieByIdSuccess(data: data)
+            case .failure(let error):
+                debugPrint(error)
+                self.presenter?.onfetchMovieBYIdFailure()
             }
         }
     }
