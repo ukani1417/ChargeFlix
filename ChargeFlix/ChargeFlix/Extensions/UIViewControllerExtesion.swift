@@ -16,4 +16,13 @@ extension UIViewController {
         dialogMessage.addAction(okAction)
         self.present(dialogMessage, animated: true, completion: nil)
     }
+    
+    func setBackButton(methode: Selector, title: String) {
+        self.title = title
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.left"),
+                                                                style: .done,
+                                                                target: self,
+                                                                action: methode)
+    }
 }

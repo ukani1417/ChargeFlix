@@ -6,8 +6,3 @@
 //
 
 import Foundation
-
-enum CastType {
-    case movie
-    case tvShow
-}

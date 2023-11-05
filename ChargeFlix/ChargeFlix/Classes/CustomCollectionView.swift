@@ -102,7 +102,7 @@ extension CustomCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.didSelectItemAt(id: (list as? [ListObj])?[indexPath.row].id ?? -1)
+        delegate?.didSelectItemAt(id: (list as? [ContentObject])?[indexPath.row].id ?? -1)
     }
 
 }

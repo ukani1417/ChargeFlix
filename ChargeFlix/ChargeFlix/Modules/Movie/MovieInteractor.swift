@@ -7,48 +7,46 @@
 
 import Foundation
 
-protocol MovieInteractorInterface: AnyObject {
-    var presenter: MoviePresenterInterface? { get set }
-    var repository: MovieRepository? { get set }
-    
-    func getMoviesMovies(type: MovieType)
-    func getMovieById(id: Int)
+protocol MovieInteractorProtocol: AnyObject {
+    var presenter: MoviePresenterProtocol? { get set }
+    var repository: CommonRepository? { get set }
+
+    func getMovies(type: DataType, page: Int)
+    func getMovieDetail(id: Int)
 }
 
-class MovieInteractor: MovieInteractorInterface {
+class MovieInteractor: MovieInteractorProtocol {
     
-    weak var presenter: MoviePresenterInterface?
+    var presenter: MoviePresenterProtocol?
+    var repository: CommonRepository?
     
-    var repository: MovieRepository?
-    
-    init(presenter: MoviePresenterInterface? = nil, 
-         repository: MovieRepository? = MovieRepository()) {
-        
-        self.presenter = presenter
+    init(repository: CommonRepository? = CommonRepository()) {
         self.repository = repository
     }
     
-    func getMoviesMovies(type: MovieType) {
-        repository?.get(type: type) { result in
-            switch result {
+    func getMovies(type: DataType, page: Int = 1) {
+        let endPoint = type.fromDataTypeToEndPoint(page)
+        repository?.get(endPoint: endPoint, modelType: CommonListModel.self) { responce in
+            switch responce {
             case .success(let data):
-                self.presenter?.onfetchSuccess(movieType: .populer, data: data.toListObj())
+                self.presenter?.onFetchMovies(dataType: type, responce: .success(data))
             case .failure:
-                self.presenter?.onFetchPopularMovieListFailure()
+                self.presenter?.onFetchMovies(dataType: type, responce: .failure(.failedInPopularMovies))
             }
         }
     }
     
-    func getMovieById(id: Int) {
-        repository?.getDetails(id: id ) { result in
-            switch result {
+    func getMovieDetail(id: Int) {
+        repository?.get(endPoint: DataType.movieDetail.fromDataTypeToEndPoint(id), 
+                        modelType: DetailModel.self) { responce in
+            switch responce {
             case .success(let data):
-                self.presenter?.onfetchMovieByIdSuccess(data: data)
-            case .failure(let error):
-                debugPrint(error)
-                self.presenter?.onfetchMovieBYIdFailure()
+                self.presenter?.onFetchMovieDetail(responce: .success(data))
+            case .failure:
+                self.presenter?.onFetchMovieDetail(responce: .failure(.failedInMovieDetail))
             }
         }
+        
     }
-    
+
 }

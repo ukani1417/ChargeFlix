@@ -8,22 +8,19 @@
 import UIKit
 
 protocol CastDetailRouterProtocol {
-    var viewController: UINavigationController? { get set }
-    
+    var viewController: UIViewController? { get set }
 }
 
 class CastDetailRouter: CastDetailRouterProtocol {
-    var viewController: UINavigationController?
+    var viewController: UIViewController?
     
-    init(viewController: UINavigationController? = nil) {
+    init(viewController: UIViewController? = nil) {
         self.viewController = viewController
     }
     
-    static func createModule(type: CastType, cast: Person) -> UINavigationController {
+    static func createModule(type: DataType, cast: Person) -> UIViewController {
         let viewController = CastDetailViewController()
-        let navController = UINavigationController(rootViewController: viewController)
-        
-        let router: CastDetailRouterProtocol = CastDetailRouter(viewController: navController)
+        let router: CastDetailRouterProtocol = CastDetailRouter(viewController: viewController)
         let interactor: CastDetailInteractorProtocol = CastDetailInteractor()
         let presenter: CastDetailPresenterProtocol = CastDetailPresenter(view: viewController, 
                                                                          router: router,
@@ -32,11 +29,7 @@ class CastDetailRouter: CastDetailRouterProtocol {
                                                                          cast: cast)
         
         viewController.presenter = presenter
-        viewController.presenter?.interactor = interactor
-        viewController.presenter?.router = router
-        viewController.presenter?.router?.viewController = navController
         viewController.presenter?.interactor?.presenter = presenter
-        
-        return navController
+        return viewController
     }
 }

@@ -10,12 +10,13 @@ import UIKit
 struct CustomDetailViewModel {
     let title: String
     let genreList: String
-    let halfStar: Int
-    let fullStar: Int
+    let stars: [String]
     let overView: String
     let stackData: [(String,String)]
     let posterPath: String
     let votes: String
+    let videos: [Video]
+    let cast: [ContentObject]
 }
 
 class CustomDetailView: UIView {
@@ -183,7 +184,7 @@ class CustomDetailView: UIView {
         NSLayoutConstraint.activate([
             detailStack.topAnchor.constraint(equalTo: poster.bottomAnchor, constant: 10),
             detailStack.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            detailStack.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.40)
+            detailStack.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.38)
         ])
     }
     private func setupGenreLabelConstraints() {
@@ -235,50 +236,41 @@ class CustomDetailView: UIView {
             ])
     }
     
-    func configContent(data: CustomDetailViewModel) {
-        overView.text = data.overView
-        poster.setImage(with: data.posterPath)
-        title.text = data.title
-        genreLabel.text = data.genreList
-        votes.text = "  \(data.votes)"
-        configStarStack(halfStar: data.halfStar, fullStar: data.fullStar)
-        configDetailsStack(data: data.stackData)
+    func configContent(data: CustomDetailViewModel, delegate: CollectionViewToPresenter? = nil) {
+        DispatchQueue.main.async {
+            self.overView.text = data.overView
+            self.poster.setImage(with: data.posterPath)
+            self.title.text = data.title
+            self.genreLabel.text = data.genreList
+            self.votes.text = "  \(data.votes)"
+            self.configStarStack(stars: data.stars)
+            self.configDetailsStack(data: data.stackData)
+            (self.youtubeVideoCollectionView as? CustomCollectionView)?.configContent(list: data.videos)
+            (self.castCollectionView as? CustomCollectionView)?.configContent(list: data.cast,
+                                                                              delegate: delegate)
+            
+            if data.cast.isEmpty {
+                self.castCollectionView.removeFromSuperview()
+                self.castHeading.removeFromSuperview()
+            }
+            if data.videos.isEmpty {
+                self.youtubeVideoCollectionView.removeFromSuperview()
+                self.videoHeading.removeFromSuperview()
+            }
+        }
     }
     
-    func configStarStack(halfStar: Int, fullStar: Int) {
-        var halfStarValue = halfStar
-        for index in 1...5 {
-            
-            let view = UIImageView()
+    func configStarStack(stars: [String]) {
+        for star in stars {
+            let view = UIImageView(image: UIImage(named: star))
             view.translatesAutoresizingMaskIntoConstraints = false
             view.contentMode = .scaleToFill
             view.widthAnchor.constraint(equalToConstant: 15).isActive = true
-            
-            if index <= fullStar {
-                view.image = UIImage(named: "star.fill")
-            } else if halfStarValue == 1 {
-                halfStarValue = 0
-                view.image = UIImage(named: "star.half.filled")
-            } else {
-                view.image = UIImage(named: "star")
-            }
-            
             self.starStackView.addArrangedSubview(view)
         }
         self.starStackView.addArrangedSubview(votes)
     }
-    func configCastContent(data: [ListObj], delegate: CollectionViewToPresenter? = nil) {
-        DispatchQueue.main.async {
-            (self.castCollectionView as? CustomCollectionView)?.configContent(list: data, delegate: delegate)
-        }
-        
-    }
-    func configVideoContent(data: MovieVideo) {
-        DispatchQueue.main.async {
-            (self.youtubeVideoCollectionView as? CustomCollectionView)?.configContent(list: data.getKeys())
-        }
-        
-    }
+    
     private func configDetailsStack(data: [(String,String)]) {
         
         let imageStack: UIStackView = {

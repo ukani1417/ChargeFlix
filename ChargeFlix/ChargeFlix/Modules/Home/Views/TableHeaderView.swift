@@ -93,24 +93,12 @@ class TableHeaderView: UIView {
         genreCollectionView.dataSource = self
     }
 
-    func addStarToStack(fullStar: Int, halfStar: Int) {
-        var halfStarValue = halfStar
-        for index in 1...5 {
-            
-            let view = UIImageView()
+    func addStarToStack(stars: [String]) {
+        for star in stars {
+            let view = UIImageView(image: UIImage(named: star))
             view.translatesAutoresizingMaskIntoConstraints = false
             view.contentMode = .scaleToFill
             view.widthAnchor.constraint(equalToConstant: 15).isActive = true
-           
-            if index <= fullStar {
-                view.image = UIImage(named: "star.fill")
-            } else if halfStarValue == 1 {
-                halfStarValue = 0
-                view.image = UIImage(named: "star.half.filled")
-            } else {
-                view.image = UIImage(named: "star")
-            }
-            
             self.stackView.addArrangedSubview(view)
         }
         self.stackView.addArrangedSubview(votes)
@@ -172,7 +160,7 @@ class TableHeaderView: UIView {
         movieName.text = input.title
         moviePoster.setImage(with: input.poster)
         votes.text = "   \(String(input.votes))"
-        addStarToStack(fullStar: input.fullStar, halfStar: input.halfStar)
+        addStarToStack(stars: input.starts)
         genreList.append(contentsOf: input.genreList)
     }
 }

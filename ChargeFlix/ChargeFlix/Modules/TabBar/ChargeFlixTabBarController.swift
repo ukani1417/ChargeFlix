@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol HomeToMovieProtocol {
-    func setupMovieModule(title: String, data: [ListObj])
-}
-
 class ChargeFlixTabBarController: UITabBarController {
     
     let homeViewController = HomeRouter.createModule()

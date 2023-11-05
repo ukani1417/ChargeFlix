@@ -7,8 +7,8 @@
 
 import UIKit
 
-protocol HomeViewInterface: AnyObject {
-    var presenter: HomePresenterInterface? { get set }
+protocol HomeViewProtocol: AnyObject {
+    var presenter: HomePresenterProtocol? { get set }
     
     func showActity()
     func hideActivity()
@@ -19,7 +19,7 @@ protocol HomeViewInterface: AnyObject {
 
 class HomeViewController: UIViewController {
     
-    var presenter: HomePresenterInterface?
+    var presenter: HomePresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +55,8 @@ class HomeViewController: UIViewController {
         view.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifire)
         view.showsVerticalScrollIndicator = false
         view.backgroundColor = .black
+        view.isHidden = false
+        view.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 330))
         return view
     }()
     
@@ -97,7 +99,7 @@ class HomeViewController: UIViewController {
     }
 }
 
-extension HomeViewController: HomeViewInterface {
+extension HomeViewController: HomeViewProtocol {
     func setupHeaderView(input: TableHeaderInput) {
         DispatchQueue.main.async {
             let headerView: TableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0, 
@@ -107,6 +109,7 @@ extension HomeViewController: HomeViewInterface {
             headerView.configContent(input: input)
             headerView.delegate = self
             self.movieTableView.tableHeaderView = headerView
+            self.movieTableView.reloadData()
         }
     }
 
@@ -126,6 +129,7 @@ extension HomeViewController: HomeViewInterface {
         DispatchQueue.main.async {
             self.movieTableView.reloadData()
             self.movieTableView.layoutIfNeeded()
+            self.movieTableView.isHidden = false
         }
     }
     

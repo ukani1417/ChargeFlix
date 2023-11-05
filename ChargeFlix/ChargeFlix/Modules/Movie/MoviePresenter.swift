@@ -7,35 +7,27 @@
 
 import UIKit
 
-protocol MoviePresenterInterface: AnyObject {
-    var view: MovieViewInterface? { get set }
-    var router: MovieRouterInterface? { get set }
-    var interactor: MovieInteractorInterface? { get set }
+protocol MoviePresenterProtocol: AnyObject {
+    var view: MovieViewProtocol? { get set }
+    var router: MovieRouterProtocol? { get set }
+    var interactor: MovieInteractorProtocol? { get set }
     
     func viewDidLoad()
-    
-    func onfetchSuccess(movieType: MovieType, data: [ListObj])
-    func onFetchPopularMovieListFailure()
-    func didSelect(indexPath: IndexPath)
-    func configerMovies(type: String, data: [ListObj])
-    
-    func onfetchMovieByIdSuccess(data: Movie)
-    func onfetchMovieBYIdFailure()
+    func onFetchMovies(dataType: DataType, responce: Result<CommonListModel, MoviePresenterError>)
+    func onFetchMovieDetail(responce: Result<DetailModel, MoviePresenterError>)
+    func configerMovies(type: String, data: [ContentObject])
 }
 
-class MoviePresenter: MoviePresenterInterface {
-   
-    weak var view: MovieViewInterface?
+class MoviePresenter: MoviePresenterProtocol {
+    weak var view: MovieViewProtocol?
+    var router: MovieRouterProtocol?
+    var interactor: MovieInteractorProtocol?
     
-    var router: MovieRouterInterface?
+    private var populerMovieList: [ContentObject] = []
     
-    var interactor: MovieInteractorInterface?
-    
-    private var populerMovieList: [ListObj] = []
-    
-    init(view: MovieViewInterface? = nil, 
-         router: MovieRouterInterface? = nil,
-         interactor: MovieInteractorInterface? = nil) {
+    init(view: MovieViewProtocol? = nil, 
+         router: MovieRouterProtocol? = nil,
+         interactor: MovieInteractorProtocol? = nil) {
         self.view = view
         self.router = router
         self.interactor = interactor
@@ -43,37 +35,35 @@ class MoviePresenter: MoviePresenterInterface {
     
     func viewDidLoad() {
         view?.showActity()
-        interactor?.getMoviesMovies(type: .populer)
+        interactor?.getMovies(type: .popularMovies, page: 1)
     }
     
-    func onfetchSuccess(movieType: MovieType, data: [ListObj]) {
-        populerMovieList = data
+    func onFetchMovies(dataType: DataType, responce: Result<CommonListModel, MoviePresenterError>) {
         view?.hideActivity()
-        view?.onFetchPopularMovieListSuccess(data: populerMovieList)
-    }
-        
-    func onFetchPopularMovieListFailure() {
-        view?.hideActivity()
-        view?.onFetchPopularMovieListFailure()
-    }
-        
-    func didSelect(indexPath: IndexPath) {
-        print("tapped index : \(indexPath.row)")
+        switch responce {
+        case .success(let data):
+            populerMovieList = data.results
+            configerMovies(type: "Movies", data: data.results)
+        case .failure(let error):
+            view?.onFetchFailure(message: error.rawValue)
+        }
     }
     
-    func configerMovies(type: String, data: [ListObj]) {
+    func onFetchMovieDetail(responce: Result<DetailModel, MoviePresenterError>) {
+        view?.hideActivity()
+        switch responce {
+        case .success(let data):
+            router?.navigateToMovieDetail(with: data)
+        case .failure(let error):
+            view?.onFetchFailure(message: error.rawValue)
+        }
+    }
+    
+    func configerMovies(type: String, data: [ContentObject]) {
         view?.setupTitle(title: type)
-        view?.onFetchPopularMovieListSuccess(data: data)
+        view?.onFetchSuccess(data: data)
     }
     
-    func onfetchMovieByIdSuccess(data: Movie) {
-        view?.hideActivity()
-        router?.pushToMovieDetail(with: data)
-    }
-    
-    func onfetchMovieBYIdFailure() {
-        view?.hideActivity()
-    }
 }
 
 // for didselect from CustomCollectionView
@@ -81,7 +71,7 @@ extension MoviePresenter: CollectionViewToPresenter {
     func didSelectItemAt(id: Int) {
         if id != -1 {
             view?.showActity()
-            interactor?.getMovieById(id: id)
+            interactor?.getMovieDetail( id: id)
         }
     }
 }

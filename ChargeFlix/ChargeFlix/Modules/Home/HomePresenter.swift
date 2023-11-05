@@ -6,14 +6,15 @@
 //
 
 import UIKit
-protocol HomePresenterInterface: AnyObject {
-    var view: HomeViewInterface? { get set }
-    var router: HomeRouterInterface? { get set }
-    var interactor: HomeInteractorInterface? { get set }
+
+protocol HomePresenterProtocol: AnyObject {
+    var view: HomeViewProtocol? { get set }
+    var router: HomeRouterProtocol? { get set }
+    var interactor: HomeInteractorProtocol? { get set }
     
     func viewDidLoad()
     
-//   for  tableView
+    //   for  tableView
     func numsOfSection() -> Int
     func numsOfRows(section: Int) -> Int
     func cellForRowAt(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
@@ -21,123 +22,98 @@ protocol HomePresenterInterface: AnyObject {
     func heightForSectionAt(tableView: UITableView, section: Int) -> CGFloat
     func setupHeaderView(section: Int) -> UIView
     func filterDataUsingGenre(index: Int)
-      
-//  Api Callbacks
-    func onfetchMovieSuccess(movieType: MovieType, data: [ListObj])
-//    func onfetchTVShowSuccess(tvShowType: TVShowType, data: [ListObj])
-    func onFetchMovieGenreListSuccess(data: MovieGenreList)
     
-    func onfetchMovieByIdSuccess(data: Movie)
-    func onfetchMovieBYIdFailure()
+    //  Api Callbacks
     
-    func onFetchMovieFailure(movieType: MovieType)
-//    func onFetchTVShowFailure(tvShowType: TVShowType)
-    func onFetchMovieGenreListFailure()
+    func onFetchMovies(dataType: DataType, responce: Result<CommonListModel, HomePresenterError>)
+    func onFetchMovie(forUse: ForUse, responce: Result<DetailModel, HomePresenterError>)
+    func onFetchGenre(responce: Result<GenreList, HomePresenterError>)
+    
 }
 
-class HomePresenter: HomePresenterInterface {
+class HomePresenter: HomePresenterProtocol {
+    weak var view: HomeViewProtocol?
+    var router: HomeRouterProtocol?
+    var interactor: HomeInteractorProtocol?
     
-    weak var view: HomeViewInterface?
-    var router: HomeRouterInterface?
-    var interactor: HomeInteractorInterface?
+    private var moviesDetails = [DataType:[ContentObject]]()
+    private var filteredMoviesDetails = [DataType:[ContentObject]]()
+    private var movieGenreList: GenreList?
+    private var randomMovie: DetailModel?
+    private var headerSetuped: Bool = false
     
-    var moviesData: [MovieData] = []
-    var filteredData: [MovieData] = []
-    
-    var tvShowsData: [TVShowData] = []
-    var filteredTVShowsData: [TVShowData] = []
-    
-    private var movieGenreList: MovieGenreList?
-        
-    init(view: HomeViewInterface? = nil, router: HomeRouterInterface? = nil, 
-         interactor: HomeInteractorInterface? = nil) {
+    init(view: HomeViewProtocol? = nil, router: HomeRouterProtocol? = nil,
+         interactor: HomeInteractorProtocol? = nil) {
         self.view = view
         self.router = router
         self.interactor = interactor
     }
     
     func viewDidLoad() {
-        interactor?.getMovieGenreList()
-        MovieType.allCases.forEach { type in
-            interactor?.getMovies(type: type)
+        interactor?.getGenreList()
+        [
+         DataType.popularMovies,
+         DataType.topRatedMovies,
+         DataType.upcomingMovies,
+         DataType.nowPlayingMovies].forEach { type in
+             interactor?.getMovies(type: type, page: 1)
         }
-//        TVShowType.allCases.forEach { type in
-//            interactor?.getTVShows(type: type)
-//        }
     }
     
-    // Api Success
-    
-    func onfetchMovieSuccess(movieType: MovieType, data: [ListObj]) {
-        moviesData.append(MovieData(type: movieType, data: data))
-        filteredData.append(MovieData(type: movieType, data: data))
-        if movieType == .populer {
-            setupHeaderView()
+    func onFetchMovies(dataType: DataType, responce: Result<CommonListModel, HomePresenterError>) {
+        switch responce {
+        case .success(let data):
+            moviesDetails[dataType] = data.results
+            filteredMoviesDetails[dataType] = data.results
+            
+//            TableHeaderView Setup from random data 
+            if headerSetuped == false, moviesDetails.isEmpty == false, let keyIndex = moviesDetails.keys.first {
+                if let id = moviesDetails[keyIndex]?.randomElement()?.id {
+                    headerSetuped = true
+                    interactor?.getMovie(forUse: ForUse.setupHeader, type: .movieDetail, id: id)
+                }
+            }
+            if filteredMoviesDetails.count == 4 {
+                view?.reloadTable()
+            }
+        case .failure:
+            view?.onFetchFailure(message: "Error in list fetching")
         }
-        view?.reloadTable()
     }
     
-    func onfetchTVShowSuccess(tvShowType: TVShowType, data: [ListObj]) {
-        tvShowsData.append(TVShowData(type: tvShowType, data: data))
-        filteredTVShowsData.append(TVShowData(type: tvShowType, data: data))
-        view?.reloadTable()
+    func onFetchMovie(forUse: ForUse, responce: Result<DetailModel, HomePresenterError>) {
+        switch responce {
+        case .success(let data):
+            switch forUse {
+            case .setupHeader:
+                randomMovie = data
+                setupHeaderView(with: data)
+            case .pushToDetail:
+                router?.pushToMovieDetail(with: data)
+            }
+        case .failure:
+            view?.onFetchFailure(message: "Error in fetching movieDetail")
+        }
     }
     
-    func onFetchMovieGenreListSuccess(data: MovieGenreList) {
-        movieGenreList = data
+    func onFetchGenre(responce: Result<GenreList, HomePresenterError>) {
+        switch responce {
+        case .success(let data):
+            movieGenreList = data
+        case .failure:
+            view?.onFetchFailure(message: "Error in fetching GenreList")
+        }
     }
     
     // HomeTableHeaderView Setup
-    private func setupHeaderView() {
-        let data = filteredData.first(where: { $0.type == .populer })?.data ?? []
-        if data.isEmpty {
-            return
-        }
-        let randomIndex = Int.random(in: 0..<(data.count ))
-        let movie = data[randomIndex]
-        let voteaverage = ((movie.voteAverage ?? 0.0)/2.0)
-        let rounded: Double = voteaverage.rounded(.down)
-        let fullStar: Int = Int(rounded)
-        var halfStar: Int = 0
+    private func setupHeaderView(with movie: DetailModel) {
         
-        if rounded != voteaverage && rounded != 5 {
-            halfStar = 1
-        }
-        let input: TableHeaderInput = TableHeaderInput(title: movie.title ?? "",
+        let input: TableHeaderInput = TableHeaderInput(title: movie.originalTitle ?? "",
                                                        poster:  movie.backdropPath ?? "",
                                                        votes: String(movie.voteCount ?? 0) + " Votes",
-                                                       fullStar: fullStar,
-                                                       halfStar: halfStar,
+                                                       starts: movie.getRating(),
                                                        genreList: movieGenreList?.genres ?? [])
         view?.setupHeaderView(input: input)
-    }
-
-    // Api failure
-    
-    func onFetchMovieFailure(movieType: MovieType) {
-        switch movieType {
-        case .populer:
-            view?.onFetchFailure(message: "Failed in popular movies")
-        case .topRated:
-            view?.onFetchFailure(message: "Failed in topRated movies")
-        case .upcoming:
-            view?.onFetchFailure(message: "Failed in upComing movies")
-        case .nowPlaying:
-            view?.onFetchFailure(message: "Failed in nowPlaying movies")
-        }
-    }
-    
-    func onFetchTVShowFailure(tvShowType: TVShowType) {
-        switch tvShowType {
-        case .populer:
-            view?.onFetchFailure(message: "Failed in popular TVShow")
-        case .topRated:
-            view?.onFetchFailure(message: "Failed in topRated TVSHow")
-        }
-    }
-
-    func onFetchMovieGenreListFailure() {
-        view?.onFetchFailure(message: "Failed in fetching genre list")
     }
     
     //    Table DataSource & Delegate
@@ -150,7 +126,7 @@ class HomePresenter: HomePresenterInterface {
     }
     
     func numsOfSection() -> Int {
-        return filteredData.count
+        return filteredMoviesDetails.count
     }
     
     func numsOfRows(section: Int) -> Int {
@@ -158,30 +134,24 @@ class HomePresenter: HomePresenterInterface {
     }
     
     func cellForRowAt(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifire, 
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifire,
                                                        for: indexPath) as? MovieTableViewCell else {
             return UITableViewCell()
         }
         
         switch indexPath.section {
         case 0:
-            cell.configContent(data: filteredData.first(where: { $0.type == .populer })?.data ?? [], 
+            cell.configContent(data: filteredMoviesDetails[.popularMovies] ?? [] ,
                                delegate: self as CollectionViewToPresenter)
         case 1:
-            cell.configContent(data: filteredData.first(where: { $0.type == .topRated })?.data ?? [], 
+            cell.configContent(data: filteredMoviesDetails[.topRatedMovies] ?? [],
                                delegate: self as CollectionViewToPresenter)
         case 2:
-            cell.configContent(data: filteredData.first(where: { $0.type == .upcoming })?.data ?? [], 
+            cell.configContent(data: filteredMoviesDetails[.upcomingMovies] ?? [],
                                delegate: self as CollectionViewToPresenter)
         case 3:
-            cell.configContent(data: filteredData.first(where: { $0.type == .nowPlaying })?.data ?? [], 
-                               delegate: self as CollectionViewToPresenter)
-        case 4:
-            cell.configContent(data: filteredTVShowsData.first(where: { $0.type == .populer })?.data ?? [],
-                               delegate: self as CollectionViewToPresenter)
-            
-        case 5:
-            cell.configContent(data: filteredTVShowsData.first(where: { $0.type == .topRated })?.data ?? [],
+            cell.configContent(data: filteredMoviesDetails[.nowPlayingMovies] ?? [],
                                delegate: self as CollectionViewToPresenter)
         default: break
         }
@@ -197,8 +167,7 @@ class HomePresenter: HomePresenterInterface {
         case 1: header.configContent(sectionTitle: "Top Rated", section: section)
         case 2: header.configContent(sectionTitle: "UpComing", section: section)
         case 3: header.configContent(sectionTitle: "In Theaters", section: section)
-        case 4: header.configContent(sectionTitle: "Popular TVShows", section: section)
-        case 5: header.configContent(sectionTitle: "Top Rated TVShows", section: section)
+            
         default: break
         }
         return header
@@ -207,28 +176,20 @@ class HomePresenter: HomePresenterInterface {
     // Filtering data on the basis of genre id
     func filterDataUsingGenre(index: Int) {
         if index == 0 {
-            filteredData = moviesData
+            filteredMoviesDetails = moviesDetails
         } else {
             let genreId = movieGenreList?.genres[index-1].id
-            for listIndex in 0..<(moviesData.count) {
-                filteredData[listIndex].data.removeAll()
-                filteredData[listIndex].data = moviesData[listIndex].data.filter({ movie in
-                    return movie.genre?.contains(where: { $0 == genreId}) ?? false
+            [DataType.popularMovies,
+             DataType.topRatedMovies,
+             DataType.upcomingMovies,
+             DataType.nowPlayingMovies].forEach { type in
+                filteredMoviesDetails[type] = moviesDetails[type]?.filter({ movie in
+                    return movie.genres?.contains(where: { $0 == genreId}) ?? false
                 })
             }
         }
         view?.reloadTable()
     }
-    
-    func onfetchMovieByIdSuccess(data: Movie) {
-        view?.hideActivity()
-        router?.pushToMovieDetail(with: data)
-    }
-    
-    func onfetchMovieBYIdFailure() {
-        view?.hideActivity()
-    }
-    
 }
 
 // for didselect from CustomCollectionView
@@ -236,7 +197,7 @@ extension HomePresenter: CollectionViewToPresenter {
     func didSelectItemAt(id: Int) {
         if id != -1 {
             view?.showActity()
-            interactor?.getMovieById(id: id)
+            interactor?.getMovie(forUse: .pushToDetail, type: .movieDetail, id: id)
         }
     }
 }
@@ -244,25 +205,25 @@ extension HomePresenter: CollectionViewToPresenter {
 // for showAll from table sectionheader
 extension HomePresenter: TableSectionHeaderViewToPresenter {
     func showAll(section: Int) {
-        var data = [ListObj]()
+        var data = [ContentObject]()
         var type = "Movies"
         
         switch section {
         case 0:
-            data = filteredData.first(where: { $0.type == .populer })?.data ?? []
+            data = filteredMoviesDetails[.popularMovies] ?? []
             type = "Popular"
         case 1:
-            data = filteredData.first(where: { $0.type == .topRated })?.data ?? []
+            data = filteredMoviesDetails[.topRatedMovies] ?? []
             type = "Top Rated"
         case 2:
-            data = filteredData.first(where: { $0.type == .upcoming })?.data ?? []
+            data = filteredMoviesDetails[.upcomingMovies] ?? []
             type = "Up Coming"
         case 3:
-            data = filteredData.first(where: { $0.type == .nowPlaying })?.data ?? []
+            data = filteredMoviesDetails[.nowPlayingMovies] ?? []
             type = "In Theaters"
         default:
             break
         }
-        router?.switchToMovieModule(type: type, data: data)
+                router?.switchToMovieModule(type: type, data: data)
     }
 }

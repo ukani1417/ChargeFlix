@@ -7,51 +7,73 @@
 
 import Foundation
 
-struct GenreList: Codable {
-    let list: [Genre]
-}
-
-struct MovieData {
-    let type: MovieType
-    var data: [ListObj]
-}
-
-struct TVShowData {
-    let type: TVShowType
-    var data: [ListObj]
-}
-
 struct TableHeaderInput {
     let title: String
     let poster: String
     let votes: String
-    let fullStar: Int
-    let halfStar: Int
+    let starts: [String]
     let genreList: [Genre]
 }
 
-struct ListObj: Codable {
-    let id: Int?
-    let title: String?
-    let posterPath: String?
-    let backdropPath: String?
-    let genre: [Int]?
-    let voteAverage: Double?
-    let voteCount: Int?
-}
-
-enum MovieType: CaseIterable {
-    case populer
-    case topRated
-    case upcoming
-    case nowPlaying
-}
-
-enum DataType: CaseIterable {
+enum DataType: Equatable {
     case popularMovies
     case topRatedMovies
     case upcomingMovies
     case nowPlayingMovies
     case popularTVShows
     case topRatedTVShows
+    case castDetail
+    case castMovieCredit
+    case castTVShowCredit
+    case movieDetail
+    case tvShowDetail
+    case movieGenreList
+    case tvShowGenreList
+}
+
+extension DataType {
+    func fromDataTypeToEndPoint(_ resource: Int) -> ApiEndPoints {
+        switch self {
+        case .popularMovies:
+            return MovieAPIEndPoints.populer(page: resource)
+        case .topRatedMovies:
+            return MovieAPIEndPoints.topRated(page: resource)
+        case .upcomingMovies:
+            return MovieAPIEndPoints.upComing(page: resource)
+        case .nowPlayingMovies:
+            return MovieAPIEndPoints.nowPlaying(page: resource)
+        case .movieGenreList:
+            return MovieAPIEndPoints.genreList
+        case .movieDetail:
+            return MovieAPIEndPoints.movieDetails(id: resource)
+            
+        case .popularTVShows:
+            return TVShowAPIEndPoints.populer(page: resource)
+        case .topRatedTVShows:
+            return TVShowAPIEndPoints.topRated(page: resource)
+        case .tvShowDetail:
+            return TVShowAPIEndPoints.tVShowDetails(id: resource)
+        case .tvShowGenreList:
+            return TVShowAPIEndPoints.genreList
+        
+        case .castDetail:
+            return CastAPIEnpoints.personDetails(id: resource)
+        case .castMovieCredit:
+            return CastAPIEnpoints.knownMovies(id: resource)
+        case .castTVShowCredit:
+            return CastAPIEnpoints.knownTVShows(id: resource)
+        }
+    }
+}
+
+enum HomePresenterError: String, Error {
+    case serverError = "server Error, try again after some time"
+    case failedToFetchMoviesList = "failed to fetch movies list"
+    case failedToFetchMovieDetail = "failed to fetch movie detail"
+    case failedToFetchGenreList = "failed to fetch genreList"
+}
+
+enum ForUse {
+    case setupHeader
+    case pushToDetail
 }

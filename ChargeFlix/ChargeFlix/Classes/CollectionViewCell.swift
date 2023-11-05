@@ -15,6 +15,7 @@ class CollectionViewCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.contentMode = .scaleToFill
         view.clipsToBounds = true
+        view.layer.cornerRadius = 10
         return view
     }()
     
@@ -23,13 +24,14 @@ class CollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = .boldSystemFont(ofSize: 15)
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        layer.cornerRadius = 16
-        clipsToBounds = true
         self.backgroundColor = .black
         setupUI()
         setupConstraint()
@@ -43,7 +45,7 @@ class CollectionViewCell: UICollectionViewCell {
         
         contentView.addSubview(posterImage)
         contentView.addSubview(movieTitle)
-        movieTitle.textAlignment = .left
+        
     }
     
     private func setupConstraint() {
@@ -51,21 +53,31 @@ class CollectionViewCell: UICollectionViewCell {
             posterImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImage.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             posterImage.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            posterImage.heightAnchor.constraint(equalToConstant: contentView.frame.height - 20),
+            posterImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
             
             movieTitle.topAnchor.constraint(equalTo: posterImage.bottomAnchor),
             movieTitle.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             movieTitle.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             movieTitle.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            
         ])
     }
     
     func configCellContent(data: Codable) {
-        guard let data = data as? ListObj else {
-            return
+        switch data {
+        case  is ContentObject :
+            if let cellData = data as? ContentObject {
+               
+                movieTitle.text = cellData.originalTitle ?? cellData.originalName ?? ""
+                posterImage.setImage(with: cellData.posterPath ?? "")
+            }
+            
+        case  is Image:
+            if let cellData = data as? Image {
+                posterImage.setImage(with: cellData.filePath ?? "")
+            }
+            
+        default: break
         }
-        movieTitle.text = " \(String(describing: data.title ?? ""   ))"
-        posterImage.setImage(with: data.posterPath ?? "")
-        self.tag = data.id ?? -1
     }
 }

@@ -5,36 +5,27 @@
 //  Created by Dhruv Ukani on 25/10/23.
 //
 
-import Foundation
 import UIKit
 
-enum TVShowType: CaseIterable {
-    case populer
-    case topRated
-}
-
-protocol TVShowPresenterInterface: AnyObject {
-    var view: TVShowViewInterface? { get set }
-    var router: TVShowRouterInterface? { get set }
-    var interactor: TVShowInteractorInterface? { get set }
+protocol TVShowPresenterProtocol: AnyObject {
+    var view: TVShowViewProtocol? { get set }
+    var router: TVShowRouterProtocol? { get set }
+    var interactor: TVShowInteractorProtocol? { get set }
     
     func viewDidLoad()
-    func onfetchSuccess(tvShowType: TVShowType, data: [ListObj])
-    func onFetchPopularTVShowsListFailure()
-    func onFetchByIdSuccess(data: TVShow)
-    func onFetchByIdFailure()
+    func onFetchTVShows(type: DataType, responce: Result<CommonListModel, TVShowPresenterError>)
+    func onFetchTVShowDetail(responce: Result<DetailModel, TVShowPresenterError>)
 }
 
-class TVShowPresenter: TVShowPresenterInterface {
-    var router: TVShowRouterInterface?
-    var interactor: TVShowInteractorInterface?
-    var view: TVShowViewInterface?
+class TVShowPresenter: TVShowPresenterProtocol {
     
-    private var popularTVShowsList: [ListObj] = []
+    var router: TVShowRouterProtocol?
+    var interactor: TVShowInteractorProtocol?
+    var view: TVShowViewProtocol?
     
-    init(router: TVShowRouterInterface? = nil, 
-         interactor: TVShowInteractorInterface? = nil,
-         view: TVShowViewInterface? = nil) {
+    init(router: TVShowRouterProtocol? = nil, 
+         interactor: TVShowInteractorProtocol? = nil,
+         view: TVShowViewProtocol? = nil) {
         self.router = router
         self.interactor = interactor
         self.view = view
@@ -42,29 +33,29 @@ class TVShowPresenter: TVShowPresenterInterface {
     
     func viewDidLoad() {
         view?.showActivity()
-        interactor?.getTVShow(type: .populer)
+        interactor?.getTVShows(type: .popularTVShows, page: 1)
     }
     
-    func onfetchSuccess(tvShowType: TVShowType, data: [ListObj]) {
-        popularTVShowsList = data
+    func onFetchTVShows(type: DataType, responce: Result<CommonListModel, TVShowPresenterError>) {
         view?.hideActivity()
-        view?.onFetchPopularTVShowsListSuccess(list: popularTVShowsList)
-    }
-
-    func onFetchPopularTVShowsListFailure() {
-        view?.hideActivity()
-        view?.onFetchPopularTVShowsListFailure()
-    }
-    
-    func onFetchByIdSuccess(data: TVShow) {
-        view?.hideActivity()
-        router?.pushToTVShowDetail(with: data)
+        switch responce {
+        case .success(let data):
+            view?.onFetchPopularTVShowsListSuccess(list: data.results)
+        case .failure(let error):
+            view?.onFetchFailure(message: error.rawValue)
+        }
     }
     
-    func onFetchByIdFailure() {
+    func onFetchTVShowDetail(responce: Result<DetailModel, TVShowPresenterError>) {
         view?.hideActivity()
+        switch responce {
+        case .success(let data):
+            router?.navigateToTVShowDetail(with: data)
+        case .failure(let error):
+            view?.onFetchFailure(message: error.rawValue)
+            
+        }
     }
-    
 }
 
 extension TVShowPresenter: CollectionViewToPresenter {

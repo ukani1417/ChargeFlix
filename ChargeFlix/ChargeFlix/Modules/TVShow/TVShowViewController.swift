@@ -7,14 +7,18 @@
 
 import UIKit
 
-protocol ViewToNewCollectionView {
-    func numsOfItem(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
-    func setupCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+protocol TVShowViewProtocol: AnyObject {
+    var presenter: TVShowPresenterProtocol? { get set }
+    
+    func showActivity()
+    func hideActivity()
+    func onFetchPopularTVShowsListSuccess(list: [ContentObject])
+    func onFetchFailure(message: String)
 }
 
 class TVShowViewController: UIViewController {
  
-    var presenter: TVShowPresenterInterface?
+    var presenter: TVShowPresenterProtocol?
     
     private var tvShowsCollectionView: CustomCollectionView = {
         let cView = CustomCollectionView(scrollDirection: .vertical, 
@@ -71,8 +75,8 @@ class TVShowViewController: UIViewController {
 
 }
 
-extension TVShowViewController: TVShowViewInterface {
-    func onFetchPopularTVShowsListSuccess(list: [ListObj]) {
+extension TVShowViewController: TVShowViewProtocol {
+    func onFetchPopularTVShowsListSuccess(list: [ContentObject]) {
         DispatchQueue.main.async {
             self.tvShowsCollectionView.configContent(list: list, delegate: self.presenter as? CollectionViewToPresenter)
             self.tvShowsCollectionView.collectionview?.reloadData()
@@ -91,9 +95,9 @@ extension TVShowViewController: TVShowViewInterface {
         }
     }
 
-    func onFetchPopularTVShowsListFailure() {
+    func onFetchFailure(message: String) {
         DispatchQueue.main.async {
-            self.showAlert(title: "Error", message: "Populer TVSHows fetch error")
+            self.showAlert(title: "Error", message: message)
         }
     }
 }

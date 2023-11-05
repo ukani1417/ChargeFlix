@@ -62,9 +62,14 @@ enum CastAPIEnpoints: ApiEndPoints {
     
     var queryItems: [URLQueryItem] {
         switch self {
-        case .tVShowsCast, .movieCast, .personDetails, .knownMovies, .knownTVShows, .personImages:
+        case .tVShowsCast, .movieCast, .knownMovies, .knownTVShows, .personImages:
             return [URLQueryItem(name: "language", value: String("en-US")),
                     URLQueryItem(name: "api_key", value: Constants.apiKey)]
+        case .personDetails:
+            return [URLQueryItem(name: "language", value: String("en-US")),
+                    URLQueryItem(name: "api_key", value: Constants.apiKey),
+                    URLQueryItem(name: "append_to_response",value: "images,movie_credits,tv_credits")]
+            
         }
     }
     
@@ -88,4 +93,5 @@ enum CastAPIEnpoints: ApiEndPoints {
             return nil
         }
     }
+    
 }

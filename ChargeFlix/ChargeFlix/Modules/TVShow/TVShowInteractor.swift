@@ -7,42 +7,44 @@
 
 import Foundation
 
-protocol TVShowInteractorInterface: AnyObject {
-    var presenter: TVShowPresenterInterface? { get set }
-    var repository: TVShowRepository? { get set }
+protocol TVShowInteractorProtocol: AnyObject {
+    var presenter: TVShowPresenterProtocol? { get set }
+    var repository: CommonRepository? { get set }
     
-    func getTVShow(type: TVShowType)
+    func getTVShows(type: DataType, page: Int)
     func getTVShowById(id: Int)
 }
 
-class TVShowInteractor: TVShowInteractorInterface {
-
-    var presenter: TVShowPresenterInterface?
-    var repository: TVShowRepository?
+class TVShowInteractor: TVShowInteractorProtocol {
+    weak var presenter: TVShowPresenterProtocol?
+    var repository: CommonRepository?
     
-    init(repository: TVShowRepository? = TVShowRepository()) {
+    init(repository: CommonRepository? = CommonRepository()) {
         self.repository = repository
     }
     
-    func getTVShow(type: TVShowType) {
-        repository?.get(type: type) { result in
+    func getTVShows(type: DataType, page: Int) {
+        repository?.get(endPoint: type.fromDataTypeToEndPoint(page), 
+                        modelType: CommonListModel.self) { result in
             switch result {
             case .success(let data):
-                self.presenter?.onfetchSuccess(tvShowType: type, data: data.toListObj())
+                self.presenter?.onFetchTVShows(type: type, responce: .success(data))
             case .failure:
-                self.presenter?.onFetchPopularTVShowsListFailure()
+                self.presenter?.onFetchTVShows(type: type, responce: .failure(.failedInTVShows))
             }
         }
     }
     
     func getTVShowById(id: Int) {
-        repository?.getDetails(id: id, completation: { result in
+        repository?.get(endPoint: DataType.tvShowDetail.fromDataTypeToEndPoint(id),
+                        modelType: DetailModel.self) { result in
             switch result {
             case .success(let data):
-                self.presenter?.onFetchByIdSuccess(data: data)
+                self.presenter?.onFetchTVShowDetail(responce: .success(data))
             case .failure:
-                self.presenter?.onFetchByIdFailure()
+                self.presenter?.onFetchTVShowDetail(responce: .failure(.failedInTVshowDetail))
             }
-        })
+        }
     }
+    
 }

@@ -36,7 +36,7 @@ class MovieTableViewCell: UITableViewCell {
         contentView.addSubview(moviessCollectionView)
     }
     
-    func configContent(data: [ListObj], delegate: CollectionViewToPresenter?) {
+    func configContent(data: [ContentObject], delegate: CollectionViewToPresenter?) {
         self.moviessCollectionView.configContent(list: data, delegate: delegate)
     }
     

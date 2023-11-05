@@ -7,19 +7,18 @@
 
 import UIKit
 
-protocol MovieDetailViewControllerProtocol: AnyObject {
-    var presenter: MovieDetailPresenterProtocol? { get set }
+protocol DetailViewProtocol: AnyObject {
+    var presenter: DetailPresenterProtocol? { get set }
     
     func onFetchSuccess(data: CustomDetailViewModel)
-    func onFetchVideoContent(data: MovieVideo)
-    func onFetchCastContennt(data: [ListObj])
+    func onFetchFailure(message: String)
     func showActity()
     func hideActivity()
 }
 
-class MovieDetailViewController: UIViewController {
+class DetailViewController: UIViewController {
 
-    var presenter: MovieDetailPresenterProtocol?
+    var presenter: DetailPresenterProtocol?
     
     private let scrollView: UIScrollView = {
         let scrolllView = UIScrollView()
@@ -60,13 +59,11 @@ class MovieDetailViewController: UIViewController {
     private func setupUI() {
         view.addSubview(scrollView)
         view.addSubview(activityIndicator)
-//        scrollView.addSubview(contentView)
         scrollView.addSubview(movieDetailView)
     }
     
     private func setupConstraints() {
         setupScrollViewConstraints()
-//        setupContentViewConstraints()
         setupMovieDetailViewConstraints()
         setupActivityIndicatorConstraints()
     }
@@ -93,7 +90,6 @@ class MovieDetailViewController: UIViewController {
         NSLayoutConstraint.activate([
             movieDetailView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             movieDetailView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-//            contentView.bottomAnchor.constraint(greaterThanOrEqualTo: movieDetailView.bottomAnchor, constant: 110)
             movieDetailView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
     }
@@ -105,24 +101,17 @@ class MovieDetailViewController: UIViewController {
     }  
 }
 
-extension MovieDetailViewController: MovieDetailViewControllerProtocol {
-    func onFetchVideoContent(data: MovieVideo) {
-        ((self.movieDetailView) as? CustomDetailView)?.configVideoContent(data: data)
-    }
+extension DetailViewController: DetailViewProtocol {
     
     func onFetchSuccess(data: CustomDetailViewModel) {
         DispatchQueue.main.async {
-            ((self.movieDetailView) as? CustomDetailView)?.configContent(data: data)
+            (self.movieDetailView as? CustomDetailView)?.configContent(data: data,
+                                                                         delegate: self.presenter as? CollectionViewToPresenter)
         }
     }
     
-    func onFetchCastContennt(data: [ListObj]) {
-        DispatchQueue.main.async {
-            ((self.movieDetailView) as? CustomDetailView)?.configCastContent(
-                data: data,
-                delegate: self.presenter as? CollectionViewToPresenter)
-        }
-       
+    func onFetchFailure(message: String) {
+        self.showAlert(title: "Error", message: message)
     }
     
     func showActity() {
