@@ -7,22 +7,21 @@
 
 import UIKit
 
-protocol MovieViewInterface: AnyObject {
-    var presenter: MoviePresenterInterface? { get set }
+protocol MovieViewProtocol: AnyObject {
+    var presenter: MoviePresenterProtocol? { get set }
     
     func showActity()
     func hideActivity()
-    
-    func onFetchPopularMovieListSuccess(data: [ListObj])
-    func onFetchPopularMovieListFailure()
+    func onFetchSuccess(data: [ContentObject])
+    func onFetchFailure(message: String)
     func setupTitle(title: String)
 }
 
 class MovieViewController: UIViewController {
 
-    var presenter: MoviePresenterInterface?
+    var presenter: MoviePresenterProtocol?
     
-    init(presenter: MoviePresenterInterface? = nil) {
+    init(presenter: MoviePresenterProtocol? = nil) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -60,6 +59,7 @@ class MovieViewController: UIViewController {
     
     private func setupUI() {
         self.title = "Movies"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .systemBackground
         
         view.addSubview(moviessCollectionView)
@@ -87,18 +87,19 @@ class MovieViewController: UIViewController {
     
 }
 
-extension MovieViewController: MovieViewInterface {
+extension MovieViewController: MovieViewProtocol {
     
     func setupTitle(title: String) {
         DispatchQueue.main.async {
-            self.title = title
+            self.navigationItem.title = title
         }
     }
-    func onFetchPopularMovieListSuccess(data: [ListObj]) {
+    func onFetchSuccess(data: [ContentObject]) {
         DispatchQueue.main.async {
             self.moviessCollectionView.configContent(list: data,
                                                      delegate: self.presenter as? CollectionViewToPresenter )
             self.moviessCollectionView.collectionview?.reloadData()
+            
         }
     }
     
@@ -114,9 +115,9 @@ extension MovieViewController: MovieViewInterface {
         }
     }
 
-    func onFetchPopularMovieListFailure() {
+    func onFetchFailure(message: String) {
         DispatchQueue.main.async {
-            self.showAlert(title: "Error", message: "On Populer Movie Fetch")
+            self.showAlert(title: "Error", message: message)
         }
     }
 }

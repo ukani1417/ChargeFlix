@@ -42,8 +42,8 @@ class VideoCollectionCell: UICollectionViewCell {
     }
     
     func configCellContent(data: Codable) {
-        guard let data = data as? String else { return }
-        guard let youTubeURL = URL(string: "\(Constants.youtubeBasePath)\(data)?modestbranding=1") else { return }
+        guard let keyPath = (data as? Video)?.keyPath else { return }
+        guard let youTubeURL = URL(string: "\(Constants.youtubeBasePath)\(keyPath)?modestbranding=1") else { return }
         webView.load(URLRequest(url: youTubeURL))
     }
 }

@@ -7,72 +7,57 @@
 
 import Foundation
 
-protocol HomeInteractorInterface {
-    var presenter: HomePresenterInterface? { get set }
-    var movieRepository: MovieRepository? { get set }
-    var tvShowRepositoy: TVShowRepository? { get set }
+protocol HomeInteractorProtocol {
+    var presenter: HomePresenterProtocol? { get set }
+    var repository: CommonRepository? { get set }
     
-    func getMovies(type: MovieType)
-//    func getTVShows(type: TVShowType)
-    func getMovieGenreList()
-    func getMovieById(id: Int)
+    func getMovies(type: DataType, page: Int)
+    func getMovie(forUse: ForUse, type: DataType, id: Int)
+    func getGenreList()
 }
 
-class HomeInteractor: HomeInteractorInterface {
-    var movieRepository: MovieRepository?
-    var tvShowRepositoy: TVShowRepository?
-    weak var presenter: HomePresenterInterface?
+class HomeInteractor: HomeInteractorProtocol {
+    weak var presenter: HomePresenterProtocol?
+    var repository: CommonRepository?
     
-    init(movieRepository: MovieRepository? = MovieRepository(),
-         tvShowRepositoy: TVShowRepository? = TVShowRepository()) {
-        self.movieRepository = movieRepository
-        self.tvShowRepositoy = tvShowRepositoy
+    init(repository: CommonRepository? = CommonRepository()) {
+        self.repository = repository
     }
-    
-    func getMovies(type: MovieType) {
-        movieRepository?.get(type: type) { result in
-            switch result {
+ 
+    func getMovies(type: DataType, page: Int = 1) {
+        repository?.get(endPoint: type.fromDataTypeToEndPoint(page), modelType: CommonListModel.self) { responce in
+            switch responce {
             case .success(let data):
-                self.presenter?.onfetchMovieSuccess(movieType: type, data: data.toListObj())
-            case .failure(let error):
-                debugPrint(error.localizedDescription)
-                self.presenter?.onFetchMovieFailure(movieType: type)
+                self.presenter?.onFetchMovies(dataType: type, responce: .success(data))
+            case .failure:
+                self.presenter?.onFetchMovies(dataType: type, responce: .failure(.failedToFetchMoviesList))
             }
         }
     }
     
-    func getMovieGenreList() {
-        movieRepository?.getGenreList { result in
-            switch result {
+    func getMovie(forUse: ForUse, type: DataType, id: Int) {
+        repository?.get(endPoint: MovieAPIEndPoints.movieDetails(id: id), modelType: DetailModel.self) { responce in
+            switch responce {
             case .success(let data):
-                self.presenter?.onFetchMovieGenreListSuccess(data: data)
-            case .failure(let error):
-                debugPrint(error.localizedDescription)
-                self.presenter?.onFetchMovieGenreListFailure()
+                self.presenter?.onFetchMovie(forUse: forUse,
+                                             responce: .success(data))
+            case .failure:
+                self.presenter?.onFetchMovie(forUse: forUse,
+                                             responce: .failure(.failedToFetchMovieDetail))
+            }
+        }
+        
+    }
+    
+    func getGenreList() {
+        repository?.get(endPoint: MovieAPIEndPoints.genreList, modelType: GenreList.self) { responce in
+            switch responce {
+            case .success(let data):
+                self.presenter?.onFetchGenre(responce: .success(data))
+            case .failure:
+                self.presenter?.onFetchGenre(responce: .failure(.failedToFetchGenreList))
             }
         }
     }
     
-    func getMovieById(id: Int) {
-        movieRepository?.getDetails(id: id ) { result in
-            switch result {
-            case .success(let data):
-                self.presenter?.onfetchMovieByIdSuccess(data: data)
-            case .failure(let error):
-                debugPrint(error)
-                self.presenter?.onfetchMovieBYIdFailure()
-            }
-        }
-    }
-    
-//    func getTVShows(type: TVShowType) {
-//        tvShowRepositoy?.get(type: type) { result in
-//            switch result {
-//            case .success(let data):
-//                self.presenter?.onfetchTVShowSuccess(tvShowType: type, data: data.toListObj())
-//            case .failure:
-//                self.presenter?.onFetchTVShowFailure(tvShowType: type)
-//            }
-//        }
-//    }
 }

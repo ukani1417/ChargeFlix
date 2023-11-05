@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+enum TVShowPresenterError: String, Error {
+    case failedInTVShows = "Failed to get TVshow List"
+    case failedInTVshowDetail = "Failed to get TVShow Details"
+}

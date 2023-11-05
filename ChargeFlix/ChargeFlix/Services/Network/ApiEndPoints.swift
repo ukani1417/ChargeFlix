@@ -16,4 +16,5 @@ protocol ApiEndPoints {
     var headers: [(String, String)] { get }
     var statusCode: Int { get }
     var body: Codable? { get }
+    
 }
