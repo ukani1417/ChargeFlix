@@ -9,24 +9,24 @@ import Foundation
 
 protocol MovieInteractorProtocol: AnyObject {
     var presenter: MoviePresenterProtocol? { get set }
-    var repository: CommonRepository? { get set }
+    var repository: Repository { get set }
 
     func getMovies(type: DataType, page: Int)
-    func getMovieDetail(id: Int)
+    func getMovieDetail(type: DataType, id: Int)
 }
 
 class MovieInteractor: MovieInteractorProtocol {
     
     var presenter: MoviePresenterProtocol?
-    var repository: CommonRepository?
+    var repository: Repository
     
-    init(repository: CommonRepository? = CommonRepository()) {
+    init(repository: Repository = CommonRepository()) {
         self.repository = repository
     }
     
     func getMovies(type: DataType, page: Int = 1) {
         let endPoint = type.fromDataTypeToEndPoint(page)
-        repository?.get(endPoint: endPoint, modelType: CommonListModel.self) { responce in
+        repository.get(endPoint: endPoint, modelType: CommonListModel.self) { responce in
             switch responce {
             case .success(let data):
                 self.presenter?.onFetchMovies(dataType: type, responce: .success(data))
@@ -36,8 +36,8 @@ class MovieInteractor: MovieInteractorProtocol {
         }
     }
     
-    func getMovieDetail(id: Int) {
-        repository?.get(endPoint: DataType.movieDetail.fromDataTypeToEndPoint(id), 
+    func getMovieDetail(type:DataType, id: Int) {
+        repository.get(endPoint: type.fromDataTypeToEndPoint(id), 
                         modelType: DetailModel.self) { responce in
             switch responce {
             case .success(let data):

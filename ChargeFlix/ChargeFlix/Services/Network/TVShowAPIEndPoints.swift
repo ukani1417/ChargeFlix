@@ -92,3 +92,14 @@ enum TVShowAPIEndPoints: ApiEndPoints {
     }
     
 }
+
+extension TVShowAPIEndPoints {
+    func toDataType() -> DataType {
+        switch self {
+        case .populer:  return .popularTVShows
+        case .topRated: return .topRatedTVShows
+        case .tVShowDetails:    return .tvShowDetail
+        case .genreList:    return .tvShowGenreList
+        }
+    }
+}
