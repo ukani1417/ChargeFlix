@@ -61,6 +61,6 @@ class TVShowPresenter: TVShowPresenterProtocol {
 extension TVShowPresenter: CollectionViewToPresenter {
     func didSelectItemAt(id: Int) {
         view?.showActivity()
-        interactor?.getTVShowById(id: id)
+        interactor?.getTVShowById(type: .tvShowDetail, id: id)
     }
 }

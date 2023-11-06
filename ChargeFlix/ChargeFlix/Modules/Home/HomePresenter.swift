@@ -24,7 +24,6 @@ protocol HomePresenterProtocol: AnyObject {
     func filterDataUsingGenre(index: Int)
     
     //  Api Callbacks
-    
     func onFetchMovies(dataType: DataType, responce: Result<CommonListModel, HomePresenterError>)
     func onFetchMovie(forUse: ForUse, responce: Result<DetailModel, HomePresenterError>)
     func onFetchGenre(responce: Result<GenreList, HomePresenterError>)
@@ -50,7 +49,7 @@ class HomePresenter: HomePresenterProtocol {
     }
     
     func viewDidLoad() {
-        interactor?.getGenreList()
+        interactor?.getGenreList(type: .movieGenreList)
         [
          DataType.popularMovies,
          DataType.topRatedMovies,
@@ -76,8 +75,8 @@ class HomePresenter: HomePresenterProtocol {
             if filteredMoviesDetails.count == 4 {
                 view?.reloadTable()
             }
-        case .failure:
-            view?.onFetchFailure(message: "Error in list fetching")
+        case .failure(let error):
+            view?.onFetchFailure(message: error.rawValue)
         }
     }
     
@@ -91,8 +90,8 @@ class HomePresenter: HomePresenterProtocol {
             case .pushToDetail:
                 router?.pushToMovieDetail(with: data)
             }
-        case .failure:
-            view?.onFetchFailure(message: "Error in fetching movieDetail")
+        case .failure(let error):
+            view?.onFetchFailure(message: error.rawValue)
         }
     }
     
@@ -100,8 +99,8 @@ class HomePresenter: HomePresenterProtocol {
         switch responce {
         case .success(let data):
             movieGenreList = data
-        case .failure:
-            view?.onFetchFailure(message: "Error in fetching GenreList")
+        case .failure(let error):
+            view?.onFetchFailure(message: error.rawValue)
         }
     }
     

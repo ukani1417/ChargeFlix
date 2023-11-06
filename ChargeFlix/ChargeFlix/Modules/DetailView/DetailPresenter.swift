@@ -52,6 +52,6 @@ class DetailPresenter: DetailPresenterProtocol {
 
 extension DetailPresenter: CollectionViewToPresenter {
     func didSelectItemAt(id: Int) {
-        interactor?.getCastDetail(id: id)
+        interactor?.getCastDetail(type: .castDetail, id: id)
     }
 }

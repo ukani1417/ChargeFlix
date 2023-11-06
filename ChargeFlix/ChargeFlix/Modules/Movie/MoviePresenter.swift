@@ -71,7 +71,7 @@ extension MoviePresenter: CollectionViewToPresenter {
     func didSelectItemAt(id: Int) {
         if id != -1 {
             view?.showActity()
-            interactor?.getMovieDetail( id: id)
+            interactor?.getMovieDetail(type: .movieDetail, id: id)
         }
     }
 }

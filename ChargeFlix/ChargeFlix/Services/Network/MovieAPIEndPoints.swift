@@ -14,7 +14,7 @@ enum MovieAPIEndPoints: ApiEndPoints {
     case nowPlaying(page: Int = 1)
     case movieDetails(id: Int)
     case genreList
-   
+    
     var host: String {
         switch self {
         case .movieDetails, .nowPlaying, .populer, .topRated, .upComing, .genreList:
@@ -93,4 +93,17 @@ enum MovieAPIEndPoints: ApiEndPoints {
         }
     }
     
+}
+
+extension MovieAPIEndPoints {
+    func toDataType() -> DataType {
+        switch self {
+        case .populer: return .popularMovies
+        case .topRated: return .topRatedMovies
+        case .upComing: return .upcomingMovies
+        case .nowPlaying: return .nowPlayingMovies
+        case .movieDetails: return .movieDetail
+        case .genreList: return .movieGenreList
+        }
+    }
 }

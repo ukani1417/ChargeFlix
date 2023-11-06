@@ -11,7 +11,7 @@ enum CommonRepositoryError: String, Error {
     case serverError = "Server error , try again after some time"
 }
 
-class CommonRepository {
+class CommonRepository: Repository {
     
     func get<T: Codable>(endPoint: ApiEndPoints, 
                          modelType: T.Type,

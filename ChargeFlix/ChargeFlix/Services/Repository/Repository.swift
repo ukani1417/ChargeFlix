@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+protocol  Repository {
+    func get<T: Codable>(endPoint: ApiEndPoints,
+                         modelType: T.Type,
+                         completation: @escaping (Result<T, CommonRepositoryError>) -> Void)
+}
