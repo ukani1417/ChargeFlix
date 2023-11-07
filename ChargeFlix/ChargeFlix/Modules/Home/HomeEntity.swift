@@ -32,7 +32,7 @@ enum DataType: Equatable {
 }
 
 extension DataType {
-    func fromDataTypeToEndPoint(_ resource: Int) -> ApiEndPoints {
+    func toEndPoint(_ resource: Int) -> ApiEndPoints {
         switch self {
         case .popularMovies:
             return MovieAPIEndPoints.populer(page: resource)
@@ -58,9 +58,7 @@ extension DataType {
         
         case .castDetail:
             return CastAPIEnpoints.personDetails(id: resource)
-        case .castMovieCredit:
-            return CastAPIEnpoints.knownMovies(id: resource)
-        case .castTVShowCredit:
+        case .castMovieCredit, .castTVShowCredit:
             return CastAPIEnpoints.knownTVShows(id: resource)
         }
     }

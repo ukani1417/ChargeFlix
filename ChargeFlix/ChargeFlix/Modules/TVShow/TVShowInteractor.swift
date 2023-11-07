@@ -7,16 +7,8 @@
 
 import Foundation
 
-protocol TVShowInteractorProtocol: AnyObject {
-    var presenter: TVShowPresenterProtocol? { get set }
-    var repository: Repository { get set }
-    
-    func getTVShows(type: DataType, page: Int)
-    func getTVShowById(type: DataType, id: Int)
-}
-
-class TVShowInteractor: TVShowInteractorProtocol {
-    weak var presenter: TVShowPresenterProtocol?
+class TVShowInteractor: TVShowPresenterToInteractorProtocol {
+    weak var presenter: TVShowInteractorToPresenterProtocol?
     var repository: Repository
     
     init(repository: Repository = CommonRepository()) {
@@ -24,7 +16,7 @@ class TVShowInteractor: TVShowInteractorProtocol {
     }
     
     func getTVShows(type: DataType, page: Int) {
-        repository.get(endPoint: type.fromDataTypeToEndPoint(page),
+        repository.get(endPoint: type.toEndPoint(page),
                         modelType: CommonListModel.self) { result in
             switch result {
             case .success(let data):
@@ -36,7 +28,7 @@ class TVShowInteractor: TVShowInteractorProtocol {
     }
     
     func getTVShowById(type: DataType, id: Int) {
-        repository.get(endPoint: type.fromDataTypeToEndPoint(id),
+        repository.get(endPoint: type.toEndPoint(id),
                         modelType: DetailModel.self) { result in
             switch result {
             case .success(let data):

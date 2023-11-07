@@ -7,18 +7,10 @@
 
 import UIKit
 
-protocol CastDetailViewControllerProtocol: AnyObject {
-    
-    var presenter: CastDetailPresenterProtocol? { get set }
-    func showActity()
-    func hideActivity()
-    func configCastData(type: DataType, data: Person)
-}
-
 class CastDetailViewController: UIViewController {
 
-    var presenter: CastDetailPresenterProtocol?
-    
+    var presenter: CastDetailViewToPresenterProtocol?
+   
     private let scrollView: UIScrollView = {
         let scrolllView = UIScrollView()
         scrolllView.translatesAutoresizingMaskIntoConstraints = false
@@ -118,6 +110,11 @@ class CastDetailViewController: UIViewController {
         presenter?.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+    }
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
@@ -216,22 +213,24 @@ class CastDetailViewController: UIViewController {
     }
     
     func configCastData(type: DataType, data: Person) {
-        self.castProfile.setImage(with: data.profilePath ?? "")
-        self.castName.text = data.name ?? ""
-        self.overview.text = data.biography ?? ""
-        self.knownFor.text = data.knownForDepartement ?? ""
-        (self.castImages as? CustomCollectionView)?.configContent(list: data.images?.profiles ?? [])
+        self.title = data.name ?? ""
+        castProfile.setImage(with: data.profilePath ?? "")
+        castName.text = data.name ?? ""
+        overview.text = data.biography ?? ""
+        knownFor.text = data.knownForDepartement ?? ""
+        (castImages as? CustomCollectionView)?.configContent(list: data.images?.profiles ?? [])
+        
         switch type {
         case .castMovieCredit:
-            (self.castCredit as? CustomCollectionView)?.configContent(list: data.movieCredit?.cast ?? [])
+            (castCredit as? CustomCollectionView)?.configContent(list: data.movieCredit?.cast ?? [])
         case .castTVShowCredit:
-            (self.castCredit as? CustomCollectionView)?.configContent(list: data.tvCredit?.cast ?? [])
+            (castCredit as? CustomCollectionView)?.configContent(list: data.tvCredit?.cast ?? [] )
         default: break
         }
     }
 }
 
-extension CastDetailViewController: CastDetailViewControllerProtocol {
+extension CastDetailViewController: CastDetailPresenterToViewProtocol {
     func showActity() {
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()

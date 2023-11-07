@@ -7,11 +7,8 @@
 
 import UIKit
 
-protocol CastDetailRouterProtocol {
-    var viewController: UIViewController? { get set }
-}
-
-class CastDetailRouter: CastDetailRouterProtocol {
+typealias CastDetailPresenterType = CastDetailViewToPresenterProtocol & CastDetailInteractorToPresenterProtocol
+class CastDetailRouter: CastDetailPresenterToRouterProtocol {
     var viewController: UIViewController?
     
     init(viewController: UIViewController? = nil) {
@@ -20,9 +17,9 @@ class CastDetailRouter: CastDetailRouterProtocol {
     
     static func createModule(type: DataType, cast: Person) -> UIViewController {
         let viewController = CastDetailViewController()
-        let router: CastDetailRouterProtocol = CastDetailRouter(viewController: viewController)
-        let interactor: CastDetailInteractorProtocol = CastDetailInteractor()
-        let presenter: CastDetailPresenterProtocol = CastDetailPresenter(view: viewController, 
+        let router: CastDetailPresenterToRouterProtocol = CastDetailRouter(viewController: viewController)
+        let interactor: CastDetailPresenterToInteractorProtocol = CastDetailInteractor()
+        let presenter: CastDetailPresenterType = CastDetailPresenter(view: viewController,
                                                                          router: router,
                                                                          interactor: interactor,
                                                                          castType: type,

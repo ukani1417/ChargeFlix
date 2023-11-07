@@ -8,13 +8,13 @@
 import Foundation
 @testable import ChargeFlix
 
-class DetailMockInteractor: DetailInteractorProtocol {
-    var presenter: ChargeFlix.DetailPresenterProtocol?
+class DetailMockInteractor: DetailPresenterToInteractorProtocol {
+    var presenter: ChargeFlix.DetailInteractorToPresenterProtocol?
     var repository: ChargeFlix.Repository
     var data: Codable?
     var error: CommonRepositoryError?
     
-    init(presenter: ChargeFlix.DetailPresenterProtocol? = nil, 
+    init(presenter: ChargeFlix.DetailInteractorToPresenterProtocol? = nil, 
          repository: ChargeFlix.Repository,
          data: Codable? = nil,
          error: CommonRepositoryError? = nil) {
@@ -25,7 +25,7 @@ class DetailMockInteractor: DetailInteractorProtocol {
     }
     
     func getCastDetail(type: DataType, id: Int) {
-        repository.get(endPoint: type.fromDataTypeToEndPoint(id), 
+        repository.get(endPoint: type.toEndPoint(id), 
                        modelType: Person.self) { result in
             switch result {
             case .success(let data):

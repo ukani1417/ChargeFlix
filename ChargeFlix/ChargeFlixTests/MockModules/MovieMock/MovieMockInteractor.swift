@@ -8,21 +8,21 @@
 import Foundation
 @testable import ChargeFlix
 
-class MovieMockInteractor: MovieInteractorProtocol {
-    var presenter: ChargeFlix.MoviePresenterProtocol?
+class MovieMockInteractor: MoviePresenterToInteractorProtocol {
+    var presenter: ChargeFlix.MovieInteractorToPresenterProtocol?
     var repository: ChargeFlix.Repository
     
     var data: Codable?
     var error: CommonRepositoryError?
     
-    init(presenter: ChargeFlix.MoviePresenterProtocol? = nil, repository: ChargeFlix.Repository, data: Codable? = nil, error: CommonRepositoryError? = nil) {
+    init(presenter: ChargeFlix.MovieInteractorToPresenterProtocol? = nil, repository: ChargeFlix.Repository, data: Codable? = nil, error: CommonRepositoryError? = nil) {
         self.presenter = presenter
         self.repository = repository
         self.data = data
         self.error = error
     }
     func getMovies(type: ChargeFlix.DataType, page: Int) {
-        repository.get(endPoint: type.fromDataTypeToEndPoint(page),
+        repository.get(endPoint: type.toEndPoint(page),
                        modelType: CommonListModel.self) { result in
             switch result {
             case .success(let data): self.data = data
@@ -32,7 +32,7 @@ class MovieMockInteractor: MovieInteractorProtocol {
     }
     
     func getMovieDetail(type: ChargeFlix.DataType, id: Int) {
-        repository.get(endPoint: type.fromDataTypeToEndPoint(id),
+        repository.get(endPoint: type.toEndPoint(id),
                        modelType: DetailModel.self) { result in
             switch result {
             case .success(let data): self.data = data

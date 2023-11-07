@@ -7,18 +7,16 @@
 
 import UIKit
 
-protocol MovieRouterProtocol: AnyObject {
-    var viewController: UINavigationController? { get set }
-    
-    func navigateToMovieDetail(with movie: DetailModel)
-}
+typealias MoviePresenterType = MovieViewToPresenterProtocol & MovieInteractorToPresenterProtocol
 
-class MovieRouter: MovieRouterProtocol {
+class MovieRouter: MoviePresenterToRouterProtocol {
    
     var viewController: UINavigationController?
+    var detailViewController: UIViewController?
     
-    init(viewController: UINavigationController? = nil) {
+    init(viewController: UINavigationController? = nil, detailViewController: UIViewController? = nil) {
         self.viewController = viewController
+        self.detailViewController = detailViewController
     }
     
     static func createModule() -> UINavigationController {
@@ -27,10 +25,10 @@ class MovieRouter: MovieRouterProtocol {
         navigationController.navigationItem.title = "Movies"
         navigationController.navigationBar.prefersLargeTitles = true
         
-        let router: MovieRouterProtocol = MovieRouter(viewController: navigationController)
-        let interactor: MovieInteractorProtocol = MovieInteractor()
+        let router: MoviePresenterToRouterProtocol = MovieRouter(viewController: navigationController)
+        let interactor: MoviePresenterToInteractorProtocol = MovieInteractor()
         
-        let presenter: MoviePresenterProtocol = MoviePresenter(view: viewController, 
+        let presenter: MoviePresenterType = MoviePresenter(view: viewController, 
                                                                 router: router,
                                                                 interactor: interactor)
         
@@ -41,33 +39,31 @@ class MovieRouter: MovieRouterProtocol {
     }
     
     func navigateToMovieDetail(with movie: DetailModel) {
-        DispatchQueue.main.async {
-            guard let viewController = self.viewController
-            else {
+        DispatchQueue.main.async { [weak self] in
+            guard let viewController = self?.viewController else { return }
+            
+            guard let detailViewController = self?.detailViewController else {
+                let detailViewController = DetailRouter.createModule(content: movie, contentType: .movieDetail)
+                self?.detailViewController = detailViewController
+                detailViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "arrow.left"),
+                    style: .done,
+                    target: self,
+                    action: #selector(self?.backButtontapped(_:))
+                )
+                viewController.pushViewController(detailViewController, animated: true)
                 return
             }
-            let movieDetailViewController = DetailRouter.createModule(movie: movie, contentType: .movieDetail)
             
-            viewController.navigationBar.tintColor = .white
-            viewController.navigationBar.prefersLargeTitles = false
-            movieDetailViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "arrow.left"),
-                style: .done,
-                target: self,
-                action: #selector(self.backButtontapped(_:))
-            )
-            
-            movieDetailViewController.title = movie.originalTitle
-            viewController.tabBarController?.tabBar.isHidden = true
-            viewController.pushViewController(movieDetailViewController, animated: true)
-                        
+            let detailView = detailViewController as? DetailPresenterToViewProtocol
+            detailView?.presenter?.configContent(type: .movieDetail, content: movie)
+            viewController.pushViewController(detailViewController, animated: true)
+        
         }
     }
     
     @objc private func backButtontapped(_ sender: UIViewController) {
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.navigationBar.prefersLargeTitles = true
-            self?.viewController?.tabBarController?.tabBar.isHidden = false
             self?.viewController?.popViewController(animated: true)
         }
     }

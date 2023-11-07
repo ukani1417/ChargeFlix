@@ -7,16 +7,9 @@
 
 import Foundation
 
-protocol DetailInteractorProtocol {
-    var presenter: DetailPresenterProtocol? { get set }
-    var repository: Repository { get set }
-
-    func getCastDetail(type:DataType, id: Int)
-}
-
-class DetailInteractor: DetailInteractorProtocol {
+class DetailInteractor: DetailPresenterToInteractorProtocol {
     
-    weak var presenter: DetailPresenterProtocol?
+    weak var presenter: DetailInteractorToPresenterProtocol?
     var repository: Repository
     
     init(repository: Repository = CommonRepository()) {
@@ -24,7 +17,7 @@ class DetailInteractor: DetailInteractorProtocol {
     }
     
     func getCastDetail(type: DataType, id: Int) {
-        repository.get(endPoint: type.fromDataTypeToEndPoint(id),
+        repository.get(endPoint: type.toEndPoint(id),
                         modelType: Person.self) { result in
             switch result {
             case .success(let data):

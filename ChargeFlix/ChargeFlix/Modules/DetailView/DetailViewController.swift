@@ -7,18 +7,9 @@
 
 import UIKit
 
-protocol DetailViewProtocol: AnyObject {
-    var presenter: DetailPresenterProtocol? { get set }
-    
-    func onFetchSuccess(data: CustomDetailViewModel)
-    func onFetchFailure(message: String)
-    func showActity()
-    func hideActivity()
-}
-
 class DetailViewController: UIViewController {
 
-    var presenter: DetailPresenterProtocol?
+    var presenter: DetailViewToPresenterProtocol?
     
     private let scrollView: UIScrollView = {
         let scrolllView = UIScrollView()
@@ -54,6 +45,12 @@ class DetailViewController: UIViewController {
         setupConstraints()
         presenter?.viewDidLoad()
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     private func setupUI() {
@@ -101,25 +98,36 @@ class DetailViewController: UIViewController {
     }  
 }
 
-extension DetailViewController: DetailViewProtocol {
+extension DetailViewController: DetailPresenterToViewProtocol {
     
     func onFetchSuccess(data: CustomDetailViewModel) {
         DispatchQueue.main.async {
+            self.title = data.title
             (self.movieDetailView as? CustomDetailView)?.configContent(data: data,
                                                                          delegate: self.presenter as? CollectionViewToPresenter)
+            self.movieDetailView.reloadInputViews()
         }
     }
     
     func onFetchFailure(message: String) {
-        self.showAlert(title: "Error", message: message)
+        DispatchQueue.main.async {
+            self.showAlert(title: "Error", message: message)
+        }
+       
     }
     
     func showActity() {
-        activityIndicator.startAnimating()
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+        
     }
     
     func hideActivity() {
-        activityIndicator.stopAnimating()
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+        
     }
 
 }

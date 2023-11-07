@@ -161,7 +161,12 @@ class TableHeaderView: UIView {
         moviePoster.setImage(with: input.poster)
         votes.text = "   \(String(input.votes))"
         addStarToStack(stars: input.starts)
-        genreList.append(contentsOf: input.genreList)
+    }
+    func configGenreList(genreList: [Genre]) {
+        DispatchQueue.main.async {
+            self.genreList.append(contentsOf: genreList)
+            self.genreCollectionView.reloadData()
+        }
     }
 }
 

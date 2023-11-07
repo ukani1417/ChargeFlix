@@ -7,17 +7,8 @@
 
 import Foundation
 
-protocol HomeInteractorProtocol {
-    var presenter: HomePresenterProtocol? { get set }
-    var repository: Repository { get set }
-    
-    func getMovies(type: DataType, page: Int)
-    func getMovie(forUse: ForUse, type: DataType, id: Int)
-    func getGenreList(type: DataType)
-}
-
-class HomeInteractor: HomeInteractorProtocol {
-    weak var presenter: HomePresenterProtocol?
+class HomeInteractor: HomePresenterToInteractorProtocol {
+    weak var presenter: HomeInteractorToPresenterProtocol?
     var repository: Repository
     
     init(repository: Repository = CommonRepository()) {
@@ -25,7 +16,7 @@ class HomeInteractor: HomeInteractorProtocol {
     }
  
     func getMovies(type: DataType, page: Int = 1) {
-        repository.get(endPoint: type.fromDataTypeToEndPoint(page), modelType: CommonListModel.self) { responce in
+        repository.get(endPoint: type.toEndPoint(page), modelType: CommonListModel.self) { responce in
             switch responce {
             case .success(let data):
                 self.presenter?.onFetchMovies(dataType: type, responce: .success(data))
@@ -36,7 +27,8 @@ class HomeInteractor: HomeInteractorProtocol {
     }
     
     func getMovie(forUse: ForUse, type: DataType, id: Int) {
-        repository.get(endPoint: MovieAPIEndPoints.movieDetails(id: id), modelType: DetailModel.self) { responce in
+
+        repository.get(endPoint: type.toEndPoint(id), modelType: DetailModel.self) { responce in
             switch responce {
             case .success(let data):
                 self.presenter?.onFetchMovie(forUse: forUse,
@@ -50,7 +42,8 @@ class HomeInteractor: HomeInteractorProtocol {
     }
     
     func getGenreList(type: DataType) {
-        repository.get(endPoint: type.fromDataTypeToEndPoint(0), modelType: GenreList.self) { responce in
+        
+        repository.get(endPoint: type.toEndPoint(0), modelType: GenreList.self) { responce in
             switch responce {
             case .success(let data):
                 self.presenter?.onFetchGenre(responce: .success(data))

@@ -7,48 +7,64 @@
 
 import UIKit
 
-protocol DetailRouterProtocol {
-    var viewController: UIViewController? { get set }
-    func pushToCastDetail(dataType: DataType, cast: Person)
-}
+typealias DetailPresenterType = DetailViewToPresenterProtocol & DetailInteractorToPresenterProtocol
 
-class DetailRouter: DetailRouterProtocol {
+class DetailRouter: DetailPresenterToRouterProtocol {
     var viewController: UIViewController?
+    var castDetailViewController: UIViewController?
     
-    init(viewController: UIViewController? = nil) {
+    init(viewController: UIViewController? = nil, 
+         castDetailViewController: UIViewController? = nil) {
         self.viewController = viewController
+        self.castDetailViewController = castDetailViewController
     }
     
-    static func createModule(movie: DetailModel, contentType: DataType) -> UIViewController {
+    static func createModule(content: DetailModel, contentType: DataType) -> UIViewController {
         let viewController = DetailViewController()
-        let router: DetailRouterProtocol = DetailRouter(viewController: viewController)
-        let interactor: DetailInteractorProtocol = DetailInteractor()
-        let presenter: DetailPresenterProtocol = DetailPresenter(view: viewController,
-                                                                 router: router, 
-                                                                 interactor: interactor,
-                                                                 content: movie,
-        contentDataType: contentType)
+        let router: DetailPresenterToRouterProtocol = DetailRouter(viewController: viewController)
+        let interactor: DetailPresenterToInteractorProtocol = DetailInteractor()
+        let presenter: DetailPresenterType = DetailPresenter(view: viewController,
+                                                             router: router,
+                                                             interactor: interactor,
+                                                             content: content,
+                                                             contentDataType: contentType)
         
         viewController.presenter = presenter
         viewController.presenter?.interactor?.presenter = presenter
         return viewController
     }
     
-    func pushToCastDetail(dataType: DataType, cast: Person) {
-        DispatchQueue.main.async {
-            guard let viewController = self.viewController else {
+    func navigateToCastDetail(dataType: DataType, cast: Person) {
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let viewController = self?.viewController else {
+                return
+            }
+            guard let castDetailViewController = self?.castDetailViewController else {
+                let castDetailViewController = CastDetailRouter.createModule(type: dataType, 
+                                                                             cast: cast)
+                self?.castDetailViewController = castDetailViewController
+                castDetailViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "arrow.left"),
+                    style: .done,
+                    target: self,
+                    action: #selector(self?.backButtontapped(_:))
+                )
+                viewController.navigationController?.pushViewController(castDetailViewController,
+                                                                        animated: true)
                 return
             }
             
-            let destinationVC = CastDetailRouter.createModule(type: dataType, cast: cast)
-            viewController.navigationController?.pushViewController(destinationVC, animated: true)
-            
-            destinationVC.setBackButton(methode: #selector(self.backButtontapped(_:)), title: cast.name ?? "")
+            let castDetailView = castDetailViewController as? CastDetailPresenterToViewProtocol
+            castDetailView?.presenter?.configCastDetailContent(castType: dataType, cast: cast)
+            viewController.navigationController?.pushViewController(castDetailViewController,
+                                                                           animated: true)
         }
     }
+    
     @objc private func backButtontapped(_ sender: UIViewController) {
-            DispatchQueue.main.async { [weak self] in
-                self?.viewController?.navigationController?.popViewController(animated: true)
-            }
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.navigationController?.popViewController(animated: true)
         }
+    }
 }

@@ -79,9 +79,10 @@ class TableSectionHeaderView: UIView {
         delegate?.showAll(section: showAllButton.tag)
     }
     
-    func configContent(sectionTitle: String, section: Int) {
+    func configContent(sectionTitle: String, section: Int, delegate: TableSectionHeaderViewToPresenter? ) {
         sectionLabel.text = sectionTitle
         showAllButton.tag = section
+        self.delegate =  delegate
     }
     
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MovieViewProtocol: AnyObject {
-    var presenter: MoviePresenterProtocol? { get set }
+    var presenter: MovieViewToPresenterProtocol? { get set }
     
     func showActity()
     func hideActivity()
@@ -19,9 +19,9 @@ protocol MovieViewProtocol: AnyObject {
 
 class MovieViewController: UIViewController {
 
-    var presenter: MoviePresenterProtocol?
+    var presenter: MovieViewToPresenterProtocol?
     
-    init(presenter: MoviePresenterProtocol? = nil) {
+    init(presenter: MovieViewToPresenterProtocol? = nil) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -51,17 +51,21 @@ class MovieViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Movies"
+        self.navigationController?.navigationBar.tintColor = .white
         view.backgroundColor = .black
         setupUI()
         setupConstraints()
         presenter?.viewDidLoad()
     }
     
-    private func setupUI() {
-        self.title = "Movies"
+    override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .systemBackground
         
+    }
+    
+    private func setupUI() {
         view.addSubview(moviessCollectionView)
         view.addSubview(activityIndicator)
     }
@@ -87,7 +91,7 @@ class MovieViewController: UIViewController {
     
 }
 
-extension MovieViewController: MovieViewProtocol {
+extension MovieViewController: MoviePresenterToViewProtocol {
     
     func setupTitle(title: String) {
         DispatchQueue.main.async {
