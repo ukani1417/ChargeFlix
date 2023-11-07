@@ -7,27 +7,18 @@
 
 import UIKit
 
-protocol MoviePresenterProtocol: AnyObject {
-    var view: MovieViewProtocol? { get set }
-    var router: MovieRouterProtocol? { get set }
-    var interactor: MovieInteractorProtocol? { get set }
+class MoviePresenter: MovieViewToPresenterProtocol {
+    weak var view: MoviePresenterToViewProtocol?
+    var router: MoviePresenterToRouterProtocol?
+    var interactor: MoviePresenterToInteractorProtocol?
     
-    func viewDidLoad()
-    func onFetchMovies(dataType: DataType, responce: Result<CommonListModel, MoviePresenterError>)
-    func onFetchMovieDetail(responce: Result<DetailModel, MoviePresenterError>)
-    func configerMovies(type: String, data: [ContentObject])
-}
-
-class MoviePresenter: MoviePresenterProtocol {
-    weak var view: MovieViewProtocol?
-    var router: MovieRouterProtocol?
-    var interactor: MovieInteractorProtocol?
+    private(set) var populerMovieList: [ContentObject] = []
+    private(set) var error: MoviePresenterError?
+    private(set) var movieDetail: DetailModel?
     
-    private var populerMovieList: [ContentObject] = []
-    
-    init(view: MovieViewProtocol? = nil, 
-         router: MovieRouterProtocol? = nil,
-         interactor: MovieInteractorProtocol? = nil) {
+    init(view: MoviePresenterToViewProtocol? = nil,
+         router: MoviePresenterToRouterProtocol? = nil,
+         interactor: MoviePresenterToInteractorProtocol? = nil) {
         self.view = view
         self.router = router
         self.interactor = interactor
@@ -37,14 +28,23 @@ class MoviePresenter: MoviePresenterProtocol {
         view?.showActity()
         interactor?.getMovies(type: .popularMovies, page: 1)
     }
+
+    func configerMovies(type: String, data: [ContentObject]) {
+        view?.setupTitle(title: type)
+        view?.onFetchSuccess(data: data)
+    }
     
+}
+
+extension MoviePresenter: MovieInteractorToPresenterProtocol {
     func onFetchMovies(dataType: DataType, responce: Result<CommonListModel, MoviePresenterError>) {
         view?.hideActivity()
         switch responce {
         case .success(let data):
-            populerMovieList = data.results
+            self.populerMovieList = data.results
             configerMovies(type: "Movies", data: data.results)
         case .failure(let error):
+            self.error = error
             view?.onFetchFailure(message: error.rawValue)
         }
     }
@@ -53,17 +53,13 @@ class MoviePresenter: MoviePresenterProtocol {
         view?.hideActivity()
         switch responce {
         case .success(let data):
+            self.movieDetail = data
             router?.navigateToMovieDetail(with: data)
         case .failure(let error):
+            self.error = error
             view?.onFetchFailure(message: error.rawValue)
         }
     }
-    
-    func configerMovies(type: String, data: [ContentObject]) {
-        view?.setupTitle(title: type)
-        view?.onFetchSuccess(data: data)
-    }
-    
 }
 
 // for didselect from CustomCollectionView

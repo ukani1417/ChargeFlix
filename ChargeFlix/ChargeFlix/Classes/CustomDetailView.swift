@@ -75,6 +75,15 @@ class CustomDetailView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.distribution = .fill
         view.spacing = 5
+        
+        [String](repeating: "star", count: 5).forEach { star in
+            let iView = UIImageView(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+            iView.image = UIImage(named: star)
+            iView.translatesAutoresizingMaskIntoConstraints = false
+            iView.contentMode = .scaleAspectFit
+            view.addArrangedSubview(iView)
+        }
+       
         return view
     }()
     
@@ -123,6 +132,39 @@ class CustomDetailView: UIView {
         return view
     }()
     
+    let releaseIconStack: UIStackView = {
+        let view =  UIStackView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .vertical
+        view.spacing = 10
+        
+        ["calendar", "clock", "globe"].forEach { image in
+            let iView = UIImageView(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+            iView.translatesAutoresizingMaskIntoConstraints = false
+            iView.contentMode = .scaleAspectFit
+            iView.image = UIImage(named: image)
+            view.addArrangedSubview(iView)
+        }
+        return view
+    }()
+    
+    let releaseLabelStack: UIStackView = {
+        let view =  UIStackView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .vertical
+        view.spacing = 10
+        
+        ["NA", "NA", "NA"].forEach { data in
+            let label = UILabel(frame: .zero)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.numberOfLines = 1
+            label.textAlignment = .left
+            label.text = data
+            view.addArrangedSubview(label)
+        }
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -137,7 +179,11 @@ class CustomDetailView: UIView {
     
     func setupUI() {
         addSubview(containerView)
-        [poster, title, detailStack, genreLabel, starStackView, overView, 
+        starStackView.addArrangedSubview(votes)
+        [releaseIconStack, releaseLabelStack].forEach { view in
+            detailStack.addArrangedSubview(view)
+        }
+        [poster, title, detailStack, genreLabel, starStackView, overView,
          videoHeading, youtubeVideoCollectionView, castHeading, castCollectionView].forEach { view in
             containerView.addSubview(view)
         }
@@ -190,7 +236,8 @@ class CustomDetailView: UIView {
     private func setupGenreLabelConstraints() {
         NSLayoutConstraint.activate([
             genreLabel.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 5),
-            genreLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 5)
+            genreLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 5),
+            genreLabel.widthAnchor.constraint(equalTo: title.widthAnchor)
         ])
     }
     private func setupStarStackViewConstraints() {
@@ -248,69 +295,20 @@ class CustomDetailView: UIView {
             (self.youtubeVideoCollectionView as? CustomCollectionView)?.configContent(list: data.videos)
             (self.castCollectionView as? CustomCollectionView)?.configContent(list: data.cast,
                                                                               delegate: delegate)
-            
-            if data.cast.isEmpty {
-                self.castCollectionView.removeFromSuperview()
-                self.castHeading.removeFromSuperview()
-            }
-            if data.videos.isEmpty {
-                self.youtubeVideoCollectionView.removeFromSuperview()
-                self.videoHeading.removeFromSuperview()
-            }
+        
         }
     }
     
     func configStarStack(stars: [String]) {
-        for star in stars {
-            let view = UIImageView(image: UIImage(named: star))
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.contentMode = .scaleToFill
-            view.widthAnchor.constraint(equalToConstant: 15).isActive = true
-            self.starStackView.addArrangedSubview(view)
+        for (index,value) in stars.enumerated() {
+            (starStackView.arrangedSubviews[index] as? UIImageView)?.image = UIImage(named: value)
         }
-        self.starStackView.addArrangedSubview(votes)
     }
     
     private func configDetailsStack(data: [(String,String)]) {
-        
-        let imageStack: UIStackView = {
-            let view =  UIStackView()
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.axis = .vertical
-            view.spacing = 10
-            return view
-        }()
-        
-        let labelStack: UIStackView = {
-            let view =  UIStackView()
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.axis = .vertical
-            view.spacing = 10
-            return view
-        }()
-        data.forEach { (image,data) in
-            let imageView: UIImageView = {
-                let view = UIImageView(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
-                view.translatesAutoresizingMaskIntoConstraints = false
-                view.image = UIImage(named: image)
-                view.contentMode = .scaleAspectFit
-                
-                return view
-            }()
-            
-            let dataLabel: UILabel = {
-                let view = UILabel(frame: .zero)
-                view.translatesAutoresizingMaskIntoConstraints = false
-                view.numberOfLines = 1
-                view.textAlignment = .left
-                view.text = data
-                return view
-            }()
-            
-            imageStack.addArrangedSubview(imageView)
-            labelStack.addArrangedSubview(dataLabel)
+        for (index,value) in data.enumerated() {
+            (releaseIconStack.arrangedSubviews[index] as? UIImageView)?.image = UIImage(named: value.0)
+            (releaseLabelStack.arrangedSubviews[index] as? UILabel)?.text = value.1
         }
-        detailStack.addArrangedSubview(imageStack)
-        detailStack.addArrangedSubview(labelStack)
     }
 }

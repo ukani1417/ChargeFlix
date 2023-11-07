@@ -7,25 +7,19 @@
 
 import UIKit
 
-protocol TVShowPresenterProtocol: AnyObject {
-    var view: TVShowViewProtocol? { get set }
-    var router: TVShowRouterProtocol? { get set }
-    var interactor: TVShowInteractorProtocol? { get set }
+class TVShowPresenter: TVShowViewToPresenterProtocol {
     
-    func viewDidLoad()
-    func onFetchTVShows(type: DataType, responce: Result<CommonListModel, TVShowPresenterError>)
-    func onFetchTVShowDetail(responce: Result<DetailModel, TVShowPresenterError>)
-}
-
-class TVShowPresenter: TVShowPresenterProtocol {
+    var router: TVShowPresenterToRouterProtocol?
+    var interactor: TVShowPresenterToInteractorProtocol?
+    var view:TVShowPresenterToViewProtocol?
     
-    var router: TVShowRouterProtocol?
-    var interactor: TVShowInteractorProtocol?
-    var view: TVShowViewProtocol?
+    private(set) var tvShowsList: CommonListModel?
+    private(set) var error: TVShowPresenterError?
+    private(set) var tvshowDetail: DetailModel?
     
-    init(router: TVShowRouterProtocol? = nil, 
-         interactor: TVShowInteractorProtocol? = nil,
-         view: TVShowViewProtocol? = nil) {
+    init(router: TVShowPresenterToRouterProtocol? = nil,
+         interactor: TVShowPresenterToInteractorProtocol? = nil,
+         view: TVShowPresenterToViewProtocol? = nil) {
         self.router = router
         self.interactor = interactor
         self.view = view
@@ -35,13 +29,17 @@ class TVShowPresenter: TVShowPresenterProtocol {
         view?.showActivity()
         interactor?.getTVShows(type: .popularTVShows, page: 1)
     }
-    
+}
+
+extension TVShowPresenter: TVShowInteractorToPresenterProtocol {
     func onFetchTVShows(type: DataType, responce: Result<CommonListModel, TVShowPresenterError>) {
         view?.hideActivity()
         switch responce {
         case .success(let data):
+            self.tvShowsList = data
             view?.onFetchPopularTVShowsListSuccess(list: data.results)
         case .failure(let error):
+            self.error = error
             view?.onFetchFailure(message: error.rawValue)
         }
     }
@@ -50,8 +48,10 @@ class TVShowPresenter: TVShowPresenterProtocol {
         view?.hideActivity()
         switch responce {
         case .success(let data):
+            self.tvshowDetail = data
             router?.navigateToTVShowDetail(with: data)
         case .failure(let error):
+            self.error = error
             view?.onFetchFailure(message: error.rawValue)
             
         }

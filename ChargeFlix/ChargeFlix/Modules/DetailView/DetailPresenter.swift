@@ -7,28 +7,20 @@
 
 import Foundation
 
-protocol DetailPresenterProtocol: AnyObject {
-    var view: DetailViewProtocol? { get set }
-    var router:  DetailRouterProtocol? { get set }
-    var interactor: DetailInteractorProtocol? { get set }
-    var content: DetailModel { get set }
-    
-    func viewDidLoad()
-    func onFetchCastDetail(responce:Result<Person,DetailPresenterError>)
-}
-
-class DetailPresenter: DetailPresenterProtocol {
-    weak var view: DetailViewProtocol?
-    var router: DetailRouterProtocol?
-    var interactor: DetailInteractorProtocol?
+class DetailPresenter: DetailViewToPresenterProtocol {
+    weak var view: DetailPresenterToViewProtocol?
+    var router: DetailPresenterToRouterProtocol?
+    var interactor: DetailPresenterToInteractorProtocol?
     var content: DetailModel
     var contentDataType: DataType
     
-    init(view: DetailViewProtocol? = nil, 
-         router: DetailRouterProtocol? = nil,
-         interactor: DetailInteractorProtocol? = nil,
-         content: DetailModel,
-         contentDataType: DataType) {
+    private(set) var castDetail: Person?
+    private(set) var error: DetailPresenterError?
+    
+    init(view: DetailPresenterToViewProtocol? = nil, 
+         router: DetailPresenterToRouterProtocol? = nil,
+         interactor: DetailPresenterToInteractorProtocol? = nil,
+         content: DetailModel, contentDataType: DataType) {
         self.view = view
         self.router = router
         self.interactor = interactor
@@ -39,12 +31,26 @@ class DetailPresenter: DetailPresenterProtocol {
     func viewDidLoad() {
         view?.onFetchSuccess(data: content.toCustomDetailView(type: contentDataType))
     }
+    
+    func configContent(type: DataType, content: DetailModel) {
+        self.content = content
+        self.contentDataType = type
+        view?.onFetchSuccess(data: content.toCustomDetailView(type: contentDataType))
+    }
+    
+}
 
+extension DetailPresenter: DetailInteractorToPresenterProtocol {
     func onFetchCastDetail(responce: Result<Person, DetailPresenterError>) {
+        view?.hideActivity()
         switch responce {
         case .success(let data):
-            router?.pushToCastDetail(dataType: contentDataType, cast: data)
+            self.castDetail = data
+            let creditType: DataType = (contentDataType == .movieDetail) ? .castMovieCredit : .castTVShowCredit
+            router?.navigateToCastDetail(dataType: creditType,
+                                         cast: data)
         case .failure(let error):
+            self.error = error
             view?.onFetchFailure(message: error.rawValue)
         }
     }
@@ -52,6 +58,7 @@ class DetailPresenter: DetailPresenterProtocol {
 
 extension DetailPresenter: CollectionViewToPresenter {
     func didSelectItemAt(id: Int) {
+        view?.showActity()
         interactor?.getCastDetail(type: .castDetail, id: id)
     }
 }

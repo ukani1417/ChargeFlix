@@ -7,19 +7,16 @@
 
 import UIKit
 
-protocol TVShowRouterProtocol: AnyObject {
-    var viewController: UINavigationController? { get set }
-    func navigateToTVShowDetail(with tvShow: DetailModel)
-}
+typealias TVShowPresenterType = TVShowViewToPresenterProtocol & TVShowInteractorToPresenterProtocol
 
-class TVShowRouter: TVShowRouterProtocol {
+class TVShowRouter: TVShowPresenterToRouterProtocol {
 
     var viewController: UINavigationController?
-    var tvShowDetailViewController: UIViewController?
+    var detailViewController: UIViewController?
     
-    init(viewController: UINavigationController? = nil, tvShowDetailViewController: UIViewController? = nil) {
+    init(viewController: UINavigationController? = nil, detailViewController: UIViewController? = nil) {
         self.viewController = viewController
-        self.tvShowDetailViewController = tvShowDetailViewController
+        self.detailViewController = detailViewController
     }
     
     static func createModule() -> UINavigationController {
@@ -28,9 +25,9 @@ class TVShowRouter: TVShowRouterProtocol {
         navigationController.navigationItem.title = "TV Shows"
         navigationController.navigationBar.prefersLargeTitles = true
         
-        let router: TVShowRouterProtocol = TVShowRouter(viewController: navigationController)
-        let interactor: TVShowInteractorProtocol = TVShowInteractor()
-        let presenter: TVShowPresenterProtocol = TVShowPresenter(router: router, 
+        let router: TVShowPresenterToRouterProtocol = TVShowRouter(viewController: navigationController)
+        let interactor: TVShowPresenterToInteractorProtocol = TVShowInteractor()
+        let presenter: TVShowPresenterType = TVShowPresenter(router: router,
                                                                   interactor: interactor,
                                                                   view: viewController)
         viewController.presenter = presenter
@@ -39,33 +36,31 @@ class TVShowRouter: TVShowRouterProtocol {
     }
     
     func navigateToTVShowDetail(with tvShow: DetailModel) {
-        DispatchQueue.main.async {
-            guard let viewController = self.viewController
-            else {
+        DispatchQueue.main.async { [weak self] in
+            guard let viewController = self?.viewController else { return }
+            
+            guard let detailViewController = self?.detailViewController else {
+                let detailViewController = DetailRouter.createModule(content: tvShow, contentType: .tvShowDetail)
+                self?.detailViewController = detailViewController
+                detailViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                    image: UIImage(systemName: "arrow.left"),
+                    style: .done,
+                    target: self,
+                    action: #selector(self?.backButtontapped(_:))
+                )
+                viewController.pushViewController(detailViewController, animated: true)
                 return
             }
-            let tvShowDetailViewController = DetailRouter.createModule(movie: tvShow, contentType: .tvShowDetail)
             
-            viewController.navigationBar.tintColor = .white
-            viewController.navigationBar.prefersLargeTitles = false
-            tvShowDetailViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                image: UIImage(systemName: "arrow.left"),
-                style: .done,
-                target: self,
-                action: #selector(self.backButtontapped(_:))
-            )
-            
-            tvShowDetailViewController.title = tvShow.originalName
-            viewController.tabBarController?.tabBar.isHidden = true
-            viewController.pushViewController(tvShowDetailViewController, animated: true)
-                        
+            let detailView = detailViewController as? DetailPresenterToViewProtocol
+            detailView?.presenter?.configContent(type: .tvShowDetail, content: tvShow)
+            viewController.pushViewController(detailViewController, animated: true)
+        
         }
     }
     
     @objc private func backButtontapped(_ sender: UIViewController) {
         DispatchQueue.main.async { [weak self] in
-            self?.viewController?.navigationBar.prefersLargeTitles = true
-            self?.viewController?.tabBarController?.tabBar.isHidden = false
             self?.viewController?.popViewController(animated: true)
        }
     }

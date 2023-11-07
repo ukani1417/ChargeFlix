@@ -19,12 +19,10 @@ class MockRepository: Repository {
         switch dataType {
             
         case .popularMovies, .topRatedMovies, .upcomingMovies, .nowPlayingMovies:
-            print("datatype: \(dataType), model : \(modelType)")
+           
             guard let data = getMoviesListResponce() as? T else {
-                print("failed to convert")
                 return completation(.failure(.serverError))
             }
-            print("worked")
             completation(.success(data))
         case .popularTVShows, .topRatedTVShows:
             guard let data = getTVShowListDataResponce() as? T else {

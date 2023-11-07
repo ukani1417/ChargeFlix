@@ -7,25 +7,14 @@
 
 import UIKit
 
-protocol HomeViewProtocol: AnyObject {
-    var presenter: HomePresenterProtocol? { get set }
-    
-    func showActity()
-    func hideActivity()
-    func reloadTable()
-    func setupHeaderView(input: TableHeaderInput)
-    func onFetchFailure(message: String)
-}
-
 class HomeViewController: UIViewController {
     
-    var presenter: HomePresenterProtocol?
+    var presenter: HomeViewToPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = "Home"
-       
+        
         view.backgroundColor = .black
         
         setupUI()
@@ -33,6 +22,13 @@ class HomeViewController: UIViewController {
         setupConstraints()
         presenter?.viewDidLoad()
     
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.tintColor = .white
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     private let contentView: UIView = {
@@ -56,16 +52,22 @@ class HomeViewController: UIViewController {
         view.showsVerticalScrollIndicator = false
         view.backgroundColor = .black
         view.isHidden = false
-        view.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 330))
+        view.tableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0,
+                                                             width: UIScreen.main.bounds.width,
+                                                            height: 330))
+        
         return view
     }()
     
     private func setupUI() {
+        
         view.addSubview(contentView)
         contentView.addSubview(activityIndicator)
         contentView.addSubview(movieTableView)
+        movieTableView.tableHeaderView?.addGestureRecognizer(UIGestureRecognizer(target: self,
+                                                                                     action: #selector(self.tappedOnPoster)))
     }
-
+    
     private func setupDelegates() {
         movieTableView.delegate = self
         movieTableView.dataSource = self
@@ -99,20 +101,27 @@ class HomeViewController: UIViewController {
     }
 }
 
-extension HomeViewController: HomeViewProtocol {
-    func setupHeaderView(input: TableHeaderInput) {
+extension HomeViewController: HomePresenterToViewProtocol {
+    func setupGenreListInHeader(genreList: [Genre]) {
         DispatchQueue.main.async {
-            let headerView: TableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0, 
-                                                                            width: self.view.frame.width,
-                                                                            height: 330))
-            
-            headerView.configContent(input: input)
-            headerView.delegate = self
-            self.movieTableView.tableHeaderView = headerView
-            self.movieTableView.reloadData()
+            (self.movieTableView.tableHeaderView as? TableHeaderView)?.configGenreList(genreList: genreList)
         }
     }
-
+    
+    func setupHeaderView(input: TableHeaderInput) {
+        DispatchQueue.main.async { [weak self] in
+            (self?.movieTableView.tableHeaderView as? TableHeaderView)?.configContent(input: input)
+            (self?.movieTableView.tableHeaderView as? TableHeaderView)?.delegate = self
+            self?.movieTableView.tableHeaderView?.reloadInputViews()
+           
+        }
+    }
+    
+    @objc func tappedOnPoster() {
+        print("tapped")
+        presenter?.tappedOnMoviePoster()
+    }
+    
     func showActity() {
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()
@@ -142,11 +151,11 @@ extension HomeViewController: HomeViewProtocol {
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        presenter?.heightForSectionAt(tableView: tableView, section: section) ?? 0.0
+        return 30.0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        presenter?.heightForRowAt(tableView: tableView, indexPath: indexPath) ?? 0.0
+        return 210.0
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -158,11 +167,24 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return presenter?.cellForRowAt(tableView: tableView, indexPath: indexPath) ?? UITableViewCell()
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifire,
+                                                       for: indexPath) as? MovieTableViewCell else {
+            return UITableViewCell()
+        }
+        let cellData = presenter?.configTableCell(section: indexPath.section)
+        cell.configContent(data: cellData?.data ?? [], delegate: cellData?.delegate)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return presenter?.setupHeaderView(section: section)
+        let headerView = TableSectionHeaderView()
+        let data = presenter?.setupSectionHeaderView(section: section) ?? ""
+        headerView.configContent(sectionTitle: data, 
+                                 section: section,
+                                 delegate: presenter as? TableSectionHeaderViewToPresenter)
+        
+        return headerView
     }
 }
 

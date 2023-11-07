@@ -7,18 +7,9 @@
 
 import UIKit
 
-protocol TVShowViewProtocol: AnyObject {
-    var presenter: TVShowPresenterProtocol? { get set }
-    
-    func showActivity()
-    func hideActivity()
-    func onFetchPopularTVShowsListSuccess(list: [ContentObject])
-    func onFetchFailure(message: String)
-}
-
 class TVShowViewController: UIViewController {
  
-    var presenter: TVShowPresenterProtocol?
+    var presenter: TVShowViewToPresenterProtocol?
     
     private var tvShowsCollectionView: CustomCollectionView = {
         let cView = CustomCollectionView(scrollDirection: .vertical, 
@@ -40,16 +31,23 @@ class TVShowViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "TV Shows"
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .black
         setupUI()
         setupConstraints()
         presenter?.viewDidLoad()
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+    }
 
     private func setupUI() {
-        self.title = "TV Shows"
-        view.backgroundColor = .systemBackground
         view.addSubview(tvShowsCollectionView)
         view.addSubview(activityIndicator)
     }
@@ -58,6 +56,7 @@ class TVShowViewController: UIViewController {
         setupTVShowsCollectionViewConstraints()
         setupActivityIndicatorConstraints()
     }
+    
     private func setupTVShowsCollectionViewConstraints() {
         NSLayoutConstraint.activate([
             tvShowsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -66,6 +65,7 @@ class TVShowViewController: UIViewController {
             tvShowsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    
     private func setupActivityIndicatorConstraints() {
         NSLayoutConstraint.activate([
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -75,7 +75,7 @@ class TVShowViewController: UIViewController {
 
 }
 
-extension TVShowViewController: TVShowViewProtocol {
+extension TVShowViewController: TVShowPresenterToViewProtocol {
     func onFetchPopularTVShowsListSuccess(list: [ContentObject]) {
         DispatchQueue.main.async {
             self.tvShowsCollectionView.configContent(list: list, delegate: self.presenter as? CollectionViewToPresenter)

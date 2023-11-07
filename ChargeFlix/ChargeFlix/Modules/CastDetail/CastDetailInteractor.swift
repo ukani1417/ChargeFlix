@@ -7,16 +7,12 @@
 
 import Foundation
 
-protocol CastDetailInteractorProtocol {
-    var presenter : CastDetailPresenterProtocol? { get set }
-    var repository: CommonRepository { get set }
-}
-
-class CastDetailInteractor: CastDetailInteractorProtocol {
-    weak var presenter: CastDetailPresenterProtocol?
-    var repository: CommonRepository
+class CastDetailInteractor: CastDetailPresenterToInteractorProtocol {
+ 
+    weak var presenter: CastDetailInteractorToPresenterProtocol?
+    var repository: Repository
     
-    init(repository: CommonRepository = CommonRepository()) {
+    init(repository: Repository = CommonRepository()) {
         self.repository = repository
     }
     

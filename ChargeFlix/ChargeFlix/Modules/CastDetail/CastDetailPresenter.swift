@@ -7,29 +7,18 @@
 
 import UIKit
 
-protocol CastDetailPresenterProtocol: AnyObject {
-    
-    var view: CastDetailViewControllerProtocol? { get set}
-    var router: CastDetailRouterProtocol? { get set }
-    var interactor: CastDetailInteractorProtocol? { get set }
-    var castType: DataType { get set }
-    var cast: Person { get set }
-    func viewDidLoad()
-}
+class CastDetailPresenter: CastDetailViewToPresenterProtocol {
 
-class CastDetailPresenter: CastDetailPresenterProtocol {
-
-    weak var view: CastDetailViewControllerProtocol?
-    var router: CastDetailRouterProtocol?
-    var interactor: CastDetailInteractorProtocol?
+    weak var view: CastDetailPresenterToViewProtocol?
+    var router: CastDetailPresenterToRouterProtocol?
+    var interactor: CastDetailPresenterToInteractorProtocol?
     var castType: DataType
     var cast: Person
     
-    init(view: CastDetailViewControllerProtocol? = nil, 
-         router: CastDetailRouterProtocol? = nil,
-         interactor: CastDetailInteractorProtocol? = nil,
-         castType: DataType,
-         cast: Person) {
+    init(view: CastDetailPresenterToViewProtocol? = nil, 
+         router: CastDetailPresenterToRouterProtocol? = nil,
+         interactor: CastDetailPresenterToInteractorProtocol? = nil,
+         castType: DataType, cast: Person) {
         self.view = view
         self.router = router
         self.interactor = interactor
@@ -40,4 +29,14 @@ class CastDetailPresenter: CastDetailPresenterProtocol {
     func viewDidLoad() {
         view?.configCastData(type: castType, data: cast)
     }
+    
+    func configCastDetailContent(castType: DataType, cast: Person) {
+        self.castType = castType
+        self.cast = cast
+        view?.configCastData(type: castType, data: cast)
+    }
+}
+
+extension CastDetailPresenter: CastDetailInteractorToPresenterProtocol {
+    
 }
