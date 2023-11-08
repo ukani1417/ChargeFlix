@@ -17,10 +17,4 @@ extension UIViewController {
         self.present(dialogMessage, animated: true, completion: nil)
     }
     
-    func setViewController(title:String, showLargeTitle: Bool, isTabHidded: Bool) {
-        self.title = title
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.prefersLargeTitles = showLargeTitle
-        self.tabBarController?.tabBar.isHidden = isTabHidded
-    }
 }

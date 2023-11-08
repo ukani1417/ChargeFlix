@@ -15,6 +15,35 @@ struct TableHeaderInput {
     let genreList: [Genre]
 }
 
+struct CommonListModel: Codable {
+    let page: Int?
+    let totalPages: Int?
+    let totalResults: Int?
+    let results: [ContentObject]
+    
+    enum CodingKeys: String, CodingKey {
+        case page, results
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
+    }
+}
+
+struct ContentObject: Codable {
+    let id: Int?
+    let posterPath: String?
+    let originalName: String?
+    let originalTitle: String?
+    let genres: [Int]?
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case posterPath = "poster_path"
+        case originalName = "original_name"
+        case originalTitle = "original_title"
+        case genres = "genre_ids"
+    }
+}
+
 enum DataType: Equatable {
     case popularMovies
     case topRatedMovies

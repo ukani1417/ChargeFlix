@@ -43,7 +43,7 @@ class HomeRouter: HomePresenterToRouterProtocol {
         let movieViewController = self.viewController?.tabBarController?.viewControllers?[1]
         as? UINavigationController
         self.movieViewController = movieViewController
-        let movieViewInterFace = movieViewController?.visibleViewController as? MovieViewProtocol
+        let movieViewInterFace = movieViewController?.visibleViewController as? MoviePresenterToViewProtocol
         movieViewInterFace?.presenter?.configerMovies(type: type, data: data)
         viewController?.tabBarController?.selectedIndex = 1
     }

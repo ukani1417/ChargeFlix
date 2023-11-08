@@ -14,17 +14,20 @@ protocol CastDetailPresenterToViewProtocol: AnyObject {
     func showActity()
     func hideActivity()
     func configCastData(type: DataType, data: Person)
+    func onFetchFailure(message: String)
 }
 
 // Presenter -> Interactor
 protocol CastDetailPresenterToInteractorProtocol: AnyObject {
     var presenter: CastDetailInteractorToPresenterProtocol? { get set }
     var repository: Repository { get set }
+    
+    func getCastCreditContentDetail(type:DataType, id: Int)
 
 }
 // Presenter -> Router
 protocol CastDetailPresenterToRouterProtocol: AnyObject {
-    
+    func navigateToDetailView(content: DetailModel, type: DataType)
 }
 
 // View -> Presenter
@@ -37,10 +40,11 @@ protocol CastDetailViewToPresenterProtocol: AnyObject {
     
     func viewDidLoad()
     func configCastDetailContent(castType: DataType, cast: Person)
-   
+    
 }
 
 // Interactor -> Presenter
 protocol CastDetailInteractorToPresenterProtocol: AnyObject {
    
+    func onFetchCastCreditContentDetail(type: DataType, responce: Result<DetailModel, CastPresenterError>)
 }

@@ -15,6 +15,9 @@ class CastDetailPresenter: CastDetailViewToPresenterProtocol {
     var castType: DataType
     var cast: Person
     
+    private(set) var creditContentDetail: DetailModel?
+    private(set) var error: CastPresenterError?
+    
     init(view: CastDetailPresenterToViewProtocol? = nil, 
          router: CastDetailPresenterToRouterProtocol? = nil,
          interactor: CastDetailPresenterToInteractorProtocol? = nil,
@@ -38,5 +41,24 @@ class CastDetailPresenter: CastDetailViewToPresenterProtocol {
 }
 
 extension CastDetailPresenter: CastDetailInteractorToPresenterProtocol {
-    
+    func onFetchCastCreditContentDetail(type: DataType, responce: Result<DetailModel, CastPresenterError>) {
+        switch responce {
+        case .success(let data):
+            self.creditContentDetail = data
+            let detailType: DataType = (castType == .castMovieCredit) ? .movieDetail : .tvShowDetail
+            router?.navigateToDetailView(content: data, type: detailType)
+        case .failure(let error):
+            self.error = error
+            self.view?.onFetchFailure(message: error.rawValue)
+        }
+    }
+}
+
+extension CastDetailPresenter: CollectionViewToPresenter {
+    func didSelectItemAt(id: Int) {
+        if id != -1 {
+            let contentType: DataType = (castType == .castMovieCredit) ? .movieDetail : .tvShowDetail
+            interactor?.getCastCreditContentDetail(type: contentType, id: id)
+        }
+    }
 }

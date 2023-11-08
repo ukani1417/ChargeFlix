@@ -52,20 +52,20 @@ class HomeViewController: UIViewController {
         view.showsVerticalScrollIndicator = false
         view.backgroundColor = .black
         view.isHidden = false
-        view.tableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0,
-                                                             width: UIScreen.main.bounds.width,
-                                                            height: 330))
-        
+       
+        let tableHeaderView = TableHeaderView(frame: CGRect(x: 0, y: 0,
+                                                            width: UIScreen.main.bounds.width,
+                                                           height: 330))
+
+        view.tableHeaderView = tableHeaderView
         return view
     }()
     
     private func setupUI() {
-        
         view.addSubview(contentView)
         contentView.addSubview(activityIndicator)
         contentView.addSubview(movieTableView)
-        movieTableView.tableHeaderView?.addGestureRecognizer(UIGestureRecognizer(target: self,
-                                                                                     action: #selector(self.tappedOnPoster)))
+        movieTableView.tableHeaderView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedOnPoster)))
     }
     
     private func setupDelegates() {
@@ -99,6 +99,11 @@ class HomeViewController: UIViewController {
             activityIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
+    
+    @objc func tappedOnPoster() {
+        print("tapped")
+        presenter?.tappedOnMoviePoster()
+    }
 }
 
 extension HomeViewController: HomePresenterToViewProtocol {
@@ -113,13 +118,7 @@ extension HomeViewController: HomePresenterToViewProtocol {
             (self?.movieTableView.tableHeaderView as? TableHeaderView)?.configContent(input: input)
             (self?.movieTableView.tableHeaderView as? TableHeaderView)?.delegate = self
             self?.movieTableView.tableHeaderView?.reloadInputViews()
-           
         }
-    }
-    
-    @objc func tappedOnPoster() {
-        print("tapped")
-        presenter?.tappedOnMoviePoster()
     }
     
     func showActity() {

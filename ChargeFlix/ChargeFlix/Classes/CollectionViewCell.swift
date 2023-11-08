@@ -42,10 +42,8 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-        
         contentView.addSubview(posterImage)
         contentView.addSubview(movieTitle)
-        
     }
     
     private func setupConstraint() {
@@ -53,9 +51,9 @@ class CollectionViewCell: UICollectionViewCell {
             posterImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             posterImage.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             posterImage.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            posterImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            posterImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            movieTitle.topAnchor.constraint(equalTo: posterImage.bottomAnchor),
+//            movieTitle.topAnchor.constraint(equalTo: posterImage.bottomAnchor),
             movieTitle.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             movieTitle.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             movieTitle.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
