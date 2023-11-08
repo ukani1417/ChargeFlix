@@ -222,15 +222,21 @@ class CastDetailViewController: UIViewController {
         
         switch type {
         case .castMovieCredit:
-            (castCredit as? CustomCollectionView)?.configContent(list: data.movieCredit?.cast ?? [])
+            (castCredit as? CustomCollectionView)?.configContent(list: data.movieCredit?.cast ?? [], delegate: presenter as? CollectionViewToPresenter)
         case .castTVShowCredit:
-            (castCredit as? CustomCollectionView)?.configContent(list: data.tvCredit?.cast ?? [] )
+            (castCredit as? CustomCollectionView)?.configContent(list: data.tvCredit?.cast ?? [] , delegate: presenter as? CollectionViewToPresenter)
         default: break
         }
     }
 }
 
 extension CastDetailViewController: CastDetailPresenterToViewProtocol {
+    func onFetchFailure(message: String) {
+        DispatchQueue.main.async {
+            self.showAlert(title: "CastDetail Error", message: message)
+        }
+    }
+    
     func showActity() {
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating()

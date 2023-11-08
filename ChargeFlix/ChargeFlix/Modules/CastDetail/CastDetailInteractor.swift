@@ -16,4 +16,16 @@ class CastDetailInteractor: CastDetailPresenterToInteractorProtocol {
         self.repository = repository
     }
     
+    func getCastCreditContentDetail(type: DataType, id: Int) {
+        repository.get(endPoint: type.toEndPoint(id), modelType: DetailModel.self) { result in
+            switch result {
+            case .success(let data):
+                self.presenter?.onFetchCastCreditContentDetail(type: type, responce: .success(data))
+            case .failure:
+                self.presenter?.onFetchCastCreditContentDetail(type: type, 
+                                                               responce: .failure(.failedOnCastCreditDetailContent))
+            }
+        }
+    }
+    
 }

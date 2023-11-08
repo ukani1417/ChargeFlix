@@ -32,9 +32,9 @@ class MovieViewController: UIViewController {
     
      private var moviessCollectionView: CustomCollectionView = {
         let cView = CustomCollectionView(scrollDirection: .vertical,
-                                      cellSize: CGSize(width: 130, height: 180),
-                                      cellClass: CollectionViewCell.self,
-                                      cellIdentifire: CollectionViewCell.identifire)
+                                         cellSize: CGSize(width: 130, height: 180),
+                                         cellClass: CollectionViewCell.self,
+                                         cellIdentifire: CollectionViewCell.identifire)
         cView.translatesAutoresizingMaskIntoConstraints = false
         cView.collectionview?.showsVerticalScrollIndicator = false
         return cView
@@ -45,13 +45,11 @@ class MovieViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.color = .red
         view.hidesWhenStopped = true
-        
         return view
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Movies"
         self.navigationController?.navigationBar.tintColor = .white
         view.backgroundColor = .black
         setupUI()
@@ -62,7 +60,6 @@ class MovieViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        
     }
     
     private func setupUI() {
@@ -95,7 +92,7 @@ extension MovieViewController: MoviePresenterToViewProtocol {
     
     func setupTitle(title: String) {
         DispatchQueue.main.async {
-            self.navigationItem.title = title
+            self.title = title
         }
     }
     func onFetchSuccess(data: [ContentObject]) {

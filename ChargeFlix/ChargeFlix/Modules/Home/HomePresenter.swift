@@ -13,6 +13,7 @@ class HomePresenter: HomeViewToPresenterProtocol {
     var router: HomePresenterToRouterProtocol?
     var interactor: HomePresenterToInteractorProtocol?
     var intialAPICalls: Int = 0
+    
     private(set) var moviesDetails = [DataType:[ContentObject]]()
     private(set) var filteredMoviesDetails = [DataType:[ContentObject]]()
     private(set) var movieGenreList: GenreList?
@@ -21,7 +22,8 @@ class HomePresenter: HomeViewToPresenterProtocol {
     private(set) var error: HomePresenterError?
     private(set) var movieDetail: DetailModel?
     
-    init(view: HomePresenterToViewProtocol? = nil, router: HomePresenterToRouterProtocol? = nil,
+    init(view: HomePresenterToViewProtocol? = nil, 
+         router: HomePresenterToRouterProtocol? = nil,
          interactor: HomePresenterToInteractorProtocol? = nil) {
         self.view = view
         self.router = router

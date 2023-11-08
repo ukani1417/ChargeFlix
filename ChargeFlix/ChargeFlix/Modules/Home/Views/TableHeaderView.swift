@@ -45,7 +45,7 @@ class TableHeaderView: UIView {
     
     private var movieName: UILabel = {
         let label = UILabel()
-         label.numberOfLines = 1
+         label.numberOfLines = 0
          label.translatesAutoresizingMaskIntoConstraints = false
          label.textColor = .white
         label.font = .boldSystemFont(ofSize: 36)
@@ -133,8 +133,9 @@ class TableHeaderView: UIView {
     
     private func setupMovieNameConstraint() {
         NSLayoutConstraint.activate([
-            movieName.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: -40),
+//            movieName.topAnchor.constraint(equalTo: moviePoster.bottomAnchor, constant: -40),
             movieName.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+            movieName.rightAnchor.constraint(equalTo: containerView.rightAnchor),
             movieName.bottomAnchor.constraint(equalTo: moviePoster.bottomAnchor)
         ])
     }
