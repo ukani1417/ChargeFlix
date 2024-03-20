@@ -8,7 +8,6 @@
 import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
-
     static let identifire = CollectionViewCell.description()
     private var posterImage: UIImageView = {
        let view = UIImageView()
